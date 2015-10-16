@@ -1,0 +1,4 @@
+venv
+*.pyc
+staticfiles
+youmate/local_settings.py

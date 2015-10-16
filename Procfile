@@ -1,0 +1,1 @@
+web: gunicorn youmate.wsgi --log-file -
