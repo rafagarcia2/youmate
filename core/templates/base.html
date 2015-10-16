@@ -1,0 +1,80 @@
+{% load static %}
+{% load i18n %}
+{% load socialaccount %}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="pt-br"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{ page_title|default:_('Index') }} - Youmate</title>
+    <meta name="title" content="Youmate" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+    <meta property="og:image" content="{% static 'img/favicon.ico' %}" />
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/materialize.css' %}" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}" media="screen,projection"/>
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body>
+    <header>
+      <nav class="light-blue lighten-1" role="navigation">
+        <div class="nav-wrapper container">
+          <a id="logo-container" href="{% url 'index' %}" class="brand-logo">Youmate</a>
+          
+          <ul id="nav-mobile" class="side-nav" style="left: -250px;">
+            <li><a href="#">Navbar Link</a></li>
+          </ul>
+          
+          <a href="#" data-activates="nav-mobile" class="button-collapse">
+            <i class="material-icons">menu</i>
+          </a>
+        </div>
+      </nav>
+      <nav class="top-nav light-blue lighten-1">
+        <div class="container">
+          <div class="nav-wrapper">
+            <a class="page-title">{{ page_title|default:_('Index') }}</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        <div class="section">
+          {% block content %}{% endblock %}
+        </div>
+      </div>
+    </main>
+
+    <footer class="page-footer light-blue lighten-1">
+      <div class="container">
+        <div class="row">
+          <div class="col l12 s12">
+            <h5 class="white-text">Morbi vestibulum</h5>
+            <p class="white-text">
+              Morbi vestibulum volutpat enim. Phasellus tempus. Donec interdum, metus et hendrerit aliquet, dolor diam sagittis ligula.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <div class="container center-align">
+          © 2015 Youmate, all rights reserved.
+        </div>
+      </div>
+    </footer>
+    
+    <script type="text/javascript" src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/masonry.min.js' %}"></script>
+
+    {% block extra_js %}{% endblock %}
+   </body>
+</html>
