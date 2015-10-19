@@ -1,15 +1,16 @@
 from django.conf.urls import patterns, url
 
-from vanilla import views
-
-
-class IndexView(views.TemplateView):
-    template_name = 'index.html'
-
+from core import views
 
 urlpatterns = patterns(
     '',
     url(regex=r'^$',
-        view=IndexView.as_view(),
+        view=views.IndexView.as_view(),
         name='index'),
+    url(regex=r'profile/$',
+        view=views.ProfileView.as_view(),
+        name='profile'),
+    url(regex=r'profile/update/$',
+        view=views.UpdateProfileView.as_view(),
+        name='update_profile'),
 )

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+
+{% load socialaccount %}
+{% get_providers as socialaccount_providers %}
+
+{% block head_title %}{% trans "Sign Up" %}{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col l6 offset-l3 m8 offset-m2 s12 z-depth-4 card-panel">
+      <div class="row grey lighten-2">
+        <div class="input-field col s12 center">
+          <h4>{% trans 'Register' %}</h4>
+          <p class="center">{% trans 'Join to our community now!' %}</p>
+
+          <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12 center">
+          <a class="indigo waves-effect waves-light btn-large" href="{% provider_login_url 'facebook' %}">
+            {% trans 'Facebook' %}
+          </a>
+          <a class="deep-orange-plus waves-effect waves-light btn-large" href="{% provider_login_url 'google' %}">
+            {% trans 'Google' %}
+          </a>
+        </div>
+      </div>
+
+      <form method="POST" action="{% url 'account_signup' %}">
+        {% csrf_token %}
+        <div class="row margin">
+          <div class="input-field col s12 center">
+            <p class="center">{% trans 'Or' %}</p>
+          </div>
+        </div>
+        <div class="row margin">
+          {% include "includes/field.html" with field=form.username prefix='mdi-social-person' %}
+        </div>
+        <div class="row margin">
+          {% include "includes/field.html" with field=form.email prefix='mdi-communication-email' %}
+        </div>
+        <div class="row margin">
+          {% include "includes/field.html" with field=form.password1 prefix='mdi-action-lock-outline' %}
+        </div>
+        <div class="row margin">
+          {% include "includes/field.html" with field=form.password2 prefix='mdi-action-lock-outline' %}
+        </div>
+        
+        <div class="row">
+          <div class="input-field col s12 center-align">
+            <button type="submit" class="btn btn-wide waves-effect waves-light">{% trans 'Register Now' %}</button>
+          </div>
+          <div class="input-field col s12">
+            <p class="margin center medium-small sign-up">
+              {% trans 'Already have an account?' %}
+              <a href="{% url 'account_login' %}">{% trans 'Login' %}</a>
+            </p>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

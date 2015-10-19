@@ -2,9 +2,12 @@
 {% load tags %}
 
 <div class="input-field col s12 l12">
+  {% if prefix %}
+    <i class="prefix {{ prefix }}"></i>
+  {% endif %}
   {% render_field field class+=field|get_error_class class+=class %}
 
-  <label for="{{ field.id }}">{{ field.label }}</label><br>
+  <label for="{{ field.id }}">{{ field.label }}</label>
   {% for error in field.errors %}
     <p class="help-text caption red-text">{{ error }}</p>
   {% endfor %}

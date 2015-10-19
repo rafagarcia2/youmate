@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load account %}
+
+{% load url from future %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col l6 offset-l3 m8 offset-m2 s12 z-depth-4 card-panel">
+      <div class="row grey lighten-2">
+        <div class="input-field col s12 center">
+          <h4>{% trans 'Sign In' %}</h4>
+          {% if socialaccount.providers  %}
+            <p>
+              {% blocktrans with site.name as site_name %}
+                Please sign in with one of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a> for a {{ site_name }} account and sign in below:
+              {% endblocktrans %}
+            </p>
+            {% include "socialaccount/snippets/login_extra.html" %}
+          {% else %}
+            <p>
+              {% blocktrans %}
+                If you have not created an account yet, then please <a href="{{ signup_url }}">sign up</a> first.
+              {% endblocktrans %}
+            </p>
+          {% endif %}
+        </div>
+      </div>
+      <div class="row">
+        <form method="POST" action="{% url 'account_login' %}">
+          {% csrf_token %}
+
+          {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+          {% endif %}
+
+          <div class="row margin">
+            {% include "includes/field.html" with field=form.login prefix='mdi-communication-email' %}
+          </div>
+          <div class="row margin">
+            {% include "includes/field.html" with field=form.password prefix='mdi-action-lock-outline' %}
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12 center-align">
+              <button type="submit" class="btn btn-wide waves-effect waves-light">{% trans 'Sign In' %}</button>
+            </div>
+            <div class="input-field col s12">
+              <p class="margin center medium-small sign-up">
+                <a class="pull-right" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+              </p>
+            </div>
+          </div>
+        </form>
+      </div>        
+    </div>
+  </div>
+{% endblock %}

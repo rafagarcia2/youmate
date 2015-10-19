@@ -1,1 +1,13 @@
 {% extends "base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+
+{% load socialaccount %}
+{% get_providers as socialaccount_providers %}
+
+{% block content %}
+  <div class="row">
+    <h4>@{{ request.user.username }}</h4>
+  </div>
+{% endblock %}
