@@ -12,6 +12,6 @@ class AccountAdapter(DefaultAccountAdapter):
         logged_time = request.user.last_login - request.user.date_joined
 
         if logged_time.seconds < threshold:
-            url = reverse('profile'),
+            url = reverse('profile')
 
         return resolve_url(url)
