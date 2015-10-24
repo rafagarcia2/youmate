@@ -15,15 +15,25 @@ body {
   flex-direction: column;
 }
 
+.nav-wrapper {
+  z-index: 2;
+  position: absolute;
+}
+
 main {
   flex: 1 0 auto;
+  padding-top: 64px;
 }
 
 .login-form {
   width: 100%;
 }
 
-.caption {
-  margin-top: 0;
-  margin-bottom: 30px !important;
+.page-footer { 
+  background-color: #494547 !important;
+  background: url(../images/background_cinza-01.svg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+     -moz-background-size: cover;
+       -o-background-size: cover;
+          background-size: cover;
 }
