@@ -26,7 +26,6 @@ body {
   }
 }
 
-
 main {
   flex: 1 0 auto;
   padding-top: 64px;
@@ -36,11 +35,37 @@ main {
   width: 100%;
 }
 
-.page-footer { 
+.page-footer {
   background-color: #494547 !important;
   background: url(../images/background_cinza-01.svg) no-repeat center center fixed;
   -webkit-background-size: cover;
      -moz-background-size: cover;
        -o-background-size: cover;
           background-size: cover;
+}
+
+#depoiments .card {
+  background-color: #494547 !important;
+  background: url(../images/gallary/30.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+     -moz-background-size: cover;
+       -o-background-size: cover;
+          background-size: cover;
+}
+
+
+#people .card-poeple .card-content {
+  background-color: #F1EDED;
+}
+
+#people .card-poeple .card-image {
+  margin-bottom: -7px;
+  width: calc(100% + 50px);
+}
+
+#people .card-poeple .btn-move-up {
+  position: relative;
+  top: -40px;
+  right: -18px;
+  margin-right: 10px !important;
 }
