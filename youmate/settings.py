@@ -161,7 +161,7 @@ SOCIALACCOUNT_PROVIDERS = {
         'AUTH_PARAMS': {'access_type': 'online'}
     },
     'facebook': {
-        'SCOPE': ['email', 'publish_stream'],
+        'SCOPE': ['email'],
         'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
         'METHOD': 'oauth2',
         'LOCALE_FUNC': lambda request: 'pt_BR',
