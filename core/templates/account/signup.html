@@ -4,7 +4,6 @@
 {% load url from future %}
 
 {% load socialaccount %}
-{% get_providers as socialaccount_providers %}
 
 {% block head_title %}{% trans "Sign Up" %}{% endblock %}
 
@@ -23,9 +22,6 @@
         <div class="input-field col s12 center">
           <a class="indigo waves-effect waves-light btn-large" href="{% provider_login_url 'facebook' %}">
             {% trans 'Facebook' %}
-          </a>
-          <a class="deep-orange-plus waves-effect waves-light btn-large" href="{% provider_login_url 'google' %}">
-            {% trans 'Google' %}
           </a>
         </div>
       </div>
