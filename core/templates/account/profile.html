@@ -5,6 +5,8 @@
 {% load socialaccount %}
 {% load widget_tweaks %}
 
+{% load tags %}
+
 {% load url from future %}
 
 {% block head_title %}{% trans "Profile" %}{% endblock %}
@@ -16,7 +18,7 @@
       <div class="card-image waves-effect waves-block waves-light grey lighten-2">
       </div>
       <figure class="card-profile-image">
-          <img src="" alt="profile image" class="circle z-depth-2 responsive-img activator">
+          <img src="{{ request.user|get_profile_photo }}" alt="profile image" class="circle z-depth-2 responsive-img activator">
       </figure>
       <div class="card-content">
         <div class="row">                    
