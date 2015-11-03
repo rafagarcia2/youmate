@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load account %}
+{% load widget_tweaks %}
+
+{% load url from future %}
+
+{% block head_title %}{% trans "Search Profiles" %}{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <h4 class="heade center">Conheça o mundo através de pessoas</h4>
+    
+    <div class="masonry-grid">
+      {% for profile in object_list  %}
+        <div class="col s12 m6 l4">
+          <div class="card card-poeple">
+            <div class="card-image">
+              <img src="http://demo.geekslabs.com/materialize/v2.2/layout02/images/avatar.jpg">
+              <span class="card-title">{{ profile.user.full_name }}</span>
+            </div>
+            <div class="card-content">
+              <a class="btn-floating activator btn-move-up waves-effect waves-light  red right">
+                <i class="mdi-editor-mode-edit"></i>
+              </a>
+              <p>
+                <i class="mdi-communication-location-on"></i>
+                {{ profile.living_city }}
+              </p>
+            </div>
+          </div>
+        </div>  
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

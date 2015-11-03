@@ -38,13 +38,13 @@
         </div>
       </div>
 
-      <form method="POST" action="{% url 'account_signup' %}">
-        {% csrf_token %}
-        <div class="row margin">
-          <div class="input-field col s12 center">
-            <p class="center">{% trans 'Or' %}</p>
-          </div>
+      <div class="row margin">
+        <div class="input-field col s12 center">
+          <p class="center">{% trans 'Or' %}</p>
         </div>
+      </div>
+
+      <div class="row">
         <form method="POST" action="{% url 'account_login' %}">
           {% csrf_token %}
 

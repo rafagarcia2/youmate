@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load account %}
+{% load socialaccount %}
 {% load widget_tweaks %}
 
 {% load url from future %}
@@ -21,7 +22,12 @@
         <div class="row">                    
           <div class="col s3 offset-s2">                        
               <h4 class="card-title grey-text text-darken-4">@{{ object.user.username }}</h4>
-              <p class="medium-small grey-text">{{ profile.job_title }}</p>                        
+              <p class="medium-small grey-text">{{ profile.job_title }}</p>
+              <p>
+                <a href="{% provider_login_url 'facebook' process='connect' %}">
+                  Connect a facebook account
+                </a>
+              </p>
           </div>
           <div class="col s2 center-align">
               <h4 class="card-title grey-text text-darken-4">10+</h4>

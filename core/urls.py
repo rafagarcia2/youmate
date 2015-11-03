@@ -13,4 +13,7 @@ urlpatterns = patterns(
     url(regex=r'profile/update/$',
         view=views.UpdateProfileView.as_view(),
         name='update_profile'),
+    url(regex=r'profiles/search/$',
+        view=views.SearchProfileView.as_view(),
+        name='search_profile'),
 )
