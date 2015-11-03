@@ -52,15 +52,21 @@
           <img src="{% static 'images/logo.svg' %}">
         </a>
         <ul class="right hide-on-med-and-down">
-          <li><a class="btn-flat white red-text" href="{% url 'account_login' %}">Participe</a></li>
-          <li><a href="#">Navbar Link</a></li>
-          <li><a href="#">Navbar Link</a></li>
+          {% if request.user.is_authenticated %}
+            <li><a class="btn-flat white red-text" href="{% url 'profile' %}">@{{ request.user.username }}</a></li>
+            <li><a href="{% url 'account_logout' %}">Logout</a></li>
+          {% else %}
+            <li><a class="btn-flat white red-text" href="{% url 'account_login' %}">Participe</a></li>
+          {% endif %}
         </ul>
 
         <ul id="nav-mobile" class="side-nav">
-          <li><a class="btn-flat white red-text" href="#">Navbar Link</a></li>
-          <li><a href="#">Navbar Link</a></li>
-          <li><a href="#">Navbar Link</a></li>
+          {% if request.user.is_authenticated %}
+            <li><a class="btn-flat white red-text" href="{% url 'profile' %}">@{{ request.user.username }}</a></li>
+            <li><a href="{% url 'account_logout' %}">Logout</a></li>
+          {% else %}
+            <li><a class="btn-flat white red-text" href="{% url 'account_login' %}">Participe</a></li>
+          {% endif %}
         </ul>
         <a href="#" data-activates="nav-mobile" class="button-collapse">
           <i class="mdi-navigation-menu"></i>
