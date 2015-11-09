@@ -1,6 +1,7 @@
 {% load static %}
 {% load i18n %}
 {% load socialaccount %}
+{% load account %}
 {% load url from future %}
 
 <!DOCTYPE html>
@@ -105,7 +106,9 @@
             </div>
             <br>
             <div class="center">
-              <a class="btn waves-effect waves-grey white red-text" href="{% url 'account_login' %}">Acesse</a>
+              <a class="btn btn-large waves-effect waves-grey indigo" href="{% provider_login_url 'facebook' %}">
+                {% trans 'Facebook' %}
+              </a>
             </div>
           </div>
         </div>
