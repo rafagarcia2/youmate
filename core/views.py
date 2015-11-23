@@ -1,11 +1,15 @@
+from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.core.urlresolvers import reverse_lazy
 from django.db.models import F
 
 from vanilla import TemplateView, UpdateView, DetailView, ListView
 
-from core.forms import UpdateUserForm
+from core.forms import UpdateUserForm, UpdateProfileAboutForm
+from reference.forms import ReferenceForm
 from core.models import Profile, SearchQuery
 
 
@@ -17,26 +21,41 @@ class ProfileView(DetailView):
     model = Profile
     template_name = 'account/profile.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(ProfileView, self).get_context_data(**kwargs)
+        context.update(reference_form=ReferenceForm())
+        context.update(
+            update_profile_about_form=UpdateProfileAboutForm(
+                instance=self.get_object()))
+        return context
+
     def get_object(self):
-        return self.request.user.profile
+        queryset = self.get_queryset()
+        username = self.kwargs.get('username')
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(ProfileView, self).dispatch(*args, **kwargs)
+        if not username and self.request.user.is_authenticated():
+            return self.request.user.profile
+        else:
+            return get_object_or_404(queryset, user__username=username)
 
 
-class UpdateProfileView(UpdateView):
+class UpdateProfileAboutView(UpdateView):
     model = Profile
-    template_name = 'account/update_profile.html'
-    form_class = UpdateUserForm
-    success_url = reverse_lazy('index')
+    template_name = 'account/profile.html'
+    form_class = UpdateProfileAboutForm
 
     def get_object(self):
         return self.request.user.profile
 
+    def form_invalid(self, form):
+        return redirect('profile')
+
+    def get_success_url(self):
+        return reverse('profile')
+
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(UpdateProfileView, self).dispatch(*args, **kwargs)
+        return super(UpdateProfileAboutView, self).dispatch(*args, **kwargs)
 
 
 class SearchProfileView(ListView):

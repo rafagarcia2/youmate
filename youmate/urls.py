@@ -20,5 +20,8 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^', include('core.urls')),
+    url(r'^', include('mate.urls')),
+    url(r'^', include('reference.urls')),
+    url(r'^', include('interest.urls')),
     url(r'^accounts/', include('allauth.urls')),
 ]

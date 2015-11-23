@@ -54,6 +54,17 @@ main {
 }
 
 
+#trip {
+  height: 800px;
+}
+
+
+#trip .right {
+  background-color: #494547 !important;
+
+}
+
+
 #people .card-poeple .card-content {
   background-color: #F1EDED;
 }

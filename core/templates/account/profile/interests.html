@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% load account %}
+{% load widget_tweaks %}
+
+{% load tags %}
+
+{% load url from future %}
+
+{% block head_title %}{% trans "Profile" %}{% endblock %}
+
+{% block content %}
+  <div class="row">
+    {% include "includes/menu_profile.html" %}
+
+    <div class="col s12">
+      <div id="test1" class="col s12">
+        <div class="row">
+          <h3>Interesses</h3>
+        </div>
+
+        <div class="row">
+          {% include "includes/sidebar_profile.html" with object=profile %}
+            
+          <form id="form_interests" method="POST" action="{% url 'profile_interests' %}">
+            {% csrf_token %}
+            <div class="col m9">
+              <div class="row margin">
+                <h4 class="header2">Escolha três interesses</h4>
+              </div>
+              
+              <div class="row margin">
+              {% for interest in interests %}
+                {% if forloop.first %}
+                  <div class="row">
+                {% endif %}
+
+                <div class="col s6">                
+                  <div class="card small {% if profile|is_interest_selected:interest.id %}green lighten-4{% endif %}">
+                    <div class="card-image">
+                      <img class="responsive-image" src="{% static 'images/sample-1.jpg' %}">
+                      <span class="card-title">{{ interest.title }}</span>
+                    </div>
+                    <div class="card-content center">
+                      <p>{{ interest.description }}</p>
+                      <input type="checkbox" name="interests" id="id_interests_{{ interests.id }}" value="{{ interest.id }}" {% if profile|is_interest_selected:interest.id %}checked="checked"{% endif %}>
+                    </div>
+                  </div>
+                </div>
+              
+                {% if forloop.counter|divisibleby:"2" %}
+                  </div>
+                  {% if not forloop.last %}
+                    <div class="row">
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </div>
+
+            <br>
+            <div class="row center">
+              <div class="col s12">
+                <a href="{% url 'profile' %}" id="reset_interests">Cancel</a>
+                &nbsp;
+                <button type="submit" class="btn btn-wide btn-large waves-effect waves-light red lighten-1">
+                  <i class="mdi-content-add left"></i>
+                  Salvar
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+   <script type="text/javascript">
+     $(document).ready(function () {
+       $('#form_interests .card').click(function () {
+          if ($(this).hasClass('green')) {
+            $(this).find('input').removeAttr('checked');
+          } else {
+            if ($('#form_interests .card.green').length >= 4) {
+              alert('Você pode esoclher no máximo três interesses!')
+              return;
+            };
+
+            $(this).find('input').attr('checked', 'checked');
+          }
+          
+          $(this).toggleClass('green lighten-4');
+       });
+     });
+   </script>
+{% endblock extra_js %}

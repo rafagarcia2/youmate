@@ -51,6 +51,9 @@ DJANGO_APPS = (
 
 LOCAL_APPS = (
     'core',
+    'mate',
+    'reference',
+    'interest',
 )
 
 EXTERNAL_APPS = (

@@ -5,6 +5,8 @@ from django.utils.translation import ugettext as _
 from django.db.models.signals import post_save
 from django.core.exceptions import AppRegistryNotReady
 
+from reference.models import Reference
+
 
 class Profile(models.Model):
     MEN = 'M'
@@ -22,6 +24,7 @@ class Profile(models.Model):
     genre = models.CharField(
         _('Genre'), max_length=15, choices=GENRE_CHOICES,
         default=OTHER, null=True, blank=True)
+    phone = models.CharField(_('Phone'), max_length=40, null=True, blank=True)
     job_title = models.CharField(
         _('Job title'), max_length=100, null=True, blank=True)
     education = models.CharField(
@@ -33,6 +36,9 @@ class Profile(models.Model):
 
     # relations
     user = models.OneToOneField(settings.AUTH_USER_MODEL, unique=True)
+    mates = models.ManyToManyField(
+        to='self', symmetrical=False,
+        through='mate.Mate', related_name='mates_by')
 
     class Meta:
         verbose_name = _('Profile')
@@ -40,6 +46,33 @@ class Profile(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('profile')
+
+    @property
+    def reference(self):
+        reference = Reference.objects.filter(
+            to_user=self, active=True
+        ).first()
+        return reference
+
+    @property
+    def ultimas_referencias(self):
+        return Reference.objects.filter(
+            to_user=self
+        ).order_by('-created_at')[:3]
+
+    @property
+    def has_phone(self):
+        return True if self.phone else False
+
+    def calcular_seguranca(self):
+        criterias = [
+            self.user.is_active,
+            self.user.is_active,
+            self.has_phone,
+            self.references_to.exists(),
+            self.references_to.exists(),
+        ]
+        return len(filter(lambda x: x is True, criterias))
 
 
 class SearchQuery(models.Model):
