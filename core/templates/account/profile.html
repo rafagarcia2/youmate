@@ -61,16 +61,18 @@
           {% include "includes/sidebar_profile.html" %}
             
           <div class="col m9">
-            <div class="row white">
-              <div class="col s12">
-                <div class="row margin">
-                  <h4 class="header2">Quem sou eu</h4>
-                  <blockquote>
-                    {{ object.about }}
-                  </blockquote>
+            {% if object.about %}
+              <div class="row white">
+                <div class="col s12">
+                  <div class="row margin">
+                    <h4 class="header2">Quem sou eu</h4>
+                    <blockquote>
+                      {{ object.about }}
+                    </blockquote>
+                  </div>
                 </div>
               </div>
-            </div>
+            {% endif %}
 
             <div class="row white">
               <div class="col s12">
@@ -107,7 +109,8 @@
                   <div class="row">
                     {% for interest in object.interests.all %}
                       <div class="col s3 tooltipped" data-position="top" data-delay="50" data-tooltip="{{ interest.description }}">
-                        <i class="{{ interest.image_class|default:'mdi-image-photo-album' }} circle large left"></i>
+
+                        <i class="{{ interest.image_class|default:'mdi-image-photo-album' }} large left"></i>
                         <br>
                         <p>{{ interest.title }}</p>
                       </div>  
@@ -133,21 +136,16 @@
                 <div class="row margin">
                   <h4 class="header2">Avaliações</h4>
                   <div>
-                    <a href="javascript:;" id="rating-1" class="yellow-text lighten-3">
-                      <i class="mdi-action-star-rate medium"></i>
-                    </a>
-                    <a href="javascript:;" id="rating-1" class="yellow-text lighten-3">
-                      <i class="mdi-action-star-rate medium"></i>
-                    </a>
-                    <a href="javascript:;" id="rating-1" class="yellow-text lighten-3">
-                      <i class="mdi-action-star-rate medium"></i>
-                    </a>
-                    <a href="javascript:;" id="rating-1" class="grey-text lighten-4">
-                      <i class="mdi-action-star-rate medium"></i>
-                    </a>
-                    <a href="javascript:;" id="rating-1" class="grey-text lighten-4">
-                      <i class="mdi-action-star-rate medium"></i>
-                    </a>
+                    {% for rating in request.user.profile.get_average_rate|as_range %}
+                      <span class="yellow-text lighten-3">
+                        <i class="mdi-action-star-rate medium"></i>
+                      </span>
+                    {% endfor %}
+                    {% for rating in 5|subtract:request.user.profile.get_average_rate|as_range %}
+                      <span class="grey-text lighten-4">
+                        <i class="mdi-action-star-rate medium"></i>
+                      </span>
+                    {% endfor %}
                     <br>
                   </div>
 
@@ -257,14 +255,14 @@
    <script type="text/javascript">
      $(document).ready(function () {
        $('.rating a').click(function () {
-          $('.rating a').addClass('grey-text lighten-5').removeClass('red-text lighten-1');
+          $('.rating a').addClass('grey-text lighten-5').removeClass('yellow-text lighten-3');
 
           $(this).find('input').attr('checked', 'checked');
           var index = $(this).find('input').val();
           for (var i = 1; i <= parseInt(index); i++) {
             var these = $('.rating #rating-' + i);
             $(these).removeClass('grey-text lighten-5');
-            $(these).addClass('red-text lighten-1');
+            $(these).addClass('yellow-text lighten-3');
           };
        });
      });

@@ -3,12 +3,11 @@ from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.core.urlresolvers import reverse_lazy
 from django.db.models import F
 
 from vanilla import TemplateView, UpdateView, DetailView, ListView
 
-from core.forms import UpdateUserForm, UpdateProfileAboutForm
+from core.forms import UpdateProfileAboutForm, ValidatePhoneForm
 from reference.forms import ReferenceForm
 from core.models import Profile, SearchQuery
 
@@ -37,6 +36,19 @@ class ProfileView(DetailView):
             return self.request.user.profile
         else:
             return get_object_or_404(queryset, user__username=username)
+
+
+class ValidatePhoneView(DetailView):
+    model = Profile
+    template_name = 'account/profile/validate_phone.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ValidatePhoneView, self).get_context_data(**kwargs)
+        context.update(validate_phone_form=ValidatePhoneForm())
+        return context
+
+    def get_object(self):
+        return self.request.user.profile
 
 
 class UpdateProfileAboutView(UpdateView):

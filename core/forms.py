@@ -13,3 +13,9 @@ class UpdateProfileAboutForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('about',)
+
+
+class ValidatePhoneForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('phone',)

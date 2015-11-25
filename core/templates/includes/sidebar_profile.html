@@ -10,31 +10,28 @@
     <div class="card-content center">
       <h4 class="black-text">
         {{ object.user.full_name|default:object.user.username }},
-        <br>
-        {{ object.age }} anos
+        {% if object.age %}
+          <br>
+          {{ object.age }} anos
+        {% endif %}
       </h4>
       <ul class="left-align">
         <li>
           <i class="mdi-action-wallet-travel tiny"></i>
-          {{ object.job_title }}
+          {{ object.job_title|default:'Não informado' }}
         </li>
         <li>
           <i class="mdi-action-home tiny"></i>
-          {{ object.living_city }}
+          {{ object.living_city|default:'Não informado' }}
         </li>
         <li>
           <i class="mdi-action-room tiny"></i>
-          {{ object.born_city }}
+          {{ object.born_city|default:'Não informado' }}
         </li>
         <li>
           <i class="mdi-action-language tiny"></i>
-          Fala Inglês e Português
+          {{ object.languages|default:'Não informado' }}
         </li>
-      </ul>
-      <br>
-      <ul>
-        <li><a href="">Ver perfil</a></li>
-        <li><a href="">Editar perfil</a></li>
       </ul>
     </div>
   </div>
@@ -56,6 +53,9 @@
         <li {% if object.phone %}class="green-text"{% endif %}>
           <i class="mdi-communication-phone tiny"></i>
           Telefone
+          {% if request.user.is_authenticated and request.user.profile == object %}
+            - <a href="{% url 'validate_phone' %}">Validar número</a>
+          {% endif %}
         </li>
         <li {% if object.references_to.exists %}class="green-text"{% endif %}>
           <i class="mdi-action-star-rate tiny"></i>
@@ -68,7 +68,7 @@
       </ul>
 
       <div class="progress tooltipped" data-position="top" data-delay="50" data-tooltip="Segurança: {{ object.calcular_seguranca }} de 5 pontos de informação" style="height: 40px;background-color: #E1E1E1;">
-        <div class="determinate {% if object|seguranca_em_porcentagem <= 30 %}red{% elif object|seguranca_em_porcentagem <= 70 %}yellow{% else %}green{% endif %} lighten-1" style="width: {{ object|seguranca_em_porcentagem }}%;"></div>   
+        <div class="determinate {% if object|seguranca_em_porcentagem <= 20 %}red{% elif object|seguranca_em_porcentagem <= 70 %}yellow{% else %}green{% endif %} lighten-1" style="width: {{ object|seguranca_em_porcentagem }}%;"></div>   
       </div>
     </div>
   </div>
@@ -76,7 +76,7 @@
   {% if request.user.is_authenticated and request.user.profile == object %}
     <div class="card">
       <div class="card-title center grey">
-        Jogo de interesses
+        Interesses similares
       </div>
       <div class="card-content">
         <div class="collection">
@@ -89,6 +89,16 @@
                 <strong>{{ interest.title }}</strong>{% if not forloop.last %},{% endif %}
               {% endfor %}
             </a>
+          {% empty %}
+            {% if object.interests.exists %}
+              <p class="collection-item grey-text">
+                Não encontramos pessoas com os mesmo interesses que os seus
+              </p>
+            {% else %}
+              <a href="{% url 'profile_interests' %}" class="collection-item grey-text">
+                <span class="title">Escolha alguns interesses para encontrar pessoas</span>
+              </a>
+            {% endif %}
           {% endfor %}
         </div>
       </div>

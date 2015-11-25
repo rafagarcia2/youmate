@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% load account %}
+{% load widget_tweaks %}
+
+{% load tags %}
+
+{% load url from future %}
+
+{% block head_title %}{% trans "Profile" %}{% endblock %}
+
+{% block content %}
+  <div class="row">
+    {% include "includes/menu_profile.html" %}
+
+    <div class="col s12">
+      <div id="test1" class="col s12">
+        <div class="row">
+          <h3>Validar Telefone</h3>
+        </div>
+
+        <div class="row">
+          {% include "includes/sidebar_profile.html" with object=profile %}
+          
+          <div class="col m9"> 
+
+            <form id="form_interests" method="POST" action="{% url 'profile_interests' %}">
+              {% csrf_token %}
+
+              <div class="row" >
+                <div class="input-field col s6">
+                  <input value="{{ request.user.profile.phone|default:'' }}" id="id_phone" type="text" class="validate">
+                  <label class="active" for="id_phone">Telefone</label>
+                </div>
+                <div class="input-field col s6">
+                  <button type="submit" class="btn btn-wide btn-large waves-effect waves-light red lighten-1">
+                    <i class="mdi-action-done-all left"></i>
+                    Validar
+                  </button>
+                </div>
+              </div>
+          </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

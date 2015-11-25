@@ -33,7 +33,7 @@ class UpdateProfileInterestsViews(DetailView):
         else:
             self.request.user.profile.interests.clear()
             self.request.user.profile.interests.add(*interests)
-        return redirect('profile_interests')
+        return redirect('profile')
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):

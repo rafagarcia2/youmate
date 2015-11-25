@@ -58,9 +58,16 @@ def jogo_de_interesse(profile):
     interests = profile.interests.all()
     return Profile.objects.filter(
         interests__in=interests
+    ).exclude(
+        id=profile.id
     ).distinct()
 
 
 @register.filter
 def seguranca_em_porcentagem(profile):
     return 100.0 * profile.calcular_seguranca() / 5
+
+
+@register.filter
+def subtract(x, y):
+    return x - y

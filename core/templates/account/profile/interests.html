@@ -39,13 +39,15 @@
                 {% endif %}
 
                 <div class="col s6">                
-                  <div class="card small {% if profile|is_interest_selected:interest.id %}green lighten-4{% endif %}">
+                  <div class="card {% if profile|is_interest_selected:interest.id %}green lighten-4{% endif %}">
                     <div class="card-image">
                       <img class="responsive-image" src="{% static 'images/sample-1.jpg' %}">
                       <span class="card-title">{{ interest.title }}</span>
                     </div>
                     <div class="card-content center">
                       <p>{{ interest.description }}</p>
+                      <br>
+                      <i class="{{ interest.image_class }}"></i>
                       <input type="checkbox" name="interests" id="id_interests_{{ interests.id }}" value="{{ interest.id }}" {% if profile|is_interest_selected:interest.id %}checked="checked"{% endif %}>
                     </div>
                   </div>
@@ -85,7 +87,7 @@
             $(this).find('input').removeAttr('checked');
           } else {
             if ($('#form_interests .card.green').length >= 4) {
-              alert('Você pode esoclher no máximo três interesses!')
+              alert('Você pode esoclher no máximo quatro interesses!')
               return;
             };
 

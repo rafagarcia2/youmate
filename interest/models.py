@@ -14,3 +14,6 @@ class Interest(models.Model):
     class Meta:
         verbose_name = "Interest"
         verbose_name_plural = "Interests"
+
+    def __unicode__(self):
+        return self.title

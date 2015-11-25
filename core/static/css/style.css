@@ -2015,3 +2015,27 @@ footer.page-footer {
       font-size: 0.8rem;
   }
 }
+
+
+.interest-animais, .interest-aventura, .interest-bares, /*.interest-cultura,*/
+.interest-atividade-fisica, .interest-festa, .interest-gastronomia, .interest-cultura,
+.interest-natureza, .interest-amizades, .interest-praia /*, .interest-viagem*/ {
+  display: inline-block;
+  background: url('../images/interests.png') no-repeat;
+  overflow: hidden;
+  text-indent: -9999px;
+  text-align: left;
+}
+
+.interest-animais { background-position: -0px -0px; width: 99px; height: 90px; }
+.interest-aventura { background-position: -99px -0px; width: 99px; height: 90px; }
+.interest-bares { background-position: -198px -0px; width: 99px; height: 90px; }
+/*.interest-cultura { background-position: -0px -90px; width: 99px; height: 90px; }*/
+.interest-atividade-fisica { background-position: -99px -90px; width: 99px; height: 90px; }
+.interest-festa { background-position: -198px -90px; width: 99px; height: 90px; }
+.interest-gastronomia { background-position: -0px -180px; width: 99px; height: 90px; }
+.interest-cultura { background-position: -99px -180px; width: 99px; height: 90px; }
+.interest-natureza { background-position: -198px -180px; width: 99px; height: 90px; }
+.interest-amizades { background-position: -0px -270px; width: 99px; height: 90px; }
+.interest-praia { background-position: -99px -270px; width: 99px; height: 90px; }
+/*.interest-viagem { background-position: -198px -270px; width: 99px; height: 90px; }*/

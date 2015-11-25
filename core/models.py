@@ -74,6 +74,13 @@ class Profile(models.Model):
         ]
         return len(filter(lambda x: x is True, criterias))
 
+    def get_average_rate(self):
+        return int(Reference.objects.filter(
+            to_user=self
+        ).aggregate(
+            models.Avg('rating')
+        )['rating__avg'] or 0)
+
 
 class SearchQuery(models.Model):
     living_city = models.CharField(
