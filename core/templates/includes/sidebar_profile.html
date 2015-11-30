@@ -2,8 +2,8 @@
 
 {% load tags %}
 
-<div class="col m3">
-  <div class="card">
+<div class="col s12 m3">
+  <div class="card" style="margin-top: 0 !important;">
     <div class="card-image">
       <img src="{{ object.user|get_profile_photo }}" alt="sample">
     </div>
@@ -42,13 +42,13 @@
     </div>
     <div class="card-content">
       <ul class="left-align">
-        <li class="green-text">
-          <i class="mdi-action-done tiny"></i>
-          Login 
-        </li>
         <li {% if object.user.is_active %}class="green-text"{% endif %}>
           <i class="mdi-communication-email tiny"></i>
           Email confirmado 
+        </li>
+        <li class="green-text">
+          <i class="mdi-action-done tiny"></i>
+          Perfil completo
         </li>
         <li {% if object.phone %}class="green-text"{% endif %}>
           <i class="mdi-communication-phone tiny"></i>
@@ -73,35 +73,33 @@
     </div>
   </div>
 
-  {% if request.user.is_authenticated and request.user.profile == object %}
-    <div class="card">
-      <div class="card-title center grey">
-        Interesses similares
-      </div>
-      <div class="card-content">
-        <div class="collection">
-          {% for profile in object|jogo_de_interesse %}
-            <a href="{% url 'profile' profile.user.username %}" class="collection-item avatar grey-text">
-              <img src="{{ profile|get_profile_photo }}" class="circle">
-              <span class="title">{{ profile.user.full_name|default:profile.user.username }}</span>
-              <br>
-              {% for interest in profile.interests.all %}
-                <strong>{{ interest.title }}</strong>{% if not forloop.last %},{% endif %}
-              {% endfor %}
+  <!--<div class="card">
+    <div class="card-title center grey">
+      Interesses similares
+    </div>
+    <div class="card-content">
+      <div class="collection">
+        {% for profile in object|jogo_de_interesse %}
+          <a href="{% url 'profile' profile.user.username %}" class="collection-item avatar grey-text">
+            <img src="{{ profile|get_profile_photo }}" class="circle">
+            <span class="title">{{ profile.user.full_name|default:profile.user.username }}</span>
+            <br>
+            {% for interest in profile.interests.all %}
+              <strong>{{ interest.title }}</strong>{% if not forloop.last %},{% endif %}
+            {% endfor %}
+          </a>
+        {% empty %}
+          {% if object.interests.exists %}
+            <p class="collection-item grey-text">
+              Não encontramos pessoas com os mesmo interesses que os seus
+            </p>
+          {% else %}
+            <a href="{% url 'profile_interests' %}" class="collection-item grey-text">
+              <span class="title">Escolha alguns interesses para encontrar pessoas</span>
             </a>
-          {% empty %}
-            {% if object.interests.exists %}
-              <p class="collection-item grey-text">
-                Não encontramos pessoas com os mesmo interesses que os seus
-              </p>
-            {% else %}
-              <a href="{% url 'profile_interests' %}" class="collection-item grey-text">
-                <span class="title">Escolha alguns interesses para encontrar pessoas</span>
-              </a>
-            {% endif %}
-          {% endfor %}
-        </div>
+          {% endif %}
+        {% endfor %}
       </div>
     </div>
-  {% endif %}
+  </div>-->
 </div>

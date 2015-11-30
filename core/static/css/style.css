@@ -2039,3 +2039,31 @@ footer.page-footer {
 .interest-amizades { background-position: -0px -270px; width: 99px; height: 90px; }
 .interest-praia { background-position: -99px -270px; width: 99px; height: 90px; }
 /*.interest-viagem { background-position: -198px -270px; width: 99px; height: 90px; }*/
+
+
+#menu_profile {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  height: 50px;
+}
+
+#menu_profile li {
+  width: 20%;
+}
+
+#menu_profile li.active {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+#menu_profile a {
+  height: 50px;
+  line-height: 50px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.box {
+  border: 1px solid #E1E1E1;
+}

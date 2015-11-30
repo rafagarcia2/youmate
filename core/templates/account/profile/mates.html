@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% load account %}
+{% load widget_tweaks %}
+
+{% load tags %}
+
+{% load url from future %}
+
+{% block head_title %}{% trans "Mates" %}{% endblock %}
+
+{% block content %}
+  <div class="row">
+    {% include "includes/menu_profile.html" with object=object active_page='mates' %}
+
+    <div class="col s12">
+      <div id="test1" class="col s12">
+        <div>
+          <form class="col s6 right">
+            <div class="input-field col s12">
+              <input id="id_search" placeholder="Nome ou Local" type="text" class="validate" style="width: calc(100% - 65px)" name="search" value="{{ search|default:'' }}">
+              <button type="submit" class="btn-flat waves-effect waves-white red white-text" style="height: 50px;padding: 15px;line-height: 15px;border-radius:0;min-width:60px;">
+                <i class="mdi-action-search"></i>
+              </button>
+            </div>
+          </form>
+          <h3>Mates</h3>
+        </div>
+
+        <div class="row">
+          {% include "includes/sidebar_profile.html" with object=object %}
+            
+          <div class="col m9">
+            <div class="row margin">
+              {% for mate in object_list %}
+                {% if forloop.first %}
+                  <div class="row">
+                {% endif %}
+
+                <div class="col s2 m6 l6 clickable hoverable" data-href="{% url 'profile' mate.from_user.user.username %}">
+                  <div class="card">
+                    <div class="card-content">
+                      <div class="left" style="margin-right: 10px;width: 100px; height: 200px;">
+                        <img src="{{ mate.from_user|get_profile_photo }}" height="100px" />
+                      </div>
+                      <div>
+                        <div>
+                          <h5>{{ mate.from_user.user.get_full_name|default:mate.from_user.user.username }}</h5>
+                          {% with average_rate=mate.from_user.get_average_rate %}
+                            {% for rating in average_rate|as_range %}
+                              <span class="yellow-text lighten-3">
+                                <i class="mdi-action-star-rate small"></i>
+                              </span>
+                            {% endfor %}
+                            {% for rating in 5|subtract:average_rate|as_range %}
+                              <span class="grey-text lighten-4">
+                                <i class="mdi-action-star-rate small"></i>
+                              </span>
+                            {% endfor %}
+                          {% endwith %}
+                          <br>
+                        </div>
+                        <div>
+                          <ul>
+                            <li>
+                              {% with total=mate.from_user.references_to.count %}
+                                {{ total }} referência{{ total|pluralize }}
+                              {% endwith %}
+                            </li>
+                            <li>
+                              {% with total=mate.from_user.mates_to.count %}
+                                <a href="{% url 'mates' mate.from_user.user.username %}">
+                                  {{ total }} mate{{ total|pluralize }}
+                                </a>
+                              {% endwith %}
+                            </li>
+                            {% if mate.from_user.born_city %}
+                              <li>
+                                <i class="mdi-action-home tiny"></i>
+                                {{ mate.from_user.living_city|default:'Não informado' }}
+                              </li>
+                            {% elif mate.from_user.living_city %}
+                              <li>
+                                <i class="mdi-action-room tiny"></i>
+                                {{ mate.from_user.born_city|default:'Não informado' }}
+                              </li>
+                            {% else %}
+                              <li>Não informado</li>
+                            {% endif %}
+                          </ul>
+                        </div>
+                      </div>
+                      <br/>
+                    </div>
+                  </div>
+                </div>
+              
+                {% if forloop.counter|divisibleby:"2" %}
+                  </div>
+                  {% if not forloop.last %}
+                    <div class="row">
+                  {% endif %}
+                {% endif %}
+              {% empty %}
+                <h4 class="header">Não encontramos nenhum perfil.</h4>
+              {% endfor %}
+            </div>
+            
+            {% if paginator.num_pages > 1 %}
+              <div class="row magin center">
+                <div class="col s12">
+                  <ul class="pagination">
+                    <li class="disabled col s2">
+                        <i class="mdi-navigation-arrow-back"></i>
+                      </a>
+                    </li>
+                    {% for page in paginator.page_range %}
+                      <li class="waves-effect col s2"><a href="#!">{{ page }}</a></li>
+                    {% endfor %}
+                    <li class="waves-effect col s2">
+                      <a href="#!">
+                        <i class="mdi-navigation-arrow-forward"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('.clickable').click(function() {
+        window.location.href = $(this).data('href');
+      });
+    });
+  </script>
+{% endblock extra_js %}

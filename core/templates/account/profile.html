@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load static %}
 {% load account %}
 {% load widget_tweaks %}
 
@@ -9,6 +10,8 @@
 {% load url from future %}
 
 {% block extra_css %}
+  <link href="{% static 'js/plugins/jquery.bxslider/jquery.bxslider.css' %}" type="text/css" rel="stylesheet">
+
   <style type="text/css">
     .tabs .indicator {
       background-color: #FFF;
@@ -29,9 +32,9 @@
 
 {% block content %}
   <div class="row">
-    {% include "includes/menu_profile.html" %}
+    {% include "includes/menu_profile.html" with active_page='profile' %}
 
-    <div class="col s12">
+    <div class="col s12 ">
       <div id="test1" class="col s12">
         <div class="row">
           {% if request.user.is_authenticated and request.user.profile == object %}
@@ -62,7 +65,7 @@
             
           <div class="col m9">
             {% if object.about %}
-              <div class="row white">
+              <div class="row white box">
                 <div class="col s12">
                   <div class="row margin">
                     <h4 class="header2">Quem sou eu</h4>
@@ -74,7 +77,7 @@
               </div>
             {% endif %}
 
-            <div class="row white">
+            <div class="row white box">
               <div class="col s12">
                 <div class="row margin">
                   <h4 class="header2">Interesses</h4>
@@ -108,10 +111,9 @@
                   </div>
                   <div class="row">
                     {% for interest in object.interests.all %}
-                      <div class="col s3 tooltipped" data-position="top" data-delay="50" data-tooltip="{{ interest.description }}">
-
-                        <i class="{{ interest.image_class|default:'mdi-image-photo-album' }} large left"></i>
-                        <br>
+                      <div class="col s3 tooltipped center" data-position="top" data-delay="50" data-tooltip="{{ interest.description }}">
+                        <i class="{{ interest.image_class|default:'mdi-image-photo-album' }} large"></i>
+                        <div class="clearfix"></div>
                         <p>{{ interest.title }}</p>
                       </div>  
                     {% endfor %}
@@ -131,7 +133,54 @@
               </div>
             </div>
 
-            <div class="row white">
+            <div class="row white box">
+              <div class="col s12">
+                <div class="row margin">
+                  <h4 class="header2">Pessoas com mesmo interesses</h4>
+
+                  <div class="row">                    
+                    <div class="similar_interests_slider">
+                      {% for profile in object|jogo_de_interesse %}
+                        <div class="card clickable hoverable" data-href="{% url 'profile' profile.user.username %}">
+                          <div class="card-content">
+                            <div>
+                              <img src="{{ profile|get_profile_photo }}" height="260px" />
+                            </div>
+                            <div>
+                              <div>
+                                <h5>{{ profile.user.get_full_name|default:profile.user.username }}</h5>
+                                {% with average_rate=profile.get_average_rate %}
+                                  {% for rating in average_rate|as_range %}
+                                    <span class="yellow-text lighten-3">
+                                      <i class="mdi-action-star-rate small"></i>
+                                    </span>
+                                  {% endfor %}
+                                  {% for rating in 5|subtract:average_rate|as_range %}
+                                    <span class="grey-text lighten-4">
+                                      <i class="mdi-action-star-rate small"></i>
+                                    </span>
+                                  {% endfor %}
+                                {% endwith %}
+                                <br>
+                                <div class="col s12">
+                                  {% for interest in profile.interests.all %}
+                                    <div class="col s3 tooltipped" data-position="top" data-delay="50" data-tooltip="{{ interest.description }}">
+                                      <i style="zoom: 0.4;" class="{{ interest.image_class|default:'mdi-image-photo-album' }} left"></i>
+                                    </div>  
+                                  {% endfor %}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row white box">
               <div class="col s12">
                 <div class="row margin">
                   <h4 class="header2">Avaliações</h4>
@@ -252,19 +301,34 @@
 {% endblock %}
 
 {% block extra_js %}
-   <script type="text/javascript">
-     $(document).ready(function () {
-       $('.rating a').click(function () {
-          $('.rating a').addClass('grey-text lighten-5').removeClass('yellow-text lighten-3');
+  <script type="text/javascript" src="{% static 'js/plugins/jquery.bxslider/jquery.bxslider.js' %}"></script>
 
-          $(this).find('input').attr('checked', 'checked');
-          var index = $(this).find('input').val();
-          for (var i = 1; i <= parseInt(index); i++) {
-            var these = $('.rating #rating-' + i);
-            $(these).removeClass('grey-text lighten-5');
-            $(these).addClass('yellow-text lighten-3');
-          };
-       });
-     });
-   </script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('.rating a').click(function () {
+        $('.rating a').addClass('grey-text lighten-5').removeClass('yellow-text lighten-3');
+
+        $(this).find('input').attr('checked', 'checked');
+        var index = $(this).find('input').val();
+        for (var i = 1; i <= parseInt(index); i++) {
+          var these = $('.rating #rating-' + i);
+          $(these).removeClass('grey-text lighten-5');
+          $(these).addClass('yellow-text lighten-3');
+        };
+      });
+
+      $('.similar_interests_slider').bxSlider({
+        slideWidth: 300,
+        minSlides: 2,
+        maxSlides: 3,
+        slideMargin: 10,
+        pager: false,
+        infiniteLoop: false,
+      });
+
+      $('.clickable').click(function() {
+        window.location.href = $(this).data('href');
+      });
+    });
+  </script>
 {% endblock extra_js %}
