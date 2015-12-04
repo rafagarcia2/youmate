@@ -7,6 +7,8 @@ from interest.models import Interest
 
 
 class InterestSerializer(serializers.ModelSerializer):
+    url = serializers.CharField(source='get_image_url', read_only=True)
+
     class Meta:
         model = Interest
 

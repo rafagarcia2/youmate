@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext as _
+from django.contrib.staticfiles.templatetags.staticfiles import static
 
 
 class Interest(models.Model):
@@ -17,3 +18,7 @@ class Interest(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    @property
+    def get_image_url(self):
+        return static('images/interests/{}.svg'.format(self.image_class))

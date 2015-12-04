@@ -1,7 +1,7 @@
 [
 {
     "fields": {
-        "image_class": "interest-bares",
+        "image_class": "bares",
         "description": "Apenas aquele petisco sensacional, com os amigos uma cerveja geladinha ou uma dose para fechar o dia \u00e9 tudo que precisa!\r\n",
         "profiles": [],
         "title": "Bares"
@@ -11,7 +11,7 @@
 },
 {
     "fields": {
-        "image_class": "interest-praia",
+        "image_class": "praia",
         "description": "O mar, o sol, as ondas, a areia! Caminhar ou surfar, pegar aquele bronze ou contemplar as estrelas na areia da praia! O que mais precisa para ser feliz?\r\n",
         "profiles": [],
         "title": "Praia"
@@ -21,7 +21,7 @@
 },
 {
     "fields": {
-        "image_class": "interest-aventura",
+        "image_class": "aventura",
         "description": "Adrenalina, esportes radicais, cora\u00e7\u00e3o saltitante, risco! Alcan\u00e7ar os limites do corpo \u00e9 o objetivo!\r\n",
         "profiles": [],
         "title": "Aventura"
@@ -31,7 +31,7 @@
 },
 {
     "fields": {
-        "image_class": "interest-amizades",
+        "image_class": "amizades",
         "description": "conhecer uma galera ai",
         "profiles": [],
         "title": "Amizades"
@@ -41,7 +41,7 @@
 },
 {
     "fields": {
-        "image_class": "interest-animais",
+        "image_class": "animais",
         "description": "",
         "profiles": [],
         "title": "Animais"
@@ -51,7 +51,7 @@
 },
 {
     "fields": {
-        "image_class": "interest-cultura",
+        "image_class": "cultura",
         "description": "Museus, arquitetura, literatura, m\u00fasica, folclore, hist\u00f3ria! O melhor para entender um lugar \u00e9 entender a cultura do local!  ",
         "profiles": [],
         "title": "Cultura"
@@ -61,7 +61,7 @@
 },
 {
     "fields": {
-        "image_class": "interest-atividade-fisica",
+        "image_class": "atividade-fisica",
         "description": "Corrida, pedalada, trilha, surf! Seu corpo s\u00f3 n\u00e3o consegue ficar parado. ",
         "profiles": [],
         "title": "Atividade f\u00edsica"
@@ -71,7 +71,7 @@
 },
 {
     "fields": {
-        "image_class": "interest-festa",
+        "image_class": "festa",
         "description": "A vida noturna agitada regada a bebidas e paqueras \u00e9 que procura! No final, a vida \u00e9 curta e tem que ser aproveitada!\r\n",
         "profiles": [],
         "title": "Festa"
@@ -81,7 +81,7 @@
 },
 {
     "fields": {
-        "image_class": "interest-gastronomia",
+        "image_class": "gastronomia",
         "description": "Nada melhor do que aquela comida saborosa, imprevis\u00edvel, surpreendente! Alimentar n\u00e3o \u00e9 apenas uma necessidade, \u00e9 um prazer!\r\n",
         "profiles": [],
         "title": "Gastronomia"
@@ -91,7 +91,7 @@
 },
 {
     "fields": {
-        "image_class": "interest-natureza",
+        "image_class": "natureza",
         "description": "Contemplar a natureza, fazer ecoturismo, fugir da rotina da cidade e se lembrar que o ser humano tamb\u00e9m \u00e9 um animal. Nada melhor que o verde da natureza para alcan\u00e7ar o equil\u00edbrio e a paz de espirito.  \r\n",
         "profiles": [],
         "title": "Natureza"
