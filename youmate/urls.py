@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^', include('mate.urls')),
     url(r'^', include('reference.urls')),
     url(r'^', include('interest.urls')),
+    url(r'^api/', include('api.urls')),
     url(r'^accounts/', include('allauth.urls')),
 ]

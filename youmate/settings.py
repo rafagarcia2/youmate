@@ -54,11 +54,17 @@ LOCAL_APPS = (
     'mate',
     'reference',
     'interest',
+    'api',
 )
 
 EXTERNAL_APPS = (
     'django_extensions',
     'widget_tweaks',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_framework_filters',
+    'rest_auth',
+    'rest_auth.registration',
 
     'allauth',
     'allauth.account',
@@ -170,6 +176,10 @@ SOCIALACCOUNT_PROVIDERS = {
         'LOCALE_FUNC': lambda request: 'pt_BR',
         'VERIFIED_EMAIL': False
     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
 }
 
 LOGIN_URL = '/accounts/login/'
