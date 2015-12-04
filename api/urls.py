@@ -21,6 +21,9 @@ urlpatterns = patterns(
     url(regex=r'^users/$',
         view=views.UserList.as_view(),
         name='user_list'),
+    url(regex=r'^users/(?P<pk>[0-9]+)/$',
+        view=views.UserRetrieve.as_view(),
+        name='user_retrieve'),
 
     # Profile
     url(regex=r'^profiles/$',

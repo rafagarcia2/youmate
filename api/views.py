@@ -53,6 +53,10 @@ class UserList(UserMixin, generics.ListCreateAPIView):
     }
 
 
+class UserRetrieve(UserMixin, generics.RetrieveAPIView):
+    pass
+
+
 class InterestList(InterestMixin, generics.ListCreateAPIView):
     pass
 
