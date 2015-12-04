@@ -8,9 +8,11 @@ from interest.models import Interest
 
 class InterestSerializer(serializers.ModelSerializer):
     url = serializers.CharField(source='get_image_url', read_only=True)
+    slug = serializers.CharField(source='image_class', read_only=True)
 
     class Meta:
         model = Interest
+        exclude = ('image_class',)
 
 
 class ProfileSerializer(serializers.ModelSerializer):
