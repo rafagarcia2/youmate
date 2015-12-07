@@ -16,6 +16,8 @@ urlpatterns = patterns(
         include('rest_auth.registration.urls')),
     url(r'^rest-auth/facebook/$',
         views.FacebookLogin.as_view(), name='rest_facebook_login'),
+    url(r'^rest-auth/google/$',
+        views.GoogleLogin.as_view(), name='rest_google_login'),
 
     # User
     url(regex=r'^users/$',

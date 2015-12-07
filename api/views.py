@@ -1,13 +1,13 @@
 from django.contrib import auth
 
-
-
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework import filters
-from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from allauth.socialaccount.providers.facebook.views import (
+    FacebookOAuth2Adapter)
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from rest_auth.registration.views import SocialLoginView
 
 from api import serializers
@@ -24,6 +24,7 @@ class APIRoot(APIView):
             'profiles': reverse('profile_list', request=request),
             'login': reverse('rest_login', request=request),
             'facebook_login': reverse('rest_facebook_login', request=request),
+            'google_login': reverse('rest_google_login', request=request),
         })
 
 
@@ -71,3 +72,7 @@ class ProfileUpdateView(ProfileMixin, generics.RetrieveUpdateAPIView):
 
 class FacebookLogin(SocialLoginView):
     adapter_class = FacebookOAuth2Adapter
+
+
+class GoogleLogin(SocialLoginView):
+    adapter_class = GoogleOAuth2Adapter
