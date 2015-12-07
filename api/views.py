@@ -19,12 +19,25 @@ from core.models import Profile
 class APIRoot(APIView):
     def get(self, request):
         return Response({
-            'users': reverse('user_list', request=request),
-            'interests': reverse('interest_list', request=request),
-            'profiles': reverse('profile_list', request=request),
-            'login': reverse('rest_login', request=request),
-            'facebook_login': reverse('rest_facebook_login', request=request),
-            'google_login': reverse('rest_google_login', request=request),
+            'YouMate': {
+                'users': reverse('user_list', request=request),
+                'interests': reverse('interest_list', request=request),
+                'profiles': reverse('profile_list', request=request),
+            },
+            'Oauth2': {
+                'oauth2_authorize': reverse(
+                    'oauth2:authorize', request=request),
+                'oauth2_token': reverse('oauth2:token', request=request),
+                'oauth2_revoke-token': reverse(
+                    'oauth2:revoke-token', request=request),
+            },
+            'Authentication': {
+                'obtain_token': reverse('rest_obtain_token', request=request),
+                'login': reverse('rest_login', request=request),
+                'facebook_login': reverse(
+                    'rest_facebook_login', request=request),
+                'google_login': reverse('rest_google_login', request=request),
+            }
         })
 
 

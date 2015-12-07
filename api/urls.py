@@ -1,5 +1,7 @@
 from django.conf.urls import patterns, url, include
 
+from rest_framework.authtoken.views import obtain_auth_token
+
 # Class based API views
 from api import views
 
@@ -11,7 +13,13 @@ urlpatterns = patterns(
         name='root'),
 
     # Authentication
+    url(r'^rest-social-auth/', include('rest_framework_social_oauth2.urls')),
+    url(r'^oauth2/',
+        include('oauth2_provider.urls', namespace='oauth2')),
     url(r'^rest-auth/', include('rest_auth.urls')),
+    url(r'^rest-auth/get-token/',
+        view=obtain_auth_token,
+        name='rest_obtain_token'),
     url(r'^rest-auth/registration/',
         include('rest_auth.registration.urls')),
     url(r'^rest-auth/facebook/$',

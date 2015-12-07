@@ -66,6 +66,9 @@ EXTERNAL_APPS = (
     'rest_auth',
     'rest_auth.registration',
     'corsheaders',
+    'oauth2_provider',
+    'social.apps.django_app.default',
+    'rest_framework_social_oauth2',
 
     'allauth',
     'allauth.account',
@@ -84,6 +87,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'oauth2_provider.middleware.OAuth2TokenMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -107,6 +111,8 @@ TEMPLATES = [
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
             ),
         },
     },
@@ -153,9 +159,35 @@ STATICFILES_DIRS = (
 # Django allauth
 
 AUTHENTICATION_BACKENDS = global_settings.AUTHENTICATION_BACKENDS + (
-    # `allauth` specific authentication methods, such as login by e-mail
-    'allauth.account.auth_backends.AuthenticationBackend',
+    # Facebook OAuth2
+    'social.backends.facebook.FacebookAppOAuth2',
+    'social.backends.facebook.FacebookOAuth2',
+
+    # django-rest-framework-social-oauth2
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
+
+    # Django
+    'django.contrib.auth.backends.ModelBackend',
+
 )
+
+# Facebook configuration
+SOCIAL_AUTH_FACEBOOK_KEY = '550725368407825'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'd6d9ee2d2795ac61e54d51dcfa9cd38d'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+
+# AUTHENTICATION_BACKENDS = global_settings.AUTHENTICATION_BACKENDS + (
+#     'oauth2_provider.backends.OAuth2Backend',
+#     # `allauth` specific authentication methods, such as login by e-mail
+#     'allauth.account.auth_backends.AuthenticationBackend',
+
+#     'rest_framework_social_oauth2.backends.DjangoOAuth2',
+#     'django.contrib.auth.backends.ModelBackend',
+
+#     # Facebook OAuth2
+#     'social.backends.facebook.FacebookAppOAuth2',
+#     'social.backends.facebook.FacebookOAuth2',
+# )
 
 # MIDDLEWARE_CLASSES = global_settings.AUTHENTICATION_BACKENDS + (
 #     'django.middleware.common.CommonMiddleware',
@@ -182,7 +214,25 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
+    'DEFAULT_FILTER_BACKENDS': (
+        'rest_framework.filters.DjangoFilterBackend',
+    ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
+    )
+}
+
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    'SCOPES': {
+        'read': 'Read scope',
+        'write': 'Write scope',
+        'groups': 'Access to your groups'
+    }
 }
 
 LOGIN_URL = '/accounts/login/'
