@@ -25,7 +25,6 @@ class APIRoot(APIView):
                 'interests': reverse('interest_list', request=request),
                 'profile': {
                     'profiles': reverse('profile_list', request=request),
-                    'search': reverse('profile_search', request=request),
                 }
             },
             'Oauth2': {
