@@ -159,9 +159,10 @@ STATICFILES_DIRS = (
 # Django allauth
 
 AUTHENTICATION_BACKENDS = global_settings.AUTHENTICATION_BACKENDS + (
-    # Facebook OAuth2
+    # Social auth
     'social.backends.facebook.FacebookAppOAuth2',
     'social.backends.facebook.FacebookOAuth2',
+    'social.backends.google.GoogleOAuth2',
 
     # django-rest-framework-social-oauth2
     'rest_framework_social_oauth2.backends.DjangoOAuth2',
@@ -171,10 +172,13 @@ AUTHENTICATION_BACKENDS = global_settings.AUTHENTICATION_BACKENDS + (
 
 )
 
-# Facebook configuration
-SOCIAL_AUTH_FACEBOOK_KEY = '550725368407825'
-SOCIAL_AUTH_FACEBOOK_SECRET = 'd6d9ee2d2795ac61e54d51dcfa9cd38d'
+# Social auth configuration
+SOCIAL_AUTH_FACEBOOK_KEY = '1685351455020151'
+SOCIAL_AUTH_FACEBOOK_SECRET = '5dc0a60e3812301c576211452ac6cce8'
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ('79881842751-c9l225d7nojbqhsfeuak1h8mlmqmmlgi'
+                                 '.apps.googleusercontent.com')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '26mT_rgQys1saUiCeqzgjjCB'
 
 # AUTHENTICATION_BACKENDS = global_settings.AUTHENTICATION_BACKENDS + (
 #     'oauth2_provider.backends.OAuth2Backend',
