@@ -1,4 +1,5 @@
 from django.contrib import auth
+from django.db.models import Q
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -22,7 +23,10 @@ class APIRoot(APIView):
             'YouMate': {
                 'users': reverse('user_list', request=request),
                 'interests': reverse('interest_list', request=request),
-                'profiles': reverse('profile_list', request=request),
+                'profile': {
+                    'profiles': reverse('profile_list', request=request),
+                    'search': reverse('profile_search', request=request),
+                }
             },
             'Oauth2': {
                 'oauth2_authorize': reverse(
@@ -66,6 +70,18 @@ class UserList(UserMixin, generics.ListCreateAPIView):
         'profile__living_city': ['icontains'],
     }
 
+    def get_queryset(self):
+        queryset = super(UserList, self).get_queryset()
+
+        search = self.request.query_params.get('search', None)
+        if search is not None:
+            queryset = queryset.filter(
+                Q(profile__living_city__icontains=search) |
+                Q(first_name__icontains=search) |
+                Q(last_name__icontains=search)
+            )
+        return queryset
+
 
 class UserRetrieve(UserMixin, generics.RetrieveAPIView):
     pass
@@ -76,7 +92,17 @@ class InterestList(InterestMixin, generics.ListCreateAPIView):
 
 
 class ProfileListView(ProfileMixin, generics.ListAPIView):
-    pass
+    def get_queryset(self):
+        queryset = super(ProfileListView, self).get_queryset()
+
+        search = self.request.query_params.get('search', None)
+        if search is not None:
+            queryset = queryset.filter(
+                Q(living_city__icontains=search) |
+                Q(user__first_name__icontains=search) |
+                Q(user__last_name__icontains=search)
+            )
+        return queryset
 
 
 class ProfileUpdateView(ProfileMixin, generics.RetrieveUpdateAPIView):

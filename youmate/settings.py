@@ -169,7 +169,6 @@ AUTHENTICATION_BACKENDS = global_settings.AUTHENTICATION_BACKENDS + (
 
     # Django
     'django.contrib.auth.backends.ModelBackend',
-
 )
 
 # Social auth configuration
