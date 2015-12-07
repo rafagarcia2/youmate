@@ -21,7 +21,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         many=True,
         queryset=Interest.objects.all()
     )
-    get_photo_url = serializers.CharField(
+    photo_url = serializers.CharField(
+        source='get_photo_url',
         read_only=True
     )
 
