@@ -2,7 +2,6 @@ import hashlib
 
 from django import template
 
-from core.models import Profile
 
 register = template.Library()
 
@@ -22,6 +21,7 @@ def exists_pk(queryset, pk):
 
 @register.filter
 def get_profile_photo(user):
+    from core.models import Profile
     if isinstance(user, Profile):
         user = user.user
 

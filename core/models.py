@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 from django.core.exceptions import AppRegistryNotReady
 
 from reference.models import Reference
+from core.templatetags.tags import get_profile_photo
 
 
 class Profile(models.Model):
@@ -80,6 +81,11 @@ class Profile(models.Model):
         ).aggregate(
             models.Avg('rating')
         )['rating__avg'] or 0)
+
+    @property
+    def get_photo_url(self):
+        return get_profile_photo(self.user)
+
 
 
 class SearchQuery(models.Model):

@@ -21,6 +21,9 @@ class ProfileSerializer(serializers.ModelSerializer):
         many=True,
         queryset=Interest.objects.all()
     )
+    get_photo_url = serializers.CharField(
+        read_only=True
+    )
 
     class Meta:
         model = Profile
