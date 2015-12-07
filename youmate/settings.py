@@ -65,6 +65,7 @@ EXTERNAL_APPS = (
     'rest_framework_filters',
     'rest_auth',
     'rest_auth.registration',
+    'corsheaders',
 
     'allauth',
     'allauth.account',
@@ -85,7 +86,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 )
+
 
 ROOT_URLCONF = 'youmate.urls'
 
@@ -195,6 +198,8 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 
 SITE_ID = 1
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Import the custom settings
 try:
