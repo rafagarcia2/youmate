@@ -2,6 +2,7 @@ from django.contrib import auth
 from django.db.models import Q
 
 from rest_framework import generics
+from rest_framework.exceptions import NotAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -21,7 +22,11 @@ class APIRoot(APIView):
     def get(self, request):
         return Response({
             'YouMate': {
-                'users': reverse('user_list', request=request),
+                'users': {
+                    'users': reverse('user_list', request=request),
+                    'logged_user': reverse(
+                        'logged_user_retrieve', request=request),
+                },
                 'interests': reverse('interest_list', request=request),
                 'profile': {
                     'profiles': reverse('profile_list', request=request),
@@ -84,6 +89,13 @@ class UserList(UserMixin, generics.ListCreateAPIView):
 
 class UserRetrieve(UserMixin, generics.RetrieveAPIView):
     pass
+
+
+class LoggedUserRetrieve(UserMixin, generics.RetrieveAPIView):
+    def get_queryset(self):
+        if self.request.user.is_authenticated():
+            return self.request.user
+        raise NotAuthenticated()
 
 
 class InterestList(InterestMixin, generics.ListCreateAPIView):
