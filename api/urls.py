@@ -50,4 +50,9 @@ urlpatterns = patterns(
     url(regex=r'^interests/$',
         view=views.InterestList.as_view(),
         name='interest_list'),
+
+    # Reference
+    url(regex=r'^references/$',
+        view=views.ReferenceList.as_view(),
+        name='reference_list'),
 )

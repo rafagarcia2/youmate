@@ -15,6 +15,7 @@ from rest_auth.registration.views import SocialLoginView
 from api import serializers
 
 from interest.models import Interest
+from reference.models import Reference
 from core.models import Profile
 
 
@@ -27,10 +28,11 @@ class APIRoot(APIView):
                     'logged_user': reverse(
                         'logged_user_retrieve', request=request),
                 },
-                'interests': reverse('interest_list', request=request),
                 'profile': {
                     'profiles': reverse('profile_list', request=request),
-                }
+                },
+                'interests': reverse('interest_list', request=request),
+                'references': reverse('reference_list', request=request),
             },
             'Oauth2': {
                 'oauth2_authorize': reverse(
@@ -62,6 +64,11 @@ class ProfileMixin(object):
 class InterestMixin(object):
     queryset = Interest.objects.all()
     serializer_class = serializers.InterestSerializer
+
+
+class ReferenceMixin(object):
+    queryset = Reference.objects.all()
+    serializer_class = serializers.ReferenceSerializer
 
 
 class UserList(UserMixin, generics.ListCreateAPIView):
@@ -100,6 +107,11 @@ class LoggedUserRetrieve(UserMixin, generics.RetrieveAPIView):
 
 class InterestList(InterestMixin, generics.ListCreateAPIView):
     pass
+
+
+class ReferenceList(ReferenceMixin, generics.ListCreateAPIView):
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('id', 'from_user', 'to_user')
 
 
 class ProfileListView(ProfileMixin, generics.ListAPIView):

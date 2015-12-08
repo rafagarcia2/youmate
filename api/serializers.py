@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 from core.models import Profile
 from interest.models import Interest
+from reference.models import Reference
 
 
 class InterestSerializer(serializers.ModelSerializer):
@@ -15,6 +16,11 @@ class InterestSerializer(serializers.ModelSerializer):
         exclude = ('image_class',)
 
 
+class ReferenceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reference
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     # interests = InterestSerializer(many=True)
     interests = serializers.PrimaryKeyRelatedField(
@@ -23,6 +29,15 @@ class ProfileSerializer(serializers.ModelSerializer):
     )
     photo_url = serializers.CharField(
         source='get_photo_url',
+        read_only=True
+    )
+    references = serializers.PrimaryKeyRelatedField(
+        source='references_to',
+        many=True,
+        queryset=Reference.objects.all()
+    )
+    reference_rate = serializers.CharField(
+        source='get_average_rate',
         read_only=True
     )
 
