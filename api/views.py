@@ -99,7 +99,7 @@ class UserRetrieve(UserMixin, generics.RetrieveAPIView):
 
 
 class LoggedUserRetrieve(UserMixin, generics.RetrieveAPIView):
-    def retrieve(request, *args, **kwargs):
+    def retrieve(self, request, *args, **kwargs):
         if request.user.is_authenticated():
             return request.user
         raise NotAuthenticated()
