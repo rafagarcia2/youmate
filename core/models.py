@@ -87,7 +87,6 @@ class Profile(models.Model):
         return get_profile_photo(self.user)
 
 
-
 class SearchQuery(models.Model):
     living_city = models.CharField(
         _('Living city'), max_length=100, null=True, blank=True)

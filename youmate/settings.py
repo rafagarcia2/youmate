@@ -29,6 +29,8 @@ SECRET_KEY = '8gm$c$+&w6#n*$bmc_4i%f=)c)oft9(u*c-d@_)jh9@gx3r&_9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+HOST_URL = 'http://youmate.herokuapp.com'
+
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 

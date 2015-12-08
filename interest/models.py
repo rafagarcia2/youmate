@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext as _
 from django.contrib.staticfiles.templatetags.staticfiles import static
@@ -21,4 +22,5 @@ class Interest(models.Model):
 
     @property
     def get_image_url(self):
-        return static('images/interests/{}.svg'.format(self.image_class))
+        photo = static('images/interests/{}.svg'.format(self.image_class))
+        return '{host}{photo}'.format(host=settings.HOST_URL, photo=photo)
