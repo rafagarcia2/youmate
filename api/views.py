@@ -109,6 +109,10 @@ class InterestList(InterestMixin, generics.ListCreateAPIView):
     pass
 
 
+class InterestUpdateView(InterestMixin, generics.RetrieveUpdateAPIView):
+    pass
+
+
 class ReferenceList(ReferenceMixin, generics.ListCreateAPIView):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('id', 'from_user', 'to_user')

@@ -50,6 +50,9 @@ urlpatterns = patterns(
     url(regex=r'^interests/$',
         view=views.InterestList.as_view(),
         name='interest_list'),
+    url(regex=r'^interests/(?P<pk>[0-9]+)/$',
+        view=views.ProfileUpdateView.as_view(),
+        name='interest_detail'),
 
     # Reference
     url(regex=r'^references/$',
