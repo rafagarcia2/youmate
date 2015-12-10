@@ -21,11 +21,25 @@ class ReferenceSerializer(serializers.ModelSerializer):
         model = Reference
 
 
+class ValidateInterestsCount(object):
+    def __init__(self):
+        self.min = 1
+        self.max = 4
+
+    def __call__(self, data):
+        interests = data.get('interests', [])
+        if not (self.min <= len(interests) <= self.max):
+            message = ('You cannot have less than %s '
+                       'and no more than %s interests.' % (self.min, self.max))
+            raise serializers.ValidationError(message)
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     # interests = InterestSerializer(many=True)
     interests = serializers.PrimaryKeyRelatedField(
         many=True,
-        queryset=Interest.objects.all()
+        queryset=Interest.objects.all(),
+        validators=[ValidateInterestsCount()]
     )
     photo_url = serializers.CharField(
         source='get_photo_url',
@@ -43,6 +57,9 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
+        validators = [
+            ValidateInterestsCount()
+        ]
 
 
 class UserSerializer(serializers.ModelSerializer):
