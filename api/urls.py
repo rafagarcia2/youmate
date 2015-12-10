@@ -51,7 +51,7 @@ urlpatterns = patterns(
         view=views.InterestList.as_view(),
         name='interest_list'),
     url(regex=r'^interests/(?P<pk>[0-9]+)/$',
-        view=views.ProfileUpdateView.as_view(),
+        view=views.InterestUpdateView.as_view(),
         name='interest_detail'),
 
     # Reference
