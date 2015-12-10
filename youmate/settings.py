@@ -71,6 +71,7 @@ EXTERNAL_APPS = (
     'oauth2_provider',
     'social.apps.django_app.default',
     'rest_framework_social_oauth2',
+    'push_notifications',
 
     'allauth',
     'allauth.account',
@@ -238,6 +239,12 @@ OAUTH2_PROVIDER = {
         'write': 'Write scope',
         'groups': 'Access to your groups'
     }
+}
+
+
+PUSH_NOTIFICATIONS_SETTINGS = {
+    'GCM_API_KEY': '<your api key>',
+    # 'APNS_CERTIFICATE': '/path/to/your/certificate.pem',
 }
 
 LOGIN_URL = '/accounts/login/'

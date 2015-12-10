@@ -50,3 +50,4 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = auth.get_user_model()
+        exclude = ('password',)

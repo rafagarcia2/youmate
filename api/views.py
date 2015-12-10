@@ -47,7 +47,11 @@ class APIRoot(APIView):
                 'facebook_login': reverse(
                     'rest_facebook_login', request=request),
                 'google_login': reverse('rest_google_login', request=request),
-            }
+            },
+            # 'Devices': {
+            #     'device_apns': reverse('device_apns', request=request),
+            #     'device_gcm': reverse('device_gcm', request=request),
+            # }
         })
 
 
