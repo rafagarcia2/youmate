@@ -16,6 +16,7 @@ from api import serializers
 
 from interest.models import Interest
 from reference.models import Reference
+from language.models import Language
 from core.models import Profile
 
 
@@ -33,6 +34,7 @@ class APIRoot(APIView):
                 },
                 'interests': reverse('interest_list', request=request),
                 'references': reverse('reference_list', request=request),
+                'languages': reverse('language_list', request=request),
             },
             'Oauth2': {
                 'oauth2_authorize': reverse(
@@ -69,6 +71,11 @@ class InterestMixin(object):
 class ReferenceMixin(object):
     queryset = Reference.objects.all()
     serializer_class = serializers.ReferenceSerializer
+
+
+class LanguageMixin(object):
+    queryset = Language.objects.all()
+    serializer_class = serializers.LanguageSerializer
 
 
 class UserList(UserMixin, generics.ListCreateAPIView):
@@ -116,6 +123,10 @@ class InterestUpdateView(InterestMixin, generics.RetrieveUpdateAPIView):
 class ReferenceList(ReferenceMixin, generics.ListCreateAPIView):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('id', 'from_user', 'to_user')
+
+
+class LanguageList(LanguageMixin, generics.ListCreateAPIView):
+    pass
 
 
 class ProfileListView(ProfileMixin, generics.ListAPIView):

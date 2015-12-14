@@ -1,0 +1,23 @@
+[
+{
+    "fields": {
+        "name": "Portugu\u00eas"
+    },
+    "model": "language.language",
+    "pk": 1
+},
+{
+    "fields": {
+        "name": "Ingl\u00eas"
+    },
+    "model": "language.language",
+    "pk": 2
+},
+{
+    "fields": {
+        "name": "Espanhol"
+    },
+    "model": "language.language",
+    "pk": 3
+}
+]

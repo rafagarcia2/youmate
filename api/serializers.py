@@ -5,6 +5,7 @@ from rest_framework import serializers
 from core.models import Profile
 from interest.models import Interest
 from reference.models import Reference
+from language.models import Language
 
 
 class InterestSerializer(serializers.ModelSerializer):
@@ -19,6 +20,11 @@ class InterestSerializer(serializers.ModelSerializer):
 class ReferenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reference
+
+
+class LanguageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Language
 
 
 class ValidateInterestsCount(object):

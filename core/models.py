@@ -40,6 +40,8 @@ class Profile(models.Model):
     mates = models.ManyToManyField(
         to='self', symmetrical=False,
         through='mate.Mate', related_name='mates_by')
+    languages = models.ManyToManyField(
+        to='language.Language', related_name='profiles')
 
     class Meta:
         verbose_name = _('Profile')

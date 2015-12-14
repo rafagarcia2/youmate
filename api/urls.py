@@ -58,4 +58,9 @@ urlpatterns = patterns(
     url(regex=r'^references/$',
         view=views.ReferenceList.as_view(),
         name='reference_list'),
+
+    # Language
+    url(regex=r'^languages/$',
+        view=views.LanguageList.as_view(),
+        name='language_list'),
 )
