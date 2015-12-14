@@ -88,6 +88,7 @@ class UserList(UserMixin, generics.ListCreateAPIView):
         'profile__born_city': ['icontains'],
         'profile__living_city': ['icontains'],
         'profile__genre': ['icontains'],
+        'profile__status': ['exact'],
     }
 
     def get_queryset(self):

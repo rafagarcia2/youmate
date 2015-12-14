@@ -10,6 +10,7 @@ from core.templatetags.tags import get_profile_photo
 
 
 class Profile(models.Model):
+    # Genre choices
     MEN = 'M'
     WOMEN = 'W'
     OTHER = 'X'
@@ -19,12 +20,23 @@ class Profile(models.Model):
         (WOMEN, _('Women')),
     )
 
+    # Status choices
+    LOCAL = 'L'
+    TRAVELER = 'T'
+    STATUS_CHOICES = (
+        (LOCAL, _('Local')),
+        (TRAVELER, _('Traveler')),
+    )
+
     about = models.TextField(
         _('About'), max_length=400, null=True, blank=True)
     age = models.IntegerField(_('Age'), null=True, blank=True)
     genre = models.CharField(
         _('Genre'), max_length=15, choices=GENRE_CHOICES,
         default=OTHER, null=True, blank=True)
+    status = models.CharField(
+        _('Status'), max_length=15, choices=STATUS_CHOICES,
+        null=True, blank=True)
     phone = models.CharField(_('Phone'), max_length=40, null=True, blank=True)
     job_title = models.CharField(
         _('Job title'), max_length=100, null=True, blank=True)
