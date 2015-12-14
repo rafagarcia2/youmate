@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework import filters
+from rest_framework.filters import django_filters
 from allauth.socialaccount.providers.facebook.views import (
     FacebookOAuth2Adapter)
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
@@ -86,17 +87,19 @@ class UserList(UserMixin, generics.ListCreateAPIView):
         'last_name': ['icontains'],
         'profile__born_city': ['icontains'],
         'profile__living_city': ['icontains'],
+        'profile__genre': ['icontains'],
+        'profile__interests__title': ['icontains'],
     }
 
     def get_queryset(self):
         queryset = super(UserList, self).get_queryset()
 
-        search = self.request.query_params.get('search', None)
-        if search is not None:
+        full_search = self.request.query_params.get('full_search', None)
+        if full_search is not None:
             queryset = queryset.filter(
-                Q(profile__living_city__icontains=search) |
-                Q(first_name__icontains=search) |
-                Q(last_name__icontains=search)
+                Q(profile__living_city__icontains=full_search) |
+                Q(first_name__icontains=full_search) |
+                Q(last_name__icontains=full_search)
             )
         return queryset
 
