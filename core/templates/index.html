@@ -107,10 +107,10 @@
             </div>
             <br>
             <div class="center">
-              <a class="btn btn-large waves-effect waves-grey indigo" href="{% provider_login_url 'facebook' %}">
+              <a class="btn btn-large waves-effect waves-grey indigo" href="{% url 'social:begin' 'facebook' %}">
                 {% trans 'Facebook' %}
               </a>
-              <a class="btn btn-large waves-effect waves-grey red" href="{% provider_login_url 'google' %}">
+              <a class="btn btn-large waves-effect waves-grey red" href="{% url 'social:begin' 'google-oauth2' %}">
                 {% trans 'Google' %}
               </a>
             </div>

@@ -55,6 +55,7 @@ def as_range(value):
 
 @register.filter
 def jogo_de_interesse(profile):
+    from core.models import Profile
     interests = profile.interests.all()
     mates_ids = list(profile.mates_from.values_list('id', flat=True))
     mates_ids.extend(profile.mates_to.values_list('id', flat=True))
