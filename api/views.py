@@ -88,7 +88,6 @@ class UserList(UserMixin, generics.ListCreateAPIView):
         'profile__born_city': ['icontains'],
         'profile__living_city': ['icontains'],
         'profile__genre': ['icontains'],
-        'profile__interests__title': ['icontains'],
     }
 
     def get_queryset(self):
@@ -100,6 +99,18 @@ class UserList(UserMixin, generics.ListCreateAPIView):
                 Q(profile__living_city__icontains=full_search) |
                 Q(first_name__icontains=full_search) |
                 Q(last_name__icontains=full_search)
+            )
+
+        interests_ids = self.request.query_params.get(
+            'profile__interests__id') or None
+        try:
+            interests_ids = interests_ids.split(',')
+        except AttributeError:
+            pass
+
+        if isinstance(interests_ids, list):
+            queryset = queryset.filter(
+                profile__interests__id__in=interests_ids
             )
         return queryset
 
