@@ -1,6 +1,7 @@
 from django.contrib import auth
 
 from rest_framework import serializers
+from push_notifications.models import APNSDevice, GCMDevice
 
 from core.models import Profile
 from interest.models import Interest
@@ -73,3 +74,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = auth.get_user_model()
+        exclude = ('password',)
+
+
+class APNSDeviceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = APNSDevice
+
+
+class GCMDeviceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GCMDevice
