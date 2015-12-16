@@ -11,6 +11,7 @@ from allauth.socialaccount.providers.facebook.views import (
     FacebookOAuth2Adapter)
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from rest_auth.registration.views import SocialLoginView
+from push_notifications.models import APNSDevice, GCMDevice
 
 from api import serializers
 
@@ -48,10 +49,10 @@ class APIRoot(APIView):
                     'rest_facebook_login', request=request),
                 'google_login': reverse('rest_google_login', request=request),
             },
-            # 'Devices': {
-            #     'device_apns': reverse('device_apns', request=request),
-            #     'device_gcm': reverse('device_gcm', request=request),
-            # }
+            'Devices': {
+                'device_apns': reverse('device_apns_list', request=request),
+                'device_gcm': reverse('device_gcm_list', request=request),
+            }
         })
 
 
@@ -73,6 +74,16 @@ class InterestMixin(object):
 class ReferenceMixin(object):
     queryset = Reference.objects.all()
     serializer_class = serializers.ReferenceSerializer
+
+
+class APNSDeviceMixin(object):
+    queryset = APNSDevice.objects.all()
+    serializer_class = serializers.APNSDeviceSerializer
+
+
+class GCMDeviceMixin(object):
+    queryset = GCMDevice.objects.all()
+    serializer_class = serializers.GCMDeviceSerializer
 
 
 class UserList(UserMixin, generics.ListCreateAPIView):
@@ -142,3 +153,19 @@ class FacebookLogin(SocialLoginView):
 
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
+
+
+class APNSDeviceList(APNSDeviceMixin, generics.ListCreateAPIView):
+    pass
+
+
+class APNSDeviceRetrieve(APNSDeviceMixin, generics.RetrieveAPIView):
+    pass
+
+
+class GCMDeviceList(GCMDeviceMixin, generics.ListCreateAPIView):
+    pass
+
+
+class GCMDeviceRetrieve(GCMDeviceMixin, generics.RetrieveAPIView):
+    pass

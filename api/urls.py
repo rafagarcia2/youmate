@@ -1,12 +1,12 @@
 from django.conf.urls import patterns, url, include
 
 from rest_framework.authtoken.views import obtain_auth_token
-from rest_framework.routers import DefaultRouter
+# from rest_framework.routers import DefaultRouter
 
-from push_notifications.api.rest_framework import (
-    APNSDeviceAuthorizedViewSet,
-    GCMDeviceAuthorizedViewSet
-)
+# from push_notifications.api.rest_framework import (
+#     APNSDeviceAuthorizedViewSet,
+#     GCMDeviceAuthorizedViewSet
+# )
 
 # Class based API views
 from api import views
@@ -25,6 +25,18 @@ urlpatterns = patterns(
     # Push notification
     # url(r'^device/apns/', APNSDeviceAuthorizedViewSet.as_view(), name='device_apns'),
     # url(r'^device/gcm/', GCMDeviceAuthorizedViewSet, name='device_gcm'),
+    url(regex=r'^device/apns/',
+        view=views.APNSDeviceList.as_view(),
+        name='device_apns_list'),
+    url(regex=r'^device/apns/(?P<pk>[0-9]+)/$',
+        view=views.APNSDeviceRetrieve.as_view(),
+        name='device_apns_retrieve'),
+    url(regex=r'^device/gcm/',
+        view=views.GCMDeviceList.as_view(),
+        name='device_gcm_list'),
+    url(regex=r'^device/gcm/(?P<pk>[0-9]+)/$',
+        view=views.GCMDeviceRetrieve.as_view(),
+        name='device_gcm_retrieve'),
 
 
     # Authentication
