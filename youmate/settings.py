@@ -246,7 +246,7 @@ OAUTH2_PROVIDER = {
 
 
 PUSH_NOTIFICATIONS_SETTINGS = {
-    'GCM_API_KEY': '<your api key>',
+    'GCM_API_KEY': 'AIzaSyDVqU9aA_gi71GnCN6nxka0EK-3ijZketg',
     # 'APNS_CERTIFICATE': '/path/to/your/certificate.pem',
 }
 
