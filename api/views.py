@@ -136,7 +136,18 @@ class UserRetrieve(UserMixin, generics.RetrieveAPIView):
 
 
 class LoggedUserRetrieve(UserMixin, generics.RetrieveUpdateAPIView):
+    def get_object(self):
+        # from django.contrib.auth.models import User
+        # return User.objects.get(username='admin')
+
+        if self.request.user.is_authenticated():
+            return self.request.user
+        raise NotAuthenticated()
+
     def retrieve(self, request, pk=None):
+        # from django.contrib.auth.models import User
+        # return Response(serializers.UserSerializer(User.objects.get(username='admin')).data)
+
         if request.user.is_authenticated():
             return Response(serializers.UserSerializer(request.user).data)
         raise NotAuthenticated()
