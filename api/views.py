@@ -135,7 +135,7 @@ class UserRetrieve(UserMixin, generics.RetrieveAPIView):
     pass
 
 
-class LoggedUserRetrieve(UserMixin, generics.RetrieveAPIView):
+class LoggedUserRetrieve(UserMixin, generics.RetrieveUpdateAPIView):
     def retrieve(self, request, pk=None):
         if request.user.is_authenticated():
             return Response(serializers.UserSerializer(request.user).data)
