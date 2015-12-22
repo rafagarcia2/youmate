@@ -131,7 +131,7 @@ class UserList(UserMixin, generics.ListCreateAPIView):
         return queryset
 
 
-class UserRetrieve(UserMixin, generics.RetrieveAPIView):
+class UserRetrieve(UserMixin, generics.RetrieveUpdateAPIView):
     pass
 
 
