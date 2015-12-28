@@ -136,7 +136,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         source='get_average_rate',
         read_only=True
     )
-    photos = PhotoUrlSerializer(many=True, read_only=True)
+    # photos = PhotoUrlSerializer(many=True, read_only=True)
     photo = Base64ImageField(
         max_length=None, use_url=True,
     )
