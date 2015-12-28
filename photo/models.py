@@ -4,7 +4,7 @@ from django_extensions.db.fields import CreationDateTimeField
 
 
 class Photo(models.Model):
-    image = models.ImageField()
+    image = models.ImageField(upload_to='photos/')
     created_at = CreationDateTimeField()
 
     # relations

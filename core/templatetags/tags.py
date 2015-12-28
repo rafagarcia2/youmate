@@ -1,6 +1,7 @@
 import hashlib
 
 from django import template
+from django.conf import settings
 
 
 register = template.Library()
@@ -28,7 +29,9 @@ def get_profile_photo(user):
     social = user.socialaccount_set.first()
 
     if user.profile.photo:
-        return user.profile.photo
+        return '{0}{1}'.format(
+            settings.HOST_URL,
+            user.profile.photo.url)
 
     if social:
         return social.get_avatar_url()
