@@ -95,6 +95,9 @@ class PhotoSerializer(serializers.ModelSerializer):
         queryset=Profile.objects.all(),
         validators=[ValidateProfilersCount()]
     )
+    image = Base64ImageField(
+        max_length=None, use_url=True,
+    )
 
     class Meta:
         model = Photo
