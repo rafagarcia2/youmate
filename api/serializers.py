@@ -29,7 +29,22 @@ class LanguageSerializer(serializers.ModelSerializer):
         model = Language
 
 
+class ValidateProfilersCount(object):
+    def __init__(self):
+        self.max = 7
+
+    def __call__(self, instance):
+        if instance.photos.count() > self.max:
+            message = ('You cannot have more than %s photos.' % (self.max))
+            raise serializers.ValidationError(message)
+
+
 class PhotoSerializer(serializers.ModelSerializer):
+    profile = serializers.PrimaryKeyRelatedField(
+        queryset=Profile.objects.all(),
+        validators=[ValidateProfilersCount()]
+    )
+
     class Meta:
         model = Photo
 
