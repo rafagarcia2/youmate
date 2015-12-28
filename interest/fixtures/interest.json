@@ -98,5 +98,16 @@
     },
     "model": "interest.interest",
     "pk": 12
+},
+{
+    "fields": {
+        "image_class": "compras",
+        "description": "",
+        "profiles": [],
+        "title": "Compras"
+    },
+    "model": "interest.interest",
+    "pk": 13
 }
+
 ]
