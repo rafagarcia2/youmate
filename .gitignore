@@ -2,5 +2,5 @@ venv
 *.pyc
 staticfiles
 media/photos/*
-youmate/local_settings.py
 db.sqlite3
+local_settings.py
