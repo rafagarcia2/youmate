@@ -39,6 +39,17 @@ class ValidateProfilersCount(object):
             raise serializers.ValidationError(message)
 
 
+class PhotoUrlSerializer(serializers.ModelSerializer):
+    image = serializers.CharField(
+        source='get_photo_url',
+        read_only=True
+    )
+
+    class Meta:
+        model = Photo
+        fields = ('image',)
+
+
 class PhotoSerializer(serializers.ModelSerializer):
     profile = serializers.PrimaryKeyRelatedField(
         queryset=Profile.objects.all(),
@@ -82,6 +93,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         source='get_average_rate',
         read_only=True
     )
+    photos = PhotoUrlSerializer(many=True)
 
     class Meta:
         model = Profile
