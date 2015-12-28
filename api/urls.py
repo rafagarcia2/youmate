@@ -90,4 +90,9 @@ urlpatterns = patterns(
     url(regex=r'^languages/$',
         view=views.LanguageList.as_view(),
         name='language_list'),
+
+    # Photo
+    url(regex=r'^photos/$',
+        view=views.PhotoList.as_view(),
+        name='photo_list'),
 )

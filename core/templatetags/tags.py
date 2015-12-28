@@ -27,6 +27,9 @@ def get_profile_photo(user):
 
     social = user.socialaccount_set.first()
 
+    if user.profile.photo:
+        return user.profile.photo
+
     if social:
         return social.get_avatar_url()
 

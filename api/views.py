@@ -19,6 +19,7 @@ from api import serializers
 from interest.models import Interest
 from reference.models import Reference
 from language.models import Language
+from photo.models import Photo
 from core.models import Profile
 
 
@@ -37,6 +38,7 @@ class APIRoot(APIView):
                 'interests': reverse('interest_list', request=request),
                 'references': reverse('reference_list', request=request),
                 'languages': reverse('language_list', request=request),
+                'photos': reverse('photo_list', request=request),
             },
             'Oauth2': {
                 'oauth2_authorize': reverse(
@@ -82,6 +84,11 @@ class ReferenceMixin(object):
 class LanguageMixin(object):
     queryset = Language.objects.all()
     serializer_class = serializers.LanguageSerializer
+
+
+class PhotoMixin(object):
+    queryset = Photo.objects.all()
+    serializer_class = serializers.PhotoSerializer
 
 
 class APNSDeviceMixin(object):
@@ -167,6 +174,10 @@ class ReferenceList(ReferenceMixin, generics.ListCreateAPIView):
 
 
 class LanguageList(LanguageMixin, generics.ListCreateAPIView):
+    pass
+
+
+class PhotoList(PhotoMixin, generics.ListCreateAPIView):
     pass
 
 

@@ -46,6 +46,7 @@ class Profile(models.Model):
         _('Born city'), max_length=100, null=True, blank=True)
     living_city = models.CharField(
         _('Living city'), max_length=100, null=True, blank=True)
+    photo = models.ImageField(null=True, blank=True)
 
     # relations
     user = models.OneToOneField(settings.AUTH_USER_MODEL, unique=True)

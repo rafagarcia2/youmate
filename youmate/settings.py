@@ -56,6 +56,7 @@ LOCAL_APPS = (
     'mate',
     'reference',
     'language',
+    'photo',
     'interest',
     'api',
 )

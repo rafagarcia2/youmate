@@ -7,6 +7,7 @@ from core.models import Profile
 from interest.models import Interest
 from reference.models import Reference
 from language.models import Language
+from photo.models import Photo
 
 
 class InterestSerializer(serializers.ModelSerializer):
@@ -26,6 +27,11 @@ class ReferenceSerializer(serializers.ModelSerializer):
 class LanguageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Language
+
+
+class PhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Photo
 
 
 class ValidateInterestsCount(object):
@@ -67,6 +73,15 @@ class ProfileSerializer(serializers.ModelSerializer):
         validators = [
             ValidateInterestsCount()
         ]
+
+    def update(self, instance, validated_data):
+        instance.interests = validated_data.pop('interests', [])
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
 
 
 class UserSerializer(serializers.ModelSerializer):
