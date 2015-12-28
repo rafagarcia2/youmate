@@ -42,7 +42,7 @@ class ValidateInterestsCount(object):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    # interests = InterestSerializer(many=True)
+    languages = LanguageSerializer(many=True)
     interests = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=Interest.objects.all(),
