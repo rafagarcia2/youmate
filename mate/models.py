@@ -4,15 +4,29 @@ from django_extensions.db.fields import CreationDateTimeField
 
 
 class Mate(models.Model):
+    PENDING = 'P'
+    MATE = 'M'
+    BLOCKED = 'B'
+    STATUS_CHOICES = (
+        (PENDING, 'Pending'),
+        (MATE, 'Mate'),
+        (BLOCKED, 'Blocked'),
+    )
+
     from_user = models.ForeignKey(
         to='core.Profile', related_name='mates_from')
     to_user = models.ForeignKey(
         to='core.Profile', related_name='mates_to')
     created_at = CreationDateTimeField()
+    status = models.CharField(
+        choices=STATUS_CHOICES,
+        default=PENDING,
+        max_length=2)
 
     class Meta:
         verbose_name = 'Mate'
         verbose_name_plural = 'Mates'
+        # unique_together = ('from_user', 'to_user')
 
     def get_mates(self, status):
         return self.mates.filter(
@@ -33,3 +47,10 @@ class Mate(models.Model):
 
     def get_followers(self):
         return self.get_mates_with_me()
+
+    def accept(self):
+        self.status = self.MATE
+        self.save()
+
+    def reject(self):
+        self.delete()

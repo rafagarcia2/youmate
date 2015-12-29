@@ -5,8 +5,9 @@ from django.utils.translation import ugettext as _
 from django.db.models.signals import post_save
 from django.core.exceptions import AppRegistryNotReady
 
-from reference.models import Reference
 from core.templatetags.tags import get_profile_photo
+from reference.models import Reference
+from mate.models import Mate
 
 
 class Profile(models.Model):
@@ -52,7 +53,7 @@ class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, unique=True)
     mates = models.ManyToManyField(
         to='self', symmetrical=False,
-        through='mate.Mate', related_name='mates_by')
+        through='mate.Mate', related_name='mates_related_to+')
     languages = models.ManyToManyField(
         to='language.Language', related_name='profiles')
 
@@ -80,6 +81,50 @@ class Profile(models.Model):
     def has_phone(self):
         return True if self.phone else False
 
+    @property
+    def get_photo_url(self):
+        return get_profile_photo(self.user)
+
+    @property
+    def get_photos(self):
+        return [
+            '{0}{1}'.format(settings.HOST_URL, photo.image.url)
+            for photo in self.photos.all()
+        ]
+
+    @property
+    def my_mates(self):
+        return Profile.objects.filter(
+            models.Q(
+                mates_to__from_user=self,
+                mates_to__status=Mate.MATE
+            ) |
+            models.Q(
+                mates_from__from_user=self,
+                mates_from__status=Mate.MATE
+            ) |
+            models.Q(
+                mates_to__to_user=self,
+                mates_to__status=Mate.MATE
+            ) |
+            models.Q(
+                mates_from__to_user=self,
+                mates_from__status=Mate.MATE
+            )
+        ).exclude(pk=self.pk)
+
+    @property
+    def peding_mates(self):
+        return self.mates_to.filter(status=Mate.PENDING)
+
+    def accept_mate(self, profile):
+        mate = self.peding_mates.get(from_user=profile)
+        mate.accept()
+
+    def reject_mate(self, profile):
+        mate = self.peding_mates.get(from_user=profile)
+        mate.reject()
+
     def calcular_seguranca(self):
         criterias = [
             self.user.is_active,
@@ -97,16 +142,16 @@ class Profile(models.Model):
             models.Avg('rating')
         )['rating__avg'] or 0)
 
-    @property
-    def get_photo_url(self):
-        return get_profile_photo(self.user)
-
-    @property
-    def get_photos(self):
-        return [
-            '{0}{1}'.format(settings.HOST_URL, photo.image.url)
-            for photo in self.photos.all()
-        ]
+    def add_mate(self, profile, status='P'):
+        mate, created = Mate.objects.get_or_create(
+            from_user=self,
+            to_user=profile,
+            status=status
+        )
+        # if symm:
+        #     # avoid recursion by passing `symm=False`
+        #     profile.add_mate(self, status, False)
+        return mate
 
 
 class SearchQuery(models.Model):

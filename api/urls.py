@@ -72,6 +72,18 @@ urlpatterns = patterns(
     url(regex=r'^profiles/(?P<pk>[0-9]+)/$',
         view=views.ProfileUpdateView.as_view(),
         name='profile_detail'),
+    url(regex=r'^profiles/add_mate/$',
+        view=views.ProfileAddMateView.as_view(),
+        name='profile_add_mate'),
+    url(regex=r'^profiles/pending_mates/$',
+        view=views.ProfilePendingMatesView.as_view(),
+        name='profile_pending_mates'),
+    url(regex=r'^profiles/accept_mate/$',
+        view=views.ProfileAcceptMateView.as_view(),
+        name='profile_accept_mate'),
+    url(regex=r'^profiles/reject_mate/$',
+        view=views.ProfileRejectMateView.as_view(),
+        name='profile_reject_mate'),
 
     # Interest
     url(regex=r'^interests/$',

@@ -8,6 +8,7 @@ from interest.models import Interest
 from reference.models import Reference
 from language.models import Language
 from photo.models import Photo
+from mate.models import Mate
 
 
 class Base64ImageField(serializers.ImageField):
@@ -103,6 +104,11 @@ class PhotoSerializer(serializers.ModelSerializer):
         model = Photo
 
 
+class MateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Mate
+
+
 class ValidateInterestsCount(object):
     def __init__(self):
         self.min = 1
@@ -144,6 +150,11 @@ class ProfileSerializer(serializers.ModelSerializer):
     photo = Base64ImageField(
         max_length=None, use_url=True,
     )
+    mates = serializers.PrimaryKeyRelatedField(
+        source='my_mates',
+        many=True,
+        read_only=True,
+    )
 
     class Meta:
         model = Profile
@@ -159,6 +170,29 @@ class ProfileSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+
+class ProfileMateActionsSerializer(serializers.ModelSerializer):
+    profile = serializers.PrimaryKeyRelatedField(
+        queryset=Profile.objects.all(),
+        validators=[ValidateProfilersCount()]
+    )
+
+    class Meta:
+        model = Profile
+        fields = ('profile',)
+
+
+class ProfilePendingMatesSerializer(serializers.ModelSerializer):
+    mates = MateSerializer(
+        source='peding_mates',
+        many=True,
+        read_only=True
+    )
+
+    class Meta:
+        model = Profile
+        fields = ('mates',)
 
 
 class UserSerializer(serializers.ModelSerializer):

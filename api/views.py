@@ -1,13 +1,11 @@
 from django.contrib import auth
 from django.db.models import Q
 
-from rest_framework import generics
+from rest_framework import generics, views, status
 from rest_framework.exceptions import NotAuthenticated
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework import filters
-from rest_framework.filters import django_filters
 from allauth.socialaccount.providers.facebook.views import (
     FacebookOAuth2Adapter)
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
@@ -23,7 +21,7 @@ from photo.models import Photo
 from core.models import Profile
 
 
-class APIRoot(APIView):
+class APIRoot(views.APIView):
     def get(self, request):
         return Response({
             'YouMate': {
@@ -34,6 +32,13 @@ class APIRoot(APIView):
                 },
                 'profile': {
                     'profiles': reverse('profile_list', request=request),
+                    'add_mate': reverse('profile_add_mate', request=request),
+                    'pending_mates': reverse(
+                        'profile_pending_mates', request=request),
+                    'accept_mate': reverse(
+                        'profile_accept_mate', request=request),
+                    'reject_mate': reverse(
+                        'profile_reject_mate', request=request),
                 },
                 'interests': reverse('interest_list', request=request),
                 'references': reverse('reference_list', request=request),
@@ -197,6 +202,73 @@ class ProfileListView(ProfileMixin, generics.ListAPIView):
 
 class ProfileUpdateView(ProfileMixin, generics.RetrieveUpdateAPIView):
     pass
+
+
+class ProfileAddMateView(ProfileMixin, views.APIView):
+    def get_object(self):
+        if self.request.user.is_authenticated():
+            return self.request.user.profile
+        raise NotAuthenticated()
+
+    def post(self, request, format=None):
+        self.object = self.get_object()
+        serializer = serializers.ProfileMateActionsSerializer(
+            data=request.query_params)
+
+        if serializer.is_valid():
+            profile = Profile.objects.get(pk=serializer.data['profile'])
+            self.object.add_mate(profile)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfilePendingMatesView(ProfileMixin, generics.RetrieveAPIView):
+    def retrieve(self, request, pk=None):
+        if request.user.is_authenticated():
+            serializer = serializers.ProfilePendingMatesSerializer(
+                request.user.profile
+            )
+            return Response(serializer.data)
+        raise NotAuthenticated()
+
+
+class ProfileAcceptMateView(ProfileMixin, views.APIView):
+    def get_object(self):
+        if self.request.user.is_authenticated():
+            return self.request.user.profile
+        raise NotAuthenticated()
+
+    def post(self, request, format=None):
+        self.object = self.get_object()
+        serializer = serializers.ProfileMateActionsSerializer(
+            data=request.query_params)
+
+        if serializer.is_valid():
+            profile = Profile.objects.get(pk=serializer.data['profile'])
+            self.object.accept_mate(profile)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileRejectMateView(ProfileMixin, views.APIView):
+    def get_object(self):
+        if self.request.user.is_authenticated():
+            return self.request.user.profile
+        raise NotAuthenticated()
+
+    def post(self, request, format=None):
+        self.object = self.get_object()
+        serializer = serializers.ProfileMateActionsSerializer(
+            data=request.query_params)
+
+        if serializer.is_valid():
+            profile = Profile.objects.get(pk=serializer.data['profile'])
+            self.object.reject_mate(profile)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class FacebookLogin(SocialLoginView):
