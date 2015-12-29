@@ -137,6 +137,10 @@ class ProfileSerializer(serializers.ModelSerializer):
         read_only=True
     )
     # photos = PhotoUrlSerializer(many=True, read_only=True)
+    photos = serializers.ListField(
+        source='get_photos',
+        read_only=True
+    )
     photo = Base64ImageField(
         max_length=None, use_url=True,
     )

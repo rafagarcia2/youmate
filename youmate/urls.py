@@ -20,12 +20,14 @@ from django.contrib import admin
 
 from youmate import settings
 
+admin.autodiscover()
+
 urlpatterns = patterns(
-    url(r'^admin/', include(admin.site.urls)),
 
     url(r'^social/',
         include('social.apps.django_app.urls', namespace='social')),
 
+    url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('core.urls')),
     url(r'^', include('mate.urls')),
     url(r'^', include('reference.urls')),

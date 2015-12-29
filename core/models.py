@@ -101,6 +101,13 @@ class Profile(models.Model):
     def get_photo_url(self):
         return get_profile_photo(self.user)
 
+    @property
+    def get_photos(self):
+        return [
+            '{0}{1}'.format(settings.HOST_URL, photo.image.url)
+            for photo in self.photos.all()
+        ]
+
 
 class SearchQuery(models.Model):
     living_city = models.CharField(
