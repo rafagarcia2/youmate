@@ -116,7 +116,7 @@ class ValidateInterestsCount(object):
 
     def __call__(self, data):
         interests = data.get('interests', [])
-        if len(interests) > self.max:
+        if not (self.min <= len(interests) <= self.max):
             message = ('You cannot have more than %s interests.' % self.max)
             raise serializers.ValidationError(message)
 
