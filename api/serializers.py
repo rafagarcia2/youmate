@@ -162,7 +162,10 @@ class ProfileSerializer(serializers.ModelSerializer):
         ]
 
     def update(self, instance, validated_data):
-        instance.interests = validated_data.pop('interests', [])
+        try:
+            instance.interests = validated_data.pop('interests')
+        except KeyError:
+            pass
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
