@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib import auth
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext as _
@@ -117,15 +118,22 @@ class Profile(models.Model):
         ).exclude(pk=self.pk)
 
     @property
-    def peding_mates(self):
+    def pending_mates(self):
         return self.mates_to.filter(status=Mate.PENDING)
 
+    @property
+    def peding_mates_user(self):
+        User = auth.get_user_model()
+        return User.objects.filter(
+            id__in=self.pending_mates.values_list('from_user__user', flat=True)
+        )
+
     def accept_mate(self, profile):
-        mate = self.peding_mates.get(from_user=profile)
+        mate = self.pending_mates.get(from_user=profile)
         mate.accept()
 
     def reject_mate(self, profile):
-        mate = self.peding_mates.get(from_user=profile)
+        mate = self.pending_mates.get(from_user=profile)
         mate.reject()
 
     def calcular_seguranca(self):

@@ -213,6 +213,8 @@ class ProfileRejectMateView(mixins.ProfileMixin, views.APIView):
 
 class ProfilePendingMatesView(mixins.ProfileMixin, generics.RetrieveAPIView):
     def get_object(self):
+        from core.models import Profile
+        return Profile.objects.get(pk=8)
         if self.request.user.is_authenticated():
             return self.request.user.profile
         raise NotAuthenticated()

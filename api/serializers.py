@@ -185,9 +185,17 @@ class ProfileMateActionsSerializer(serializers.ModelSerializer):
         fields = ('profile',)
 
 
+class UserSerializer(serializers.ModelSerializer):
+    profile = ProfileSerializer()
+
+    class Meta:
+        model = auth.get_user_model()
+        exclude = ('password',)
+
+
 class ProfilePendingMatesSerializer(serializers.ModelSerializer):
-    mates = MateSerializer(
-        source='peding_mates',
+    mates = UserSerializer(
+        source='peding_mates_user',
         many=True,
         read_only=True
     )
@@ -207,14 +215,6 @@ class ProfileMatesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ('mates',)
-
-
-class UserSerializer(serializers.ModelSerializer):
-    profile = ProfileSerializer()
-
-    class Meta:
-        model = auth.get_user_model()
-        exclude = ('password',)
 
 
 class APNSDeviceSerializer(serializers.ModelSerializer):
