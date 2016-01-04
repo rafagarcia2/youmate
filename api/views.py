@@ -207,10 +207,12 @@ class ProfileUpdateView(ProfileMixin, generics.RetrieveUpdateAPIView):
 
 
 class ProfileAddMateView(ProfileMixin, views.APIView):
-    def post(self, request, format=None, pk=None):
-        if not self.request.user.is_authenticated():
-            raise NotAuthenticated()
+    def get_object(self):
+        if self.request.user.is_authenticated():
+            return self.request.user.profile
+        raise NotAuthenticated()
 
+    def post(self, request, format=None, pk=None):
         self.object = self.get_object()
         try:
             request.user.profile.add_mate(self.object)
@@ -246,10 +248,12 @@ class ProfileMatesView(ProfileMixin, generics.RetrieveAPIView):
 
 
 class ProfileAcceptMateView(ProfileMixin, views.APIView):
-    def post(self, request, format=None, pk=None):
-        if not self.request.user.is_authenticated():
-            raise NotAuthenticated()
+    def get_object(self):
+        if self.request.user.is_authenticated():
+            return self.request.user.profile
+        raise NotAuthenticated()
 
+    def post(self, request, format=None, pk=None):
         self.object = self.get_object()
         try:
             request.user.profile.accept_mate(self.object)
@@ -259,10 +263,12 @@ class ProfileAcceptMateView(ProfileMixin, views.APIView):
 
 
 class ProfileRejectMateView(ProfileMixin, views.APIView):
-    def post(self, request, format=None, pk=None):
-        if not self.request.user.is_authenticated():
-            raise NotAuthenticated()
+    def get_object(self):
+        if self.request.user.is_authenticated():
+            return self.request.user.profile
+        raise NotAuthenticated()
 
+    def post(self, request, format=None, pk=None):
         self.object = self.get_object()
         try:
             request.user.profile.reject_mate(self.object)
