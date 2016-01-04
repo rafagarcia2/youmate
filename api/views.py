@@ -226,7 +226,7 @@ class ProfileAddMateView(ProfileMixin, views.APIView):
         return self.queryset.get(**self.kwargs)
 
     def post(self, request, format=None, pk=None):
-        if self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated():
             raise NotAuthenticated()
 
         self.object = self.get_object()
@@ -242,7 +242,7 @@ class ProfileAcceptMateView(ProfileMixin, views.APIView):
         return self.queryset.get(**self.kwargs)
 
     def post(self, request, format=None, pk=None):
-        if self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated():
             raise NotAuthenticated()
 
         self.object = self.get_object()
@@ -258,7 +258,7 @@ class ProfileRejectMateView(ProfileMixin, views.APIView):
         return self.queryset.get(**self.kwargs)
 
     def post(self, request, format=None, pk=None):
-        if self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated():
             raise NotAuthenticated()
 
         self.object = self.get_object()
