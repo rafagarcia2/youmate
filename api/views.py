@@ -222,6 +222,9 @@ class ProfileUpdateView(ProfileMixin, generics.RetrieveUpdateAPIView):
 
 
 class ProfileAddMateView(ProfileMixin, views.APIView):
+    def get_object(self):
+        return self.queryset.get(**self.kwargs)
+
     def post(self, request, format=None, pk=None):
         if self.request.user.is_authenticated():
             raise NotAuthenticated()
@@ -229,6 +232,38 @@ class ProfileAddMateView(ProfileMixin, views.APIView):
         self.object = self.get_object()
         try:
             request.user.profile.add_mate(self.object)
+            return Response({}, status=status.HTTP_201_CREATED)
+        except:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileAcceptMateView(ProfileMixin, views.APIView):
+    def get_object(self):
+        return self.queryset.get(**self.kwargs)
+
+    def post(self, request, format=None, pk=None):
+        if self.request.user.is_authenticated():
+            raise NotAuthenticated()
+
+        self.object = self.get_object()
+        try:
+            request.user.profile.accept_mate(self.object)
+            return Response({}, status=status.HTTP_201_CREATED)
+        except:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileRejectMateView(ProfileMixin, views.APIView):
+    def get_object(self):
+        return self.queryset.get(**self.kwargs)
+
+    def post(self, request, format=None, pk=None):
+        if self.request.user.is_authenticated():
+            raise NotAuthenticated()
+
+        self.object = self.get_object()
+        try:
+            request.user.profile.reject_mate(self.object)
             return Response({}, status=status.HTTP_201_CREATED)
         except:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
@@ -258,36 +293,6 @@ class ProfileMatesView(ProfileMixin, generics.RetrieveAPIView):
             self.get_object()
         )
         return Response(serializer.data)
-
-
-class ProfileAcceptMateView(ProfileMixin, views.APIView):
-    def get_object(self):
-        if self.request.user.is_authenticated():
-            return self.request.user.profile
-        raise NotAuthenticated()
-
-    def post(self, request, format=None, pk=None):
-        self.object = self.get_object()
-        try:
-            request.user.profile.accept_mate(self.object)
-            return Response({}, status=status.HTTP_201_CREATED)
-        except:
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ProfileRejectMateView(ProfileMixin, views.APIView):
-    def get_object(self):
-        if self.request.user.is_authenticated():
-            return self.request.user.profile
-        raise NotAuthenticated()
-
-    def post(self, request, format=None, pk=None):
-        self.object = self.get_object()
-        try:
-            request.user.profile.reject_mate(self.object)
-            return Response({}, status=status.HTTP_201_CREATED)
-        except:
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class FacebookLogin(SocialLoginView):
