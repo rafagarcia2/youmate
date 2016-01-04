@@ -1,4 +1,3 @@
-from django.contrib import auth
 from django.db.models import Q
 
 from rest_framework import generics, views, status
@@ -10,16 +9,9 @@ from allauth.socialaccount.providers.facebook.views import (
     FacebookOAuth2Adapter)
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from rest_auth.registration.views import SocialLoginView
-from push_notifications.models import APNSDevice, GCMDevice
 
 from api import serializers
-
-from interest.models import Interest
-from reference.models import Reference
-from language.models import Language
-from photo.models import Photo
-from core.models import Profile
-from mate.models import Mate
+from api import mixins
 
 
 class APIRoot(views.APIView):
@@ -70,52 +62,7 @@ class APIRoot(views.APIView):
         })
 
 
-class UserMixin(object):
-    queryset = auth.get_user_model().objects.all()
-    serializer_class = serializers.UserSerializer
-
-
-class ProfileMixin(object):
-    queryset = Profile.objects.all()
-    serializer_class = serializers.ProfileSerializer
-
-
-class InterestMixin(object):
-    queryset = Interest.objects.all()
-    serializer_class = serializers.InterestSerializer
-
-
-class MateMixin(object):
-    queryset = Mate.objects.all()
-    serializer_class = serializers.MateSerializer
-
-
-class ReferenceMixin(object):
-    queryset = Reference.objects.all()
-    serializer_class = serializers.ReferenceSerializer
-
-
-class LanguageMixin(object):
-    queryset = Language.objects.all()
-    serializer_class = serializers.LanguageSerializer
-
-
-class PhotoMixin(object):
-    queryset = Photo.objects.all()
-    serializer_class = serializers.PhotoSerializer
-
-
-class APNSDeviceMixin(object):
-    queryset = APNSDevice.objects.all()
-    serializer_class = serializers.APNSDeviceSerializer
-
-
-class GCMDeviceMixin(object):
-    queryset = GCMDevice.objects.all()
-    serializer_class = serializers.GCMDeviceSerializer
-
-
-class UserList(UserMixin, generics.ListCreateAPIView):
+class UserList(mixins.UserMixin, generics.ListCreateAPIView):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = {
         'username': ['exact'],
@@ -152,58 +99,53 @@ class UserList(UserMixin, generics.ListCreateAPIView):
         return queryset
 
 
-class UserRetrieve(UserMixin, generics.RetrieveUpdateAPIView):
+class UserRetrieve(mixins.UserMixin, generics.RetrieveUpdateAPIView):
     pass
 
 
-class LoggedUserRetrieve(UserMixin, generics.RetrieveUpdateAPIView):
+class LoggedUserRetrieve(mixins.UserMixin, generics.RetrieveUpdateAPIView):
     def get_object(self):
-        # from django.contrib.auth.models import User
-        # return User.objects.get(username='admin')
-
         if self.request.user.is_authenticated():
             return self.request.user
         raise NotAuthenticated()
 
     def retrieve(self, request, pk=None):
-        # from django.contrib.auth.models import User
-        # return Response(serializers.UserSerializer(User.objects.get(username='admin')).data)
-
         if request.user.is_authenticated():
             return Response(serializers.UserSerializer(request.user).data)
         raise NotAuthenticated()
 
 
-class InterestList(InterestMixin, generics.ListCreateAPIView):
+class InterestList(mixins.InterestMixin, generics.ListCreateAPIView):
     pass
 
 
-class InterestUpdateView(InterestMixin, generics.RetrieveUpdateAPIView):
+class InterestUpdateView(mixins.InterestMixin,
+                         generics.RetrieveUpdateAPIView):
     pass
 
 
-class MateList(MateMixin, generics.ListCreateAPIView):
+class MateList(mixins.MateMixin, generics.ListCreateAPIView):
     pass
 
 
-class MateUpdateView(MateMixin, generics.RetrieveUpdateAPIView):
+class MateUpdateView(mixins.MateMixin, generics.RetrieveUpdateAPIView):
     pass
 
 
-class ReferenceList(ReferenceMixin, generics.ListCreateAPIView):
+class ReferenceList(mixins.ReferenceMixin, generics.ListCreateAPIView):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('id', 'from_user', 'to_user')
 
 
-class LanguageList(LanguageMixin, generics.ListCreateAPIView):
+class LanguageList(mixins.LanguageMixin, generics.ListCreateAPIView):
     pass
 
 
-class PhotoList(PhotoMixin, generics.ListCreateAPIView):
+class PhotoList(mixins.PhotoMixin, generics.ListCreateAPIView):
     pass
 
 
-class ProfileListView(ProfileMixin, generics.ListAPIView):
+class ProfileListView(mixins.ProfileMixin, generics.ListAPIView):
     def get_queryset(self):
         queryset = super(ProfileListView, self).get_queryset()
 
@@ -217,11 +159,11 @@ class ProfileListView(ProfileMixin, generics.ListAPIView):
         return queryset
 
 
-class ProfileUpdateView(ProfileMixin, generics.RetrieveUpdateAPIView):
+class ProfileUpdateView(mixins.ProfileMixin, generics.RetrieveUpdateAPIView):
     pass
 
 
-class ProfileAddMateView(ProfileMixin, views.APIView):
+class ProfileAddMateView(mixins.ProfileMixin, views.APIView):
     def get_object(self):
         return self.queryset.get(**self.kwargs)
 
@@ -237,7 +179,7 @@ class ProfileAddMateView(ProfileMixin, views.APIView):
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProfileAcceptMateView(ProfileMixin, views.APIView):
+class ProfileAcceptMateView(mixins.ProfileMixin, views.APIView):
     def get_object(self):
         return self.queryset.get(**self.kwargs)
 
@@ -253,7 +195,7 @@ class ProfileAcceptMateView(ProfileMixin, views.APIView):
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProfileRejectMateView(ProfileMixin, views.APIView):
+class ProfileRejectMateView(mixins.ProfileMixin, views.APIView):
     def get_object(self):
         return self.queryset.get(**self.kwargs)
 
@@ -269,7 +211,7 @@ class ProfileRejectMateView(ProfileMixin, views.APIView):
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProfilePendingMatesView(ProfileMixin, generics.RetrieveAPIView):
+class ProfilePendingMatesView(mixins.ProfileMixin, generics.RetrieveAPIView):
     def get_object(self):
         if self.request.user.is_authenticated():
             return self.request.user.profile
@@ -282,7 +224,7 @@ class ProfilePendingMatesView(ProfileMixin, generics.RetrieveAPIView):
         return Response(serializer.data)
 
 
-class ProfileMatesView(ProfileMixin, generics.RetrieveAPIView):
+class ProfileMatesView(mixins.ProfileMixin, generics.RetrieveAPIView):
     def get_object(self):
         if self.request.user.is_authenticated():
             return self.request.user.profile
@@ -303,17 +245,17 @@ class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
 
 
-class APNSDeviceList(APNSDeviceMixin, generics.ListCreateAPIView):
+class APNSDeviceList(mixins.APNSDeviceMixin, generics.ListCreateAPIView):
     pass
 
 
-class APNSDeviceRetrieve(APNSDeviceMixin, generics.RetrieveAPIView):
+class APNSDeviceRetrieve(mixins.APNSDeviceMixin, generics.RetrieveAPIView):
     pass
 
 
-class GCMDeviceList(GCMDeviceMixin, generics.ListCreateAPIView):
+class GCMDeviceList(mixins.GCMDeviceMixin, generics.ListCreateAPIView):
     pass
 
 
-class GCMDeviceRetrieve(GCMDeviceMixin, generics.RetrieveAPIView):
+class GCMDeviceRetrieve(mixins.GCMDeviceMixin, generics.RetrieveAPIView):
     pass
