@@ -19,6 +19,7 @@ from reference.models import Reference
 from language.models import Language
 from photo.models import Photo
 from core.models import Profile
+from mate.models import Mate
 
 
 class APIRoot(views.APIView):
@@ -46,6 +47,7 @@ class APIRoot(views.APIView):
                 'references': reverse('reference_list', request=request),
                 'languages': reverse('language_list', request=request),
                 'photos': reverse('photo_list', request=request),
+                'mates': reverse('mate_list', request=request),
             },
             'Oauth2': {
                 'oauth2_authorize': reverse(
@@ -81,6 +83,11 @@ class ProfileMixin(object):
 class InterestMixin(object):
     queryset = Interest.objects.all()
     serializer_class = serializers.InterestSerializer
+
+
+class MateMixin(object):
+    queryset = Mate.objects.all()
+    serializer_class = serializers.MateSerializer
 
 
 class ReferenceMixin(object):
@@ -172,6 +179,14 @@ class InterestList(InterestMixin, generics.ListCreateAPIView):
 
 
 class InterestUpdateView(InterestMixin, generics.RetrieveUpdateAPIView):
+    pass
+
+
+class MateList(MateMixin, generics.ListCreateAPIView):
+    pass
+
+
+class MateUpdateView(MateMixin, generics.RetrieveUpdateAPIView):
     pass
 
 

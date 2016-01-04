@@ -110,4 +110,12 @@ urlpatterns = patterns(
     url(regex=r'^photos/$',
         view=views.PhotoList.as_view(),
         name='photo_list'),
+
+    # Mate
+    url(regex=r'^mates/$',
+        view=views.MateList.as_view(),
+        name='mate_list'),
+    url(regex=r'^mates/(?P<pk>[0-9]+)/$',
+        view=views.MateUpdateView.as_view(),
+        name='mate_detail'),
 )

@@ -61,6 +61,9 @@ class Profile(models.Model):
         verbose_name = _('Profile')
         verbose_name_plural = _('Profiles')
 
+    def __unicode__(self):
+        return self.user.get_full_name() or str(self.pk)
+
     def get_absolute_url(self):
         return reverse_lazy('profile')
 
