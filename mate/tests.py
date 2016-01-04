@@ -17,16 +17,16 @@ class TestMate(TestCase):
 
         self.assertEquals(1, Mate.objects.count())
         self.assertEquals(1, self.profile2.peding_mates.count())
-        self.assertEquals(0, self.profile1.my_mates.count())
-        self.assertEquals(0, self.profile2.my_mates.count())
+        self.assertEquals(0, self.profile1.mates_profiles.count())
+        self.assertEquals(0, self.profile2.mates_profiles.count())
 
     def test_send_multiple_mates(self):
         self.profile1.add_mate(self.profile2)
 
         self.assertEquals(1, Mate.objects.count())
         self.assertEquals(1, self.profile2.peding_mates.count())
-        self.assertEquals(0, self.profile1.my_mates.count())
-        self.assertEquals(0, self.profile2.my_mates.count())
+        self.assertEquals(0, self.profile1.mates_profiles.count())
+        self.assertEquals(0, self.profile2.mates_profiles.count())
 
     def test_accept_mate(self):
         self.profile1.add_mate(self.profile2)
@@ -35,8 +35,8 @@ class TestMate(TestCase):
 
         self.assertEquals(1, Mate.objects.count())
         self.assertEquals(0, self.profile2.peding_mates.count())
-        self.assertEquals(1, self.profile1.my_mates.count())
-        self.assertEquals(1, self.profile2.my_mates.count())
+        self.assertEquals(1, self.profile1.mates_profiles.count())
+        self.assertEquals(1, self.profile2.mates_profiles.count())
 
     def test_reject_mate(self):
         self.profile1.add_mate(self.profile2)
@@ -45,5 +45,5 @@ class TestMate(TestCase):
 
         self.assertEquals(0, Mate.objects.count())
         self.assertEquals(0, self.profile2.peding_mates.count())
-        self.assertEquals(0, self.profile1.my_mates.count())
-        self.assertEquals(0, self.profile2.my_mates.count())
+        self.assertEquals(0, self.profile1.mates_profiles.count())
+        self.assertEquals(0, self.profile2.mates_profiles.count())

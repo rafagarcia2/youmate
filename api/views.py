@@ -35,6 +35,8 @@ class APIRoot(views.APIView):
                     'mate': {
                         'pending_mates': reverse(
                             'profile_pending_mates', request=request),
+                        'mates': reverse(
+                            'profile_mates', request=request),
                         'add_mate': '/profiles/:pk/add_mate/',
                         'accept_mate': '/profiles/:pk/accept_mate/',
                         'reject_mate': '/profiles/:pk/reject_mate/',
@@ -224,12 +226,23 @@ class ProfilePendingMatesView(ProfileMixin, generics.RetrieveAPIView):
         raise NotAuthenticated()
 
     def retrieve(self, request, pk=None):
-        if request.user.is_authenticated():
-            serializer = serializers.ProfilePendingMatesSerializer(
-                request.user.profile
-            )
-            return Response(serializer.data)
+        serializer = serializers.ProfilePendingMatesSerializer(
+            self.get_object()
+        )
+        return Response(serializer.data)
+
+
+class ProfileMatesView(ProfileMixin, generics.RetrieveAPIView):
+    def get_object(self):
+        if self.request.user.is_authenticated():
+            return self.request.user.profile
         raise NotAuthenticated()
+
+    def retrieve(self, request, pk=None):
+        serializer = serializers.ProfileMatesSerializer(
+            self.get_object()
+        )
+        return Response(serializer.data)
 
 
 class ProfileAcceptMateView(ProfileMixin, views.APIView):

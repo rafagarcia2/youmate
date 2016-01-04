@@ -93,7 +93,7 @@ class Profile(models.Model):
         ]
 
     @property
-    def my_mates(self):
+    def mates_profiles(self):
         return Profile.objects.filter(
             models.Q(
                 mates_to__from_user=self,

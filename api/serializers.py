@@ -150,7 +150,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         max_length=None, use_url=True,
     )
     mates = serializers.PrimaryKeyRelatedField(
-        source='my_mates',
+        source='mates_profiles',
         many=True,
         read_only=True,
     )
@@ -188,6 +188,18 @@ class ProfileMateActionsSerializer(serializers.ModelSerializer):
 class ProfilePendingMatesSerializer(serializers.ModelSerializer):
     mates = MateSerializer(
         source='peding_mates',
+        many=True,
+        read_only=True
+    )
+
+    class Meta:
+        model = Profile
+        fields = ('mates',)
+
+
+class ProfileMatesSerializer(serializers.ModelSerializer):
+    mates = ProfileSerializer(
+        source='mates_profiles',
         many=True,
         read_only=True
     )
