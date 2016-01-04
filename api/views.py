@@ -207,7 +207,7 @@ class ProfileUpdateView(ProfileMixin, generics.RetrieveUpdateAPIView):
 
 
 class ProfileAddMateView(ProfileMixin, views.APIView):
-    def post(self, request, format=None):
+    def post(self, request, format=None, pk=None):
         if not self.request.user.is_authenticated():
             raise NotAuthenticated()
 
@@ -246,7 +246,7 @@ class ProfileMatesView(ProfileMixin, generics.RetrieveAPIView):
 
 
 class ProfileAcceptMateView(ProfileMixin, views.APIView):
-    def post(self, request, format=None):
+    def post(self, request, format=None, pk=None):
         if not self.request.user.is_authenticated():
             raise NotAuthenticated()
 
@@ -259,7 +259,7 @@ class ProfileAcceptMateView(ProfileMixin, views.APIView):
 
 
 class ProfileRejectMateView(ProfileMixin, views.APIView):
-    def post(self, request, format=None):
+    def post(self, request, format=None, pk=None):
         if not self.request.user.is_authenticated():
             raise NotAuthenticated()
 
