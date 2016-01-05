@@ -136,6 +136,14 @@ class Profile(models.Model):
         mate = self.pending_mates.get(from_user=profile)
         mate.reject()
 
+    def delete_mate(self, profile):
+        mate = Mate.objects.get(
+            models.Q(from_user=self, to_user=profile) |
+            models.Q(to_user=self, from_user=profile),
+            status=Mate.MATE
+        )
+        mate.delete()
+
     def calcular_seguranca(self):
         criterias = [
             self.user.is_active,
