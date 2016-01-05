@@ -141,7 +141,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         source='get_average_rate',
         read_only=True
     )
-    # photos = PhotoUrlSerializer(many=True, read_only=True)
     photos = serializers.ListField(
         source='get_photos',
         read_only=True
@@ -149,14 +148,10 @@ class ProfileSerializer(serializers.ModelSerializer):
     photo = Base64ImageField(
         max_length=None, use_url=True,
     )
-    mates = serializers.PrimaryKeyRelatedField(
-        source='mates_profiles',
-        many=True,
-        read_only=True,
-    )
 
     class Meta:
         model = Profile
+        exclude = ('mates',)
         validators = [
             ValidateInterestsCount()
         ]
@@ -195,7 +190,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ProfilePendingMatesSerializer(serializers.ModelSerializer):
     mates = UserSerializer(
-        source='peding_mates_user',
+        source='peding_mates_users',
         many=True,
         read_only=True
     )
@@ -206,8 +201,8 @@ class ProfilePendingMatesSerializer(serializers.ModelSerializer):
 
 
 class ProfileMatesSerializer(serializers.ModelSerializer):
-    mates = ProfileSerializer(
-        source='mates_profiles',
+    mates = UserSerializer(
+        source='mates_users',
         many=True,
         read_only=True
     )

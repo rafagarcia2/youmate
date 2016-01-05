@@ -97,32 +97,32 @@ class Profile(models.Model):
         ]
 
     @property
-    def mates_profiles(self):
-        return Profile.objects.filter(
+    def mates_users(self):
+        return User.objects.filter(
             models.Q(
-                mates_to__from_user=self,
-                mates_to__status=Mate.MATE
+                profile__mates_to__from_user=self,
+                profile__mates_to__status=Mate.MATE
             ) |
             models.Q(
-                mates_from__from_user=self,
-                mates_from__status=Mate.MATE
+                profile__mates_from__from_user=self,
+                profile__mates_from__status=Mate.MATE
             ) |
             models.Q(
-                mates_to__to_user=self,
-                mates_to__status=Mate.MATE
+                profile__mates_to__to_user=self,
+                profile__mates_to__status=Mate.MATE
             ) |
             models.Q(
-                mates_from__to_user=self,
-                mates_from__status=Mate.MATE
+                profile__mates_from__to_user=self,
+                profile__mates_from__status=Mate.MATE
             )
-        ).exclude(pk=self.pk)
+        ).exclude(pk=self.user.pk)
 
     @property
     def pending_mates(self):
         return self.mates_to.filter(status=Mate.PENDING)
 
     @property
-    def peding_mates_user(self):
+    def peding_mates_users(self):
         User = auth.get_user_model()
         return User.objects.filter(
             id__in=self.pending_mates.values_list('from_user__user', flat=True)
