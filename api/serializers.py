@@ -148,6 +148,10 @@ class ProfileSerializer(serializers.ModelSerializer):
     photo = Base64ImageField(
         max_length=None, use_url=True,
     )
+    device_registration_ids = serializers.ListField(
+        source='get_device_registration_ids',
+        read_only=True,
+    )
 
     class Meta:
         model = Profile

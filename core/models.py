@@ -68,6 +68,16 @@ class Profile(models.Model):
     def get_absolute_url(self):
         return reverse_lazy('profile')
 
+    def get_device_registration_ids(self):
+        registration_ids = []
+        registration_ids.extend(
+            self.user.gcmdevice_set.values_list('registration_id', flat=True)
+        )
+        registration_ids.extend(
+            self.user.apnsdevice_set.values_list('registration_id', flat=True)
+        )
+        return registration_ids
+
     @property
     def reference(self):
         reference = Reference.objects.filter(
