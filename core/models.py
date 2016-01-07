@@ -76,7 +76,7 @@ class Profile(models.Model):
         registration_ids.extend(
             self.user.apnsdevice_set.values_list('registration_id', flat=True)
         )
-        return registration_ids
+        return set(registration_ids)
 
     @property
     def reference(self):
