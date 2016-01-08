@@ -1,4 +1,7 @@
+from datetime import datetime
+
 from django.db import models
+from django.db.models.signals import post_save
 
 from django_extensions.db.fields import CreationDateTimeField
 
@@ -54,3 +57,32 @@ class Mate(models.Model):
 
     def reject(self):
         self.delete()
+
+
+def send_mate_notification(sender, instance, **kwargs):
+    if instance.status != Mate.PENDING:
+        return
+
+    from_name = (
+        instance.from_user.user.first_name or
+        instance.from_user.user.username
+    )
+    message = '{} quer ser seu Mate.'.format(from_name)
+    photo_url = instance.from_user.get_photo_url
+    devices = list(instance.to_user.user.gcmdevice_set.all())
+    devices.extend(instance.to_user.user.apnsdevice_set.all())
+    notification_id = int(
+        (datetime.now() - datetime(1970, 1, 1)).total_seconds()
+    )
+
+    for device in devices:
+        device.send_message(message, extra={
+            'title': 'YouMate',
+            'message': message,
+            'image': photo_url,
+            'type': 'invite_mate',
+            'mateId': str(instance.id),
+            'notId': str(notification_id),
+        })
+
+post_save.connect(send_mate_notification, sender=Mate)
