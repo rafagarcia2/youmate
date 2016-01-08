@@ -9,11 +9,9 @@ from django_extensions.db.fields import CreationDateTimeField
 class Mate(models.Model):
     PENDING = 'P'
     MATE = 'M'
-    BLOCKED = 'B'
     STATUS_CHOICES = (
         (PENDING, 'Pending'),
         (MATE, 'Mate'),
-        (BLOCKED, 'Blocked'),
     )
 
     from_user = models.ForeignKey(

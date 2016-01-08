@@ -167,7 +167,17 @@ class ProfileListView(mixins.ProfileMixin, generics.ListAPIView):
 
 
 class ProfileUpdateView(mixins.ProfileMixin, generics.RetrieveUpdateAPIView):
-    pass
+    def get(self, *args, **kwargs):
+        response = super(ProfileUpdateView, self).get(*args, **kwargs)
+        if not self.request.user.is_authenticated():
+            return response
+
+        instance = self.get_object()
+        if self.request.user.pk != kwargs.get('pk'):
+            mate_status = self.request.user.profile.get_mate_status(instance)
+            response.data.update(mate_status=mate_status)
+
+        return response
 
 
 class ProfileAddMateView(mixins.ProfileMixin, views.APIView):

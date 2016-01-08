@@ -182,6 +182,14 @@ class Profile(models.Model):
         #     profile.add_mate(self, status, False)
         return mate
 
+    def get_mate_status(self, profile):
+        mate = Mate.objects.filter(
+            models.Q(from_user=profile, to_user=self) |
+            models.Q(to_user=profile, from_user=self)
+        ).first()
+
+        return mate.status if mate else None
+
 
 class SearchQuery(models.Model):
     living_city = models.CharField(
