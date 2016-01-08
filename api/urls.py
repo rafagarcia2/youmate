@@ -103,6 +103,9 @@ urlpatterns = patterns(
     url(regex=r'^references/$',
         view=views.ReferenceList.as_view(),
         name='reference_list'),
+    url(regex=r'^references/(?P<pk>[0-9]+)/$',
+        view=views.ReferenceUpdateView.as_view(),
+        name='reference_detail'),
 
     # Language
     url(regex=r'^languages/$',
@@ -121,12 +124,4 @@ urlpatterns = patterns(
     url(regex=r'^mates/(?P<pk>[0-9]+)/$',
         view=views.MateUpdateView.as_view(),
         name='mate_detail'),
-
-    # Reference
-    url(regex=r'^references/$',
-        view=views.ReferenceList.as_view(),
-        name='reference_list'),
-    url(regex=r'^references/(?P<pk>[0-9]+)/$',
-        view=views.ReferenceUpdateView.as_view(),
-        name='reference_detail'),
 )
