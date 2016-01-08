@@ -41,6 +41,7 @@ class APIRoot(views.APIView):
                 'languages': reverse('language_list', request=request),
                 'photos': reverse('photo_list', request=request),
                 'mates': reverse('mate_list', request=request),
+                'references': reverse('reference_list', request=request),
             },
             'Oauth2': {
                 'oauth2_authorize': reverse(
@@ -136,6 +137,11 @@ class MateUpdateView(mixins.MateMixin, generics.RetrieveUpdateAPIView):
 class ReferenceList(mixins.ReferenceMixin, generics.ListCreateAPIView):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('id', 'from_user', 'to_user')
+
+
+class ReferenceUpdateView(mixins.ReferenceMixin,
+                          generics.RetrieveUpdateAPIView):
+    pass
 
 
 class LanguageList(mixins.LanguageMixin, generics.ListCreateAPIView):
