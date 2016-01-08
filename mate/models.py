@@ -29,7 +29,7 @@ class Mate(models.Model):
     class Meta:
         verbose_name = 'Mate'
         verbose_name_plural = 'Mates'
-        # unique_together = ('from_user', 'to_user')
+        unique_together = ('from_user', 'to_user')
 
     def get_mates(self, status):
         return self.mates.filter(
