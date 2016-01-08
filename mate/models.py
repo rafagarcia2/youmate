@@ -84,4 +84,32 @@ def send_mate_notification(sender, instance, **kwargs):
             'notId': str(notification_id),
         })
 
+
+def accepted_mate_notification(sender, instance, **kwargs):
+    if instance.status != Mate.MATE:
+        return
+
+    to_name = (
+        instance.to_user.user.first_name or
+        instance.to_user.user.username
+    )
+    message = '{} aceitou ser seu Mate.'.format(to_name)
+    photo_url = instance.to_user.get_photo_url
+    devices = list(instance.from_user.user.gcmdevice_set.all())
+    devices.extend(instance.from_user.user.apnsdevice_set.all())
+    notification_id = int(
+        (datetime.now() - datetime(1970, 1, 1)).total_seconds()
+    )
+
+    for device in devices:
+        device.send_message(message, extra={
+            'title': 'YouMate',
+            'message': message,
+            'image': photo_url,
+            'type': 'accept_mate',
+            'mateId': str(instance.id),
+            'notId': str(notification_id),
+        })
+
 post_save.connect(send_mate_notification, sender=Mate)
+post_save.connect(accepted_mate_notification, sender=Mate)
