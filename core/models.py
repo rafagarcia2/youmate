@@ -147,11 +147,11 @@ class Profile(models.Model):
         mate.reject()
 
     def delete_mate(self, profile):
-        mate = Mate.objects.get(
+        mate = Mate.objects.filter(
             models.Q(from_user=self, to_user=profile) |
             models.Q(to_user=self, from_user=profile),
             status=Mate.MATE
-        )
+        ).first()
         mate.delete()
 
     def calcular_seguranca(self):

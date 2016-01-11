@@ -249,7 +249,7 @@ class ProfileDeleteMateView(mixins.ProfileMixin, views.APIView):
 
         self.object = self.get_object()
         try:
-            request.user.profile.delete_mate(self.object)
+            self.request.user.profile.delete_mate(self.object)
             return Response({}, status=status.HTTP_201_CREATED)
         except:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
