@@ -246,7 +246,8 @@ OAUTH2_PROVIDER = {
         'write': 'Write scope',
         'groups': 'Access to your groups'
     },
-    'ACCESS_TOKEN_EXPIRE_SECONDS': 604800,
+    # Expire after a month
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 2592000,
 }
 
 
