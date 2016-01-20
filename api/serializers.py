@@ -219,10 +219,8 @@ class ProfileMatesSerializer(serializers.ModelSerializer):
 class APNSDeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = APNSDevice
-        exclude = ('device_id',)
 
 
 class GCMDeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = GCMDevice
-        exclude = ('device_id',)
