@@ -107,7 +107,7 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
         queryset = queryset.annotate(
             null_rating=Count('profile__references_to__rating'),
             rating=Avg('profile__references_to__rating')
-        ).order_by(['null_rating', '-rating'])
+        ).order_by('null_rating', '-rating')
         return queryset
 
 
