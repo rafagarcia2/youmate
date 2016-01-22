@@ -109,7 +109,7 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
             rating=Avg('profile__references_to__rating')
         ).order_by(ordering)
         queryset = queryset.extra(
-            order_by=['-null_rating', '-rating'])
+            order_by=['-rating', '-null_rating'])
         return queryset
 
 
