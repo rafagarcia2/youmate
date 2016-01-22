@@ -80,6 +80,7 @@ EXTERNAL_APPS = (
     'social.apps.django_app.default',
     'rest_framework_social_oauth2',
     'push_notifications',
+    'django_twilio',
 
     'allauth',
     'allauth.account',
@@ -274,6 +275,13 @@ ACCOUNT_USERNAME_REQUIRED = False
 SITE_ID = 1
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+# Twilio config
+ENABLE_SMS = False
+TWILIO_ACCOUNT_SID = 'ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+TWILIO_AUTH_TOKEN = 'YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY'
+TWILIO_DEFAULT_CALLERID = 'NNNNNNNNNN'
+
 
 # Import the custom settings
 try:

@@ -6,6 +6,8 @@ from django.core.urlresolvers import reverse
 from django.db.models import F
 
 from vanilla import TemplateView, UpdateView, DetailView, ListView
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from core.forms import UpdateProfileAboutForm, ValidatePhoneForm
 from reference.forms import ReferenceForm
@@ -61,6 +63,25 @@ class ConfirmationEmail(DetailView):
         profile = get_object_or_404(queryset, email_code=email_code)
         profile.is_email_verified = True
         profile.email_code = code_generate(size=32)
+        profile.save()
+        return profile
+
+
+class ConfirmationPhone(APIView):
+    queryset = Profile.objects.all()
+
+    def put(self, request, **kwargs):
+        self.object = self.get_object()
+        return Response({
+            'profile_id': self.object.id,
+            'is_phone_verified': self.object.is_phone_verified,
+        })
+
+    def get_object(self):
+        phone_code = self.kwargs.get('phone_code')
+        profile = get_object_or_404(self.queryset, phone_code=phone_code)
+        profile.is_phone_verified = True
+        profile.phone_code = code_generate()
         profile.save()
         return profile
 

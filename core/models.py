@@ -12,6 +12,8 @@ from django.db.models.signals import post_save
 from django.template.loader import render_to_string
 from django.core.exceptions import AppRegistryNotReady
 
+from twilio.rest import TwilioRestClient
+
 from core.templatetags.tags import get_profile_photo
 from reference.models import Reference
 from mate.models import Mate
@@ -97,6 +99,31 @@ class Profile(models.Model):
             self.user.apnsdevice_set.values_list('registration_id', flat=True)
         )
         return set(registration_ids)
+
+    def send_phone_confirmation(self):
+        if not settings.ENABLE_SMS:
+            return
+
+        client = TwilioRestClient(
+            settings.TWILIO_ACCOUNT_SID,
+            settings.TWILIO_AUTH_TOKEN
+        )
+
+        body = _('To confirm this phone is correct, '
+                 'put this code in the app "{{ phone_code }}".')
+        client.messages.create(
+            body=body.format(phone_code=self.phone_code),
+            to=self.phone,
+            from_="+NNNNNNNNNNNN",
+        )
+
+    def save(self, *args, **kwargs):
+        if self.pk is not None:
+            old_instance = Profile.objects.get(pk=self.pk)
+            if old_instance.phone != self.phone:
+                self.send_phone_confirmation()
+
+        return super(Profile, self).save(*args, **kwargs)
 
     @property
     def reference(self):
@@ -249,6 +276,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         subject = _(u'Email Confirmation - Youmate')
         recipients = [instance.email]
         send_mail(subject, message, 'noreply@youmate.com.br', recipients)
+
 
 try:
     from django.contrib.auth import get_user_model
