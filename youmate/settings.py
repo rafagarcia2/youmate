@@ -41,7 +41,8 @@ MEDIA_ROOT = 'media'
 
 MEDIA_URL = '/media/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+MANDRILL_API_KEY = "YW3aJkoPhCmodizEU7ZGvQ"
+EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
 
 # Application definition
 
