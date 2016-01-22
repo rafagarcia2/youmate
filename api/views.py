@@ -106,7 +106,7 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
             ordering = '-rating'
         queryset = queryset.annotate(
             rating=Avg('profile__references_to__rating')
-        ).order_by('-rating')
+        ).order_by(ordering)
         return queryset
 
 
