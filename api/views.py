@@ -100,13 +100,19 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
                 profile__interests__id__in=interests_ids
             )
 
-        ordering = '-rating'
+        # ordering = '-rating'
         # sqlite_db = 'django.db.backends.sqlite3'
         # if settings.DATABASES['default'].get('ENGINE') == sqlite_db:
         #     ordering = '-rating'
+        # queryset = queryset.annotate(
+        #     rating=Avg('profile__references_to__rating')
+        # ).order_by(ordering)
+        queryset = queryset.extra(
+            select={'rating_is_null': 'rating is null'})
+        queryset = queryset.extra(
+            order_by=['-rating', 'rating_is_null'])
         queryset = queryset.annotate(
-            rating=Avg('profile__references_to__rating')
-        ).order_by(ordering)
+            rating=Avg('profile__references_to__rating'))
         return queryset
 
 
