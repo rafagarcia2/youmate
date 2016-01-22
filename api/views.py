@@ -1,4 +1,4 @@
-from django.db.models import Q, Avg
+from django.db.models import Q, Avg, Count
 from django.conf import settings
 
 from rest_framework import generics, views, status
@@ -100,20 +100,16 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
                 profile__interests__id__in=interests_ids
             )
 
-        # ordering = '-rating'
-        # sqlite_db = 'django.db.backends.sqlite3'
-        # if settings.DATABASES['default'].get('ENGINE') == sqlite_db:
-        #     ordering = '-rating'
-        # queryset = queryset.annotate(
-        #     rating=Avg('profile__references_to__rating')
-        # ).order_by(ordering)
-        queryset = queryset.extra(
-            select={'rating_is_null': 'rating is null'})
-        queryset = queryset.extra(
-            order_by=['-rating', '-rating_is_null'])
+        ordering = '-rating'
+        sqlite_db = 'django.db.backends.sqlite3'
+        if settings.DATABASES['default'].get('ENGINE') == sqlite_db:
+            ordering = 'rating'
         queryset = queryset.annotate(
-            rating=Avg('profile__references_to__rating'))
-        return queryset
+            null_rating=Count('rating'),
+            rating=Avg('profile__references_to__rating')
+        ).order_by(ordering)
+        queryset = queryset.extra(
+            order_by=['-null_rating', '-rating'])
 
 
 class UserRetrieve(mixins.UserMixin, generics.RetrieveUpdateAPIView):
