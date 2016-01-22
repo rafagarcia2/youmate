@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Q, Avg
 
 from rest_framework import generics, views, status
 from rest_framework.exceptions import NotAuthenticated
@@ -98,6 +98,10 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
             queryset = queryset.filter(
                 profile__interests__id__in=interests_ids
             )
+
+        queryset = queryset.annotate(
+            rating=Avg('profile__references_to__rating')
+        ).order_by('-rating')
         return queryset
 
 
