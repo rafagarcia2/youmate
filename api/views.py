@@ -110,6 +110,7 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
         ).order_by(ordering)
         queryset = queryset.extra(
             order_by=['-null_rating', '-rating'])
+        return queryset
 
 
 class UserRetrieve(mixins.UserMixin, generics.RetrieveUpdateAPIView):
