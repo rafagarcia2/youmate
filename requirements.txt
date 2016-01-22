@@ -1,4 +1,5 @@
 -e git+https://github.com/Tivix/django-common.git@bcf5a67192f967a71688f597dc79db8f9b620412#egg=django_common_helpers-master
+Babel==2.2.0
 Django==1.8.4
 Pillow==3.0.0
 PyJWT==1.4.0
@@ -10,11 +11,11 @@ appnope==0.1.0
 beautifulsoup4==4.4.1
 blessings==1.6
 bpython==0.14.2
+click==6.2
 curtsies==0.1.19
 decorator==4.0.4
 dj-database-url==0.3.0
 dj-static==0.0.6
-djrill==2.0
 django-allauth==0.23.0
 django-braces==1.8.1
 django-common==0.1.51
@@ -23,16 +24,20 @@ django-extensions==1.5.7
 django-filter==0.11.0
 django-oauth-toolkit==0.9.0
 django-oauth2-provider==0.2.6.1
+django-phonenumber-field==1.0.0
 django-push-notifications==1.4.1
 django-rest-auth==0.6.0
 django-rest-framework-social-oauth2==1.0.2
 django-toolbelt==0.0.1
 django-twilio-sms==0.2
+django-twilio==0.8.0
 django-vanilla-views==1.0.4
 django-webtest==1.7.8
 django-widget-tweaks==1.4.1
 djangorestframework-filters==0.6.0
 djangorestframework==3.3.1
+djrill==2.0
+first==2.0.1
 gnureadline==6.3.3
 greenlet==0.4.9
 gunicorn==19.3.0
@@ -46,8 +51,13 @@ oauth2-provider==0.0
 oauthlib==1.0.1
 path.py==8.1.1
 pexpect==3.3
+phonenumbers==7.2.3
 pickleshare==0.5
+pip-tools==1.4.2
 psycopg2==2.6.1
+pydot==1.0.2
+pygraphviz==1.3.1
+pyparsing==1.5.7
 python-openid==2.2.5
 python-social-auth==0.2.13
 pytz==2015.7
