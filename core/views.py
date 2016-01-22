@@ -72,6 +72,10 @@ class ConfirmationPhone(APIView):
 
     def put(self, request, **kwargs):
         self.object = self.get_object()
+
+        self.object.is_phone_verified = True
+        self.object.save()
+
         return Response({
             'profile_id': self.object.id,
             'is_phone_verified': self.object.is_phone_verified,
