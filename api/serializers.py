@@ -162,7 +162,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        exclude = ('mates',)
+        exclude = ('mates', 'email_code', 'phone_code',)
         validators = [
             ValidateInterestsCount()
         ]

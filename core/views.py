@@ -9,7 +9,7 @@ from vanilla import TemplateView, UpdateView, DetailView, ListView
 
 from core.forms import UpdateProfileAboutForm, ValidatePhoneForm
 from reference.forms import ReferenceForm
-from core.models import Profile, SearchQuery
+from core.models import Profile, SearchQuery, code_generate
 
 
 class IndexView(TemplateView):
@@ -49,6 +49,20 @@ class ValidatePhoneView(DetailView):
 
     def get_object(self):
         return self.request.user.profile
+
+
+class ConfirmationEmail(DetailView):
+    model = Profile
+    template_name = 'account/confirmation_email_verified.html'
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        email_code = self.kwargs.get('email_code')
+        profile = get_object_or_404(queryset, email_code=email_code)
+        profile.is_email_verified = True
+        profile.email_code = code_generate(size=32)
+        profile.save()
+        return profile
 
 
 class UpdateProfileAboutView(UpdateView):

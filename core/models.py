@@ -1,14 +1,27 @@
+import string
+import random
+
 from django.db import models
 from django.contrib import auth
+from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
+from django.core.mail import send_mail
 from django.utils.translation import ugettext as _
 from django.db.models.signals import post_save
+from django.template.loader import render_to_string
 from django.core.exceptions import AppRegistryNotReady
 
 from core.templatetags.tags import get_profile_photo
 from reference.models import Reference
 from mate.models import Mate
+
+
+def code_generate(size=6):
+    return ''.join(
+        random.choice(
+            string.ascii_uppercase + string.digits
+        ) for x in range(size))
 
 
 class Profile(models.Model):
@@ -49,6 +62,13 @@ class Profile(models.Model):
     living_city = models.CharField(
         _('Living city'), max_length=100, null=True, blank=True)
     photo = models.ImageField(upload_to='photos/', null=True, blank=True)
+
+    # Confirmations
+    is_email_verified = models.BooleanField(default=False)
+    email_code = models.CharField(
+        max_length=50, default=code_generate(size=32))
+    is_phone_verified = models.BooleanField(default=False)
+    phone_code = models.CharField(max_length=50, default=code_generate())
 
     # relations
     user = models.OneToOneField(settings.AUTH_USER_MODEL, unique=True)
@@ -210,6 +230,25 @@ class SearchQuery(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+
+        # Send confirmation email
+        activate_url = '{host}{confirmation_url}'.format(
+            host=settings.HOST_URL,
+            confirmation_url=reverse(
+                'confirmation_email',
+                kwargs={'email_code': instance.profile.email_code}
+            )
+        )
+        context = {
+            'user_display': instance.get_full_name() or instance.email,
+            'site_name': 'Youmate',
+            'activate_url': activate_url,
+        }
+        message = render_to_string(
+            'account/email/email_confirmation_message.txt', context)
+        subject = _(u'Email Confirmation - Youmate')
+        recipients = [instance.email]
+        send_mail(subject, message, 'noreply@youmate.com.br', recipients)
 
 try:
     from django.contrib.auth import get_user_model

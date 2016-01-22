@@ -41,6 +41,8 @@ MEDIA_ROOT = 'media'
 
 MEDIA_URL = '/media/'
 
+EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+
 # Application definition
 
 DJANGO_APPS = (

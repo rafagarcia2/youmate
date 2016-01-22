@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load account %}
+{% load url from future %}
+
+{% load socialaccount %}
+
+{% block head_title %}{% trans "Email Confirmation" %}{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col l6 offset-l3 m8 offset-m2 s12 z-depth-4 card-panel">
+      <div class="row grey lighten-2">
+        <div class="input-field col s12 center">
+          <h4>Confirmação de Email</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12 center">
+          <h5>Você confirmou que o email: "{{ object.user.email }}" é um email válido, obrigado.</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
