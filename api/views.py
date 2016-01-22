@@ -105,7 +105,7 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
         if settings.DATABASES['default'].get('ENGINE') == sqlite_db:
             ordering = 'rating'
         queryset = queryset.annotate(
-            null_rating=Count('rating'),
+            null_rating=Count('profile__references_to__rating'),
             rating=Avg('profile__references_to__rating')
         ).order_by(ordering)
         queryset = queryset.extra(
