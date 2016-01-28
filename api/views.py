@@ -169,7 +169,10 @@ class LanguageList(mixins.LanguageMixin, generics.ListCreateAPIView):
 
 
 class PhotoList(mixins.PhotoMixin, generics.ListCreateAPIView):
-    pass
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = {
+        'profile': ['exact'],
+    }
 
 
 class ProfileListView(mixins.ProfileMixin, generics.ListAPIView):
