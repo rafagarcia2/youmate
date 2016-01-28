@@ -1,5 +1,5 @@
-from django.db.models import Q, Avg, Count
-from django.conf import settings
+from django.db.models import Q, Avg
+from django.db.models.functions import Coalesce
 
 from rest_framework import generics, views, status
 from rest_framework.exceptions import NotAuthenticated
@@ -100,13 +100,9 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
                 profile__interests__id__in=interests_ids
             )
 
-        ordering = '-rating'
-        # sqlite_db = 'django.db.backends.sqlite3'
-        # if settings.DATABASES['default'].get('ENGINE') == sqlite_db:
-        #     ordering = 'rating'
         queryset = queryset.annotate(
-            rating=Avg('profile__references_to__rating')
-        ).order_by(ordering)
+            rating=Coalesce(Avg('profile__references_to__rating'), 0)
+        ).order_by('-rating')
         return queryset
 
 
