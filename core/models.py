@@ -258,6 +258,10 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
+        # Wtf
+        if not instance.email:
+            return
+
         # Send confirmation email
         activate_url = '{host}{confirmation_url}'.format(
             host=settings.HOST_URL,
