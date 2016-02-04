@@ -186,20 +186,20 @@ AUTHENTICATION_BACKENDS = global_settings.AUTHENTICATION_BACKENDS + (
 # Social auth configuration
 SOCIAL_AUTH_FACEBOOK_KEY = '1685351455020151'
 SOCIAL_AUTH_FACEBOOK_SECRET = '5dc0a60e3812301c576211452ac6cce8'
-# SOCIAL_AUTH_FACEBOOK_SCOPE = [
-#     'email',
-#     'public_profile',
-#     'user_about_me',
-#     'user_birthday',
-#     'user_location',
-#     'user_location',
-# ]
-SOCIAL_AUTH_FACEBOOK_IGNORE_DEFAULT_SCOPE = True
 SOCIAL_AUTH_FACEBOOK_SCOPE = [
     'email',
     'public_profile',
-    # 'user_location'
+    'user_about_me',
+    'user_birthday',
+    'user_location',
+    'user_location',
 ]
+SOCIAL_AUTH_FACEBOOK_IGNORE_DEFAULT_SCOPE = True
+# SOCIAL_AUTH_FACEBOOK_SCOPE = [
+#     'email',
+#     'public_profile',
+#     # 'user_location'
+# ]
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_IGNORE_DEFAULT_SCOPE = True
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
@@ -241,6 +241,23 @@ REST_FRAMEWORK = {
         'oauth2_provider.ext.rest_framework.OAuth2Authentication',
         'rest_framework_social_oauth2.authentication.SocialAuthentication',
     )
+}
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'https://www.googleapis.com/auth/userinfo.profile',
+            'https://www.googleapis.com/auth/userinfo.email'
+        ],
+        'AUTH_PARAMS': {'access_type': 'online'}
+    },
+    'facebook': {
+        'SCOPE': ['email'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'METHOD': 'oauth2',
+        'LOCALE_FUNC': lambda request: 'pt_BR',
+        'VERIFIED_EMAIL': False
+    }
 }
 
 OAUTH2_PROVIDER = {
