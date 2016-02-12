@@ -196,7 +196,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = auth.get_user_model()
-        exclude = ('password',)
+        exclude = (
+            'password', 'last_login', 'is_superuser',
+            'is_staff', 'is_active', 'date_joined', 'groups',
+            'user_permissions',
+        )
 
 
 class ProfilePendingMatesSerializer(serializers.ModelSerializer):
