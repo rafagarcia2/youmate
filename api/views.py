@@ -67,6 +67,7 @@ class APIRoot(views.APIView):
 
 class UserList(mixins.UserMixin, generics.ListCreateAPIView):
     filter_backends = (filters.DjangoFilterBackend,)
+    pagination_class = serializers.PaginatedUserSerializer
     filter_fields = {
         'username': ['exact'],
         'first_name': ['icontains'],

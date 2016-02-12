@@ -1,6 +1,6 @@
 from django.contrib import auth
 
-from rest_framework import serializers
+from rest_framework import serializers, pagination
 from push_notifications.models import APNSDevice, GCMDevice
 
 from core.models import Profile
@@ -201,6 +201,14 @@ class UserSerializer(serializers.ModelSerializer):
             'is_staff', 'is_active', 'date_joined', 'groups',
             'user_permissions',
         )
+
+
+class PaginatedUserSerializer(pagination.PageNumberPagination):
+    # page_size = 20
+    page_size = 2
+
+    class Meta:
+        object_serializer_class = UserSerializer
 
 
 class ProfilePendingMatesSerializer(serializers.ModelSerializer):
