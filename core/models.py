@@ -26,6 +26,14 @@ def code_generate(size=6):
         ) for x in range(size))
 
 
+def code_generate6():
+    return code_generate(6)
+
+
+def code_generate32():
+    return code_generate(32)
+
+
 class Profile(models.Model):
     # Genre choices
     MEN = 'M'
@@ -68,9 +76,9 @@ class Profile(models.Model):
     # Confirmations
     is_email_verified = models.BooleanField(default=False)
     email_code = models.CharField(
-        max_length=50, default=code_generate(size=32))
+        max_length=50, default=code_generate32)
     is_phone_verified = models.BooleanField(default=False)
-    phone_code = models.CharField(max_length=50, default=code_generate())
+    phone_code = models.CharField(max_length=50, default=code_generate6)
 
     # relations
     user = models.OneToOneField(settings.AUTH_USER_MODEL, unique=True)

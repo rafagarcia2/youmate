@@ -155,6 +155,12 @@ class ReferenceList(mixins.ReferenceMixin, generics.ListCreateAPIView):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('id', 'from_user', 'to_user')
 
+    def perform_create(self, serializer):
+        if not self.request.user.is_authenticated():
+            raise NotAuthenticated()
+
+        serializer.save(from_user=self.request.user.profile)
+
 
 class ReferenceUpdateView(mixins.ReferenceMixin,
                           generics.RetrieveUpdateAPIView):

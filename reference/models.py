@@ -14,7 +14,7 @@ class Reference(models.Model):
         to='core.Profile', related_name='references_to')
     created_at = CreationDateTimeField()
     text = models.TextField(
-        'Texto da referencia', max_length=400, null=False, blank=False)
+        'Texto da referencia', max_length=400, null=True, blank=True)
     active = models.BooleanField(default=False)
     rating = models.PositiveSmallIntegerField(
         choices=RATING_CHOICES, default=1)

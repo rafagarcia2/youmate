@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import core.models
 
 
 class Migration(migrations.Migration):
@@ -14,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profile',
             name='email_code',
-            field=models.CharField(default=b'89DMNU', max_length=50),
+            field=models.CharField(default=core.models.code_generate32, max_length=50),
         ),
         migrations.AddField(
             model_name='profile',
@@ -29,6 +30,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profile',
             name='phone_code',
-            field=models.CharField(default=b'403IN0', max_length=50),
+            field=models.CharField(default=core.models.code_generate6, max_length=50),
         ),
     ]

@@ -241,9 +241,9 @@ REST_FRAMEWORK = {
         'oauth2_provider.ext.rest_framework.OAuth2Authentication',
         'rest_framework_social_oauth2.authentication.SocialAuthentication',
     ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'api.permissions.AppSecretKeyPermission',
-    ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'api.permissions.AppSecretKeyPermission',
+    # ),
 }
 
 OAUTH2_PROVIDER = {
