@@ -1,23 +1,14 @@
-from rest_framework import permissions
-
-from django.shortcuts import get_object_or_404
+from django.conf import settings
 from django.utils.translation import ugettext as _
 
-from deck.models import Event
+from rest_framework import permissions
 
 
-class IsJuryPermission(permissions.BasePermission):
+class AppSecretKeyPermission(permissions.BasePermission):
     message = _('You are not allowed to see this page.')
 
     def has_permission(self, request, view):
-        slug = view.kwargs.get('event_slug', view.kwargs.get('slug'))
-        event = get_object_or_404(Event, slug=slug)
-        is_in_jury = event.jury.users.filter(pk=request.user.pk).exists()
-        return is_in_jury or request.user.is_superuser
-
-
-class DeckPermissionMixing(object):
-    permission_classes = (
-        permissions.IsAuthenticated,
-        IsJuryPermission,
-    )
+        app_secret_key = self.request.META.get('APP_SECRET_KEY')
+        if self.request.user.is_authenticated():
+            is_superuser = self.request.user.is_superuser
+        return is_superuser or app_secret_key == settings.APP_SECRET_KEY
