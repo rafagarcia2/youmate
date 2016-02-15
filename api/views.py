@@ -101,6 +101,9 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
                 profile__interests__id__in=interests_ids
             )
 
+        if self.request.user.is_authenticated():
+            queryset = queryset.exclude(pk=self.request.user.pk)
+
         queryset = queryset.annotate(
             rating=Coalesce(Avg('profile__references_to__rating'), 0)
         ).order_by('-rating')
