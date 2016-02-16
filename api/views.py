@@ -193,6 +193,9 @@ class PhotoList(mixins.PhotoMixin, generics.ListCreateAPIView):
 
 class PhotoRetrieveDelete(mixins.PhotoMixin, generics.RetrieveDestroyAPIView):
     def delete(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            raise NotAuthenticated()
+
         self.object = self.get_object()
 
         if not self.request.user.is_authenticated() and \
