@@ -20,6 +20,7 @@ class Reference(models.Model):
         choices=RATING_CHOICES, default=1)
 
     class Meta:
+        ordering = ('-created_at',)
         verbose_name = 'Reference'
         verbose_name_plural = 'References'
 
