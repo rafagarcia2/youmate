@@ -162,14 +162,17 @@ class ReferenceList(mixins.ReferenceMixin, generics.ListCreateAPIView):
         if not self.request.user.is_authenticated():
             raise NotAuthenticated()
 
-        return request.data.update(
+        request.data.update(
             from_user=str(self.request.user.profile.pk)
         )
+
         # from core.models import Profile
         # p = Profile.objects.get(pk=80)
-        # request.data.update(from_user=str(p.pk))
-        # return super(ReferenceList, self).post(
-        #     request=request, format=format, pk=pk)
+        # request.data.update(
+        #     from_user=str(p.pk)
+        # )
+        return super(ReferenceList, self).post(
+            request=request, format=format, pk=pk)
 
 
 class ReferenceUpdateView(mixins.ReferenceMixin,
