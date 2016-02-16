@@ -63,6 +63,8 @@ class InterestSerializer(serializers.ModelSerializer):
 class ReferenceSerializer(serializers.ModelSerializer):
     from_user__photo_url = serializers.CharField(
         source='from_user.get_photo_url', read_only=True)
+    from_user__pk = serializers.CharField(
+        source='from_user.user.pk', read_only=True)
     from_user__first_name = serializers.CharField(
         source='from_user.user.first_name', read_only=True)
     from_user__last_name = serializers.CharField(
