@@ -166,11 +166,6 @@ class ReferenceList(mixins.ReferenceMixin, generics.ListCreateAPIView):
             from_user=str(self.request.user.profile.pk)
         )
 
-        # from core.models import Profile
-        # p = Profile.objects.get(pk=80)
-        # request.data.update(
-        #     from_user=str(p.pk)
-        # )
         return super(ReferenceList, self).post(
             request=request, format=format, pk=pk)
 
