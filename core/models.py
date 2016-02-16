@@ -215,6 +215,12 @@ class Profile(models.Model):
         ).first()
         mate.delete()
 
+    def cancel_mate(self, profile):
+        mate = Mate.objects.filter(
+            from_user=self, to_user=profile, status=Mate.PENDING
+        ).first()
+        mate.delete()
+
     def calcular_seguranca(self):
         criterias = [
             self.user.is_active,

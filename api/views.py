@@ -33,6 +33,7 @@ class APIRoot(views.APIView):
                         'mates': reverse(
                             'profile_mates', request=request),
                         'add_mate': '/profiles/:pk/add_mate/',
+                        'cancel_mate': '/profiles/:pk/cancel_mate/',
                         'accept_mate': '/profiles/:pk/accept_mate/',
                         'reject_mate': '/profiles/:pk/reject_mate/',
                         'delete_mate': '/profiles/:pk/delete_mate/',
@@ -311,6 +312,22 @@ class ProfileDeleteMateView(mixins.ProfileMixin, views.APIView):
         self.object = self.get_object()
         try:
             self.request.user.profile.delete_mate(self.object)
+            return Response({}, status=status.HTTP_201_CREATED)
+        except:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileCancelMateView(mixins.ProfileMixin, views.APIView):
+    def get_object(self):
+        return self.queryset.get(**self.kwargs)
+
+    def delete(self, request, format=None, pk=None):
+        if not self.request.user.is_authenticated():
+            raise NotAuthenticated()
+
+        self.object = self.get_object()
+        try:
+            self.request.user.profile.cancel_mate(self.object)
             return Response({}, status=status.HTTP_201_CREATED)
         except:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
