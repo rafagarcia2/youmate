@@ -78,7 +78,7 @@ class ReferenceSerializer(serializers.ModelSerializer):
     def validate_users_are_mate(self, data):
         from_user = data.get('from_user')
         to_user = data.get('to_user')
-        if from_user.mates_users.filter(profile=to_user).exists():
+        if not from_user.mates_users.filter(profile=to_user).exists():
             message = ('You can only create references for your mates.')
             raise serializers.ValidationError(message)
 
