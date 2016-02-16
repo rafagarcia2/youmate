@@ -69,6 +69,8 @@ class ReferenceSerializer(serializers.ModelSerializer):
         source='from_user.user.first_name', read_only=True)
     from_user__last_name = serializers.CharField(
         source='from_user.user.last_name', read_only=True)
+    to_user__pk = serializers.CharField(
+        source='to_user.user.pk', read_only=True)
 
     class Meta:
         model = Reference

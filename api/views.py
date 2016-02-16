@@ -188,6 +188,18 @@ class PhotoList(mixins.PhotoMixin, generics.ListCreateAPIView):
     }
 
 
+class PhotoRetrieveDelete(mixins.PhotoMixin, generics.RetrieveDestroyAPIView):
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        if not self.request.user.is_authenticated() and \
+           self.request.user.profile != self.object.profile:
+            raise NotAuthenticated()
+
+        return super(PhotoRetrieveDelete, self).delete(
+            request, *args, **kwargs)
+
+
 class ProfileListView(mixins.ProfileMixin, generics.ListAPIView):
     def get_queryset(self):
         queryset = super(ProfileListView, self).get_queryset()
@@ -214,6 +226,16 @@ class ProfileUpdateView(mixins.ProfileMixin, generics.RetrieveUpdateAPIView):
             response.data.update(mate_status=mate_status)
 
         return response
+
+    def patch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        if not self.request.user.is_authenticated() and \
+           self.request.user.profile != self.object:
+            raise NotAuthenticated()
+
+        return super(ProfileUpdateView, self).patch(
+            request, *args, **kwargs)
 
 
 class ProfileAddMateView(mixins.ProfileMixin, views.APIView):

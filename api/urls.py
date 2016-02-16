@@ -116,6 +116,9 @@ urlpatterns = patterns(
     url(regex=r'^photos/$',
         view=views.PhotoList.as_view(),
         name='photo_list'),
+    url(regex=r'^photos/(?P<pk>[0-9]+)/$',
+        view=views.PhotoRetrieveDelete.as_view(),
+        name='photo_retrieve_delete'),
 
     # Mate
     url(regex=r'^mates/$',
