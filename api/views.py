@@ -6,6 +6,7 @@ from rest_framework.exceptions import NotAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework import filters
+
 from allauth.socialaccount.providers.facebook.views import (
     FacebookOAuth2Adapter)
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
@@ -247,9 +248,21 @@ class ProfileAddMateView(mixins.ProfileMixin, views.APIView):
         if not self.request.user.is_authenticated():
             raise NotAuthenticated()
 
+        profile = self.request.user.profile
         self.object = self.get_object()
+
+        # Mates of any kind
+        already_mates = profile.all_mates.filter(
+            Q(to_user=self.object) | Q(from_user=self.object)
+        ).exists()
+
+        if already_mates:
+            message = ('You can only ask for mate once.')
+            return Response(
+                {'detail': message}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
-            request.user.profile.add_mate(self.object)
+            profile.add_mate(self.object)
             return Response({}, status=status.HTTP_201_CREATED)
         except:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)

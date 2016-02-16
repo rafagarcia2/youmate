@@ -193,6 +193,12 @@ class Profile(models.Model):
             id__in=self.pending_mates.values_list('from_user__user', flat=True)
         )
 
+    @property
+    def all_mates(self):
+        return Mate.objects.filter(
+            models.Q(from_user=self) | models.Q(to_user=self)
+        )
+
     def accept_mate(self, profile):
         mate = self.pending_mates.get(from_user=profile)
         mate.accept()
