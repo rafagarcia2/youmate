@@ -186,20 +186,24 @@ AUTHENTICATION_BACKENDS = global_settings.AUTHENTICATION_BACKENDS + (
 # Social auth configuration
 SOCIAL_AUTH_FACEBOOK_KEY = '1685351455020151'
 SOCIAL_AUTH_FACEBOOK_SECRET = '5dc0a60e3812301c576211452ac6cce8'
-SOCIAL_AUTH_FACEBOOK_SCOPE = [
-    'email',
-    'public_profile',
-    'user_about_me',
-    'user_birthday',
-    'user_location',
-    'user_location',
-]
+# SOCIAL_AUTH_FACEBOOK_SCOPE = [
+#     'email',
+#     'public_profile',
+#     'user_about_me',
+#     'user_birthday',
+#     'user_location',
+#     'user_location',
+# ]
 SOCIAL_AUTH_FACEBOOK_IGNORE_DEFAULT_SCOPE = True
 SOCIAL_AUTH_FACEBOOK_SCOPE = [
     'email',
     'public_profile',
-    'user_location'
+    # 'user_location'
 ]
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+  # 'locale': 'pt_BR',
+  'fields': 'id, name, email, birthday'
+}
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_IGNORE_DEFAULT_SCOPE = True
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
