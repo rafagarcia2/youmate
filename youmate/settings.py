@@ -202,13 +202,14 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = [
 ]
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
   # 'locale': 'pt_BR',
-  'fields': 'id, name, email, birthday'
+  'fields': 'id, name, email, birthday, gender, location'
 }
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_IGNORE_DEFAULT_SCOPE = True
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://www.googleapis.com/auth/userinfo.email',
-    'https://www.googleapis.com/auth/userinfo.profile'
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/auth/user.birthday.read',
 ]
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ('79881842751-c9l225d7nojbqhsfeuak1h8mlmqmmlgi'
                                  '.apps.googleusercontent.com')
