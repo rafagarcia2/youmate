@@ -1,18 +1,19 @@
-from datetime import date
-from time import mktime
-
-from social.backends.facebook import FacebookOAuth2
-from social.backends.google import GoogleOAuth2
-
-from core.models import Profile
+from datetime import datetime, date
 
 
-def custom_user_details(strategy, details, response, user=None, *args, **kwargs):
-    if not user:
-        return
+def convert_birthday(birthday):
+    birthday = datetime.strptime(birthday, '%m/%d/%Y').date()
+    today = date.today()
+    return (
+        today.year - birthday.year - (
+            (today.month, today.day) < (birthday.month, birthday.day)
+        )
+    )
 
-    if kwargs['is_new']:
-        if isinstance(kwargs.get('backend'), FacebookOAuth2):
-            pass
-        elif isinstance(kwargs.get('backend'), GoogleOAuth2):
-            pass
+
+def save_profile(backend, user, response, *args, **kwargs):
+    if backend.name == 'facebook':
+        birthday = response.get('birthday')
+        if birthday:
+            user.profile.age = convert_birthday(birthday)
+        user.profile.save()

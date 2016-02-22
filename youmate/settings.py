@@ -214,6 +214,20 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ('79881842751-c9l225d7nojbqhsfeuak1h8mlmqmmlgi'
                                  '.apps.googleusercontent.com')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '26mT_rgQys1saUiCeqzgjjCB'
 
+
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    'social.pipeline.user.create_user',
+    'core.pipeline.save_profile',  # Custom Pipeline
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details',
+)
+
 # AUTHENTICATION_BACKENDS = global_settings.AUTHENTICATION_BACKENDS + (
 #     'oauth2_provider.backends.OAuth2Backend',
 #     # `allauth` specific authentication methods, such as login by e-mail
