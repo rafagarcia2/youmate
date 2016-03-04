@@ -60,10 +60,14 @@ class ConfirmationEmail(DetailView):
     def get_object(self):
         queryset = self.get_queryset()
         email_code = self.kwargs.get('email_code')
-        profile = get_object_or_404(queryset, email_code=email_code)
-        profile.is_email_verified = True
-        profile.email_code = code_generate(size=32)
-        profile.save()
+        try:
+            profile = get_object_or_404(queryset, email_code=email_code)
+        except:
+            profile = None
+        else:
+            profile.is_email_verified = True
+            profile.email_code = code_generate(size=32)
+            profile.save()
         return profile
 
 

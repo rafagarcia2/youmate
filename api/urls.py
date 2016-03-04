@@ -93,6 +93,9 @@ urlpatterns = patterns(
     url(regex=r'^profiles/mates/$',
         view=views.ProfileMatesView.as_view(),
         name='profile_mates'),
+    url(regex=r'^profiles/reset_email_code/$',
+        view=views.ProfileResetEmailCodeView.as_view(),
+        name='profile_reset_email_code'),
 
     # Interest
     url(regex=r'^interests/$',

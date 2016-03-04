@@ -37,6 +37,8 @@ class APIRoot(views.APIView):
                         'accept_mate': '/profiles/:pk/accept_mate/',
                         'reject_mate': '/profiles/:pk/reject_mate/',
                         'delete_mate': '/profiles/:pk/delete_mate/',
+                        'reset_email_code': reverse(
+                            'profile_reset_email_code', request=request),
                     }
                 },
                 'interests': reverse('interest_list', request=request),
@@ -357,6 +359,24 @@ class ProfileMatesView(mixins.ProfileMixin, generics.RetrieveAPIView):
             self.get_object()
         )
         return Response(serializer.data)
+
+
+class ProfileResetEmailCodeView(mixins.ProfileMixin, views.APIView):
+    def get_object(self):
+        # if self.request.user.is_authenticated():
+        #     return self.request.user.profile
+        # raise NotAuthenticated()
+        from core.models import Profile
+        return Profile.objects.get(pk=90)
+
+    def post(self, request, format=None, pk=None):
+        self.object = self.get_object()
+        try:
+            self.object.send_email_verification(reset_email=True)
+        except:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({}, status=status.HTTP_200_OK)
 
 
 class FacebookLogin(SocialLoginView):

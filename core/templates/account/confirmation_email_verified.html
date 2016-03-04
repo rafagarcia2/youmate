@@ -18,7 +18,11 @@
       </div>
       <div class="row">
         <div class="input-field col s12 center">
-          <h5>Você confirmou que o email: "{{ object.user.email }}" é um email válido, obrigado.</h5>
+          {% if object %}
+            <h5>Você confirmou que o email: "{{ object.user.email }}" é um email válido, obrigado.</h5>
+          {% else %}
+            <h5>Código inválido. Acesse o nosso aplicativo e solicite um novo código de confirmação.</h5>
+          {% endif %}
         </div>
       </div>
     </div>

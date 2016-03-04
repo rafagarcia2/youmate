@@ -257,6 +257,34 @@ class Profile(models.Model):
 
         return mate.status if mate else None
 
+    def reset_email_code(self):
+        self.email_code = code_generate32()
+        self.is_email_verified = False
+        self.save()
+
+    def send_email_verification(self, reset_email=True):
+        if reset_email:
+            self.reset_email_code()
+
+        # Send confirmation email
+        activate_url = '{host}{confirmation_url}'.format(
+            host=settings.HOST_URL,
+            confirmation_url=reverse(
+                'confirmation_email',
+                kwargs={'email_code': self.email_code}
+            )
+        )
+        context = {
+            'user_display': self.user.get_full_name() or self.user.email,
+            'site_name': 'Youmate',
+            'activate_url': activate_url,
+        }
+        message = render_to_string(
+            'account/email/email_confirmation_message.txt', context)
+        subject = _(u'Email Confirmation - Youmate')
+        recipients = [self.user.email]
+        send_mail(subject, message, 'noreply@youmate.com.br', recipients)
+
 
 class SearchQuery(models.Model):
     living_city = models.CharField(
@@ -278,28 +306,7 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
-        # Wtf
-        if not instance.email:
-            return
-
-        # Send confirmation email
-        activate_url = '{host}{confirmation_url}'.format(
-            host=settings.HOST_URL,
-            confirmation_url=reverse(
-                'confirmation_email',
-                kwargs={'email_code': instance.profile.email_code}
-            )
-        )
-        context = {
-            'user_display': instance.get_full_name() or instance.email,
-            'site_name': 'Youmate',
-            'activate_url': activate_url,
-        }
-        message = render_to_string(
-            'account/email/email_confirmation_message.txt', context)
-        subject = _(u'Email Confirmation - Youmate')
-        recipients = [instance.email]
-        send_mail(subject, message, 'noreply@youmate.com.br', recipients)
+        instance.send_email_verification(reset_email=False)
 
 
 try:
