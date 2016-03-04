@@ -180,7 +180,7 @@ class Profile(models.Model):
                 profile__mates_from__to_user=self,
                 profile__mates_from__status=Mate.MATE
             )
-        ).exclude(pk=self.user.pk)
+        ).exclude(pk=self.user.pk).distinct()
 
     @property
     def pending_mates(self):
