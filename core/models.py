@@ -306,7 +306,7 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
-        instance.send_email_verification(reset_email=False)
+        instance.profile.send_email_verification(reset_email=False)
 
 
 try:
