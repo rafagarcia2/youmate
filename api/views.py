@@ -363,11 +363,9 @@ class ProfileMatesView(mixins.ProfileMixin, generics.RetrieveAPIView):
 
 class ProfileResetEmailCodeView(mixins.ProfileMixin, views.APIView):
     def get_object(self):
-        # if self.request.user.is_authenticated():
-        #     return self.request.user.profile
-        # raise NotAuthenticated()
-        from core.models import Profile
-        return Profile.objects.get(pk=90)
+        if self.request.user.is_authenticated():
+            return self.request.user.profile
+        raise NotAuthenticated()
 
     def post(self, request, format=None, pk=None):
         self.object = self.get_object()
