@@ -197,7 +197,7 @@ class Profile(models.Model):
     def all_mates(self):
         return Mate.objects.filter(
             models.Q(from_user=self) | models.Q(to_user=self)
-        )
+        ).distinct()
 
     def accept_mate(self, profile):
         mate = self.pending_mates.get(from_user=profile)
