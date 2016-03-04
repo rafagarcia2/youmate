@@ -1,5 +1,9 @@
 from datetime import datetime, date
 
+from django.core.files.base import ContentFile
+
+from requests import request, HTTPError
+
 
 def convert_birthday(birthday, date_format='%m/%d/%Y'):
     birthday = datetime.strptime(birthday, date_format).date()
@@ -41,3 +45,26 @@ def save_profile(backend, user, response, *args, **kwargs):
             except ValueError:
                 pass
     user.profile.save()
+
+
+def save_profile_picture(backend, user, response, *args, **kwargs):
+    url = None
+    params = {}
+
+    if backend.name == 'facebook':
+        url = 'http://graph.facebook.com/{0}/picture'.format(response['id'])
+        params = {'type': 'large'}
+
+    if backend.name == 'google-oauth2' and response.get('image'):
+        url = response['image'].get('url').replace('?sz=50', '')
+
+    try:
+        response = request('GET', url, params=params)
+        response.raise_for_status()
+    except HTTPError:
+        pass
+    else:
+        user.profile.photo.save(
+            '{0}_photo.jpg'.format(user.username),
+            ContentFile(response.content))
+        user.profile.save()

@@ -26,18 +26,14 @@ def get_profile_photo(user):
     if isinstance(user, Profile):
         user = user.user
 
-    social = user.socialaccount_set.first()
-
     if user.profile.photo:
         return '{0}{1}'.format(
             settings.HOST_URL,
             user.profile.photo.url)
 
+    social = user.socialaccount_set.first()
     if social:
         return social.get_avatar_url()
-
-    return 'http://www.gravatar.com/avatar/{}?s=40&d=mm'.format(
-        hashlib.md5(user.email).hexdigest())
 
 
 @register.filter
