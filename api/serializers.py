@@ -208,6 +208,8 @@ class ProfileMateActionsSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
+    full_name = serializers.CharField(
+        source='get_full_name', read_only=True)
 
     class Meta:
         model = auth.get_user_model()
