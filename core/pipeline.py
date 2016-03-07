@@ -16,6 +16,9 @@ def convert_birthday(birthday, date_format='%m/%d/%Y'):
 
 
 def save_profile(backend, user, response, *args, **kwargs):
+    if not kwargs.get('is_new'):
+        return
+
     birthday = response.get('birthday')
     gender = response.get('gender')
 
@@ -48,6 +51,9 @@ def save_profile(backend, user, response, *args, **kwargs):
 
 
 def save_profile_picture(backend, user, response, *args, **kwargs):
+    if not kwargs.get('is_new'):
+        return
+
     url = None
     params = {}
 

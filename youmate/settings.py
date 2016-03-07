@@ -230,6 +230,11 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.user.user_details',
 )
 
+PROTECTED_USER_FIELDS = [
+    'first_name',
+    'last_name',
+]
+
 # AUTHENTICATION_BACKENDS = global_settings.AUTHENTICATION_BACKENDS + (
 #     'oauth2_provider.backends.OAuth2Backend',
 #     # `allauth` specific authentication methods, such as login by e-mail
