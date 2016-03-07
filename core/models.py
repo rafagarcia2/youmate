@@ -108,28 +108,11 @@ class Profile(models.Model):
         )
         return set(registration_ids)
 
-    def send_phone_confirmation(self):
-        if not settings.ENABLE_SMS:
-            return
-
-        client = TwilioRestClient(
-            settings.TWILIO_ACCOUNT_SID,
-            settings.TWILIO_AUTH_TOKEN
-        )
-
-        body = _('To confirm this phone is correct, '
-                 'put this code in the app "{{ phone_code }}".')
-        client.messages.create(
-            body=body.format(phone_code=self.phone_code),
-            to=self.phone,
-            from_="+NNNNNNNNNNNN",
-        )
-
     def save(self, *args, **kwargs):
         if self.pk is not None:
             old_instance = Profile.objects.get(pk=self.pk)
             if old_instance.phone != self.phone:
-                self.send_phone_confirmation()
+                self.send_phone_verification()
 
         return super(Profile, self).save(*args, **kwargs)
 
@@ -262,6 +245,11 @@ class Profile(models.Model):
         self.is_email_verified = False
         self.save()
 
+    def reset_phone_code(self):
+        self.phone_code = code_generate6()
+        self.is_phone_verified = False
+        self.save()
+
     def send_email_verification(self, reset_email=True):
         if reset_email:
             self.reset_email_code()
@@ -284,6 +272,26 @@ class Profile(models.Model):
         subject = _(u'Email Confirmation - Youmate')
         recipients = [self.user.email]
         send_mail(subject, message, 'noreply@youmate.com.br', recipients)
+
+    def send_phone_verification(self, reset_phone=True):
+        if not settings.ENABLE_SMS:
+            return
+
+        if reset_phone:
+            self.reset_phone_code()
+
+        client = TwilioRestClient(
+            settings.TWILIO_ACCOUNT_SID,
+            settings.TWILIO_AUTH_TOKEN
+        )
+
+        body = _('To confirm this phone is correct, '
+                 'put this code in the app "{{ phone_code }}".')
+        client.messages.create(
+            body=body.format(phone_code=self.phone_code),
+            to=self.phone,
+            from_="+NNNNNNNNNNNN",
+        )
 
 
 class SearchQuery(models.Model):

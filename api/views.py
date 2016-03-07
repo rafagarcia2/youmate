@@ -377,6 +377,22 @@ class ProfileResetEmailCodeView(mixins.ProfileMixin, views.APIView):
             return Response({}, status=status.HTTP_200_OK)
 
 
+class ProfileResetPhoneCodeView(mixins.ProfileMixin, views.APIView):
+    def get_object(self):
+        if self.request.user.is_authenticated():
+            return self.request.user.profile
+        raise NotAuthenticated()
+
+    def post(self, request, format=None, pk=None):
+        self.object = self.get_object()
+        try:
+            self.object.send_phone_verification(reset_phone=True)
+        except:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({}, status=status.HTTP_200_OK)
+
+
 class FacebookLogin(SocialLoginView):
     adapter_class = FacebookOAuth2Adapter
 
