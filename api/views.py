@@ -41,6 +41,8 @@ class APIRoot(views.APIView):
                             'profile_reset_email_code', request=request),
                         'reset_phone_code': reverse(
                             'profile_reset_phone_code', request=request),
+                        'confirm_phone_code': reverse(
+                            'profile_confirm_phone_code', request=request),
                     }
                 },
                 'interests': reverse('interest_list', request=request),
@@ -393,6 +395,23 @@ class ProfileResetPhoneCodeView(mixins.ProfileMixin, views.APIView):
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({}, status=status.HTTP_200_OK)
+
+
+class ProfileConfirmPhoneCodeView(mixins.ProfileMixin, views.APIView):
+    def get_object(self):
+        if self.request.user.is_authenticated():
+            return self.request.user.profile
+        raise NotAuthenticated()
+
+    def post(self, request, format=None, pk=None):
+        self.object = self.get_object()
+        phone_code = self.request.data.get('phone_code', None)
+
+        if self.object.phone_code == phone_code:
+            self.object.is_phone_verified = True
+            return Response({}, status=status.HTTP_200_OK)
+        else:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class FacebookLogin(SocialLoginView):
