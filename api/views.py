@@ -39,6 +39,8 @@ class APIRoot(views.APIView):
                         'delete_mate': '/profiles/:pk/delete_mate/',
                         'reset_email_code': reverse(
                             'profile_reset_email_code', request=request),
+                        'reset_phone_code': reverse(
+                            'profile_reset_phone_code', request=request),
                     }
                 },
                 'interests': reverse('interest_list', request=request),
