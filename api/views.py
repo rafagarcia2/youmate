@@ -409,6 +409,7 @@ class ProfileConfirmPhoneCodeView(mixins.ProfileMixin, views.APIView):
 
         if self.object.phone_code == phone_code:
             self.object.is_phone_verified = True
+            self.object.save()
             return Response({}, status=status.HTTP_200_OK)
         else:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
