@@ -115,6 +115,9 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
         queryset = queryset.annotate(
             rating=Coalesce(Avg('profile__references_to__rating'), 0)
         ).order_by('-rating')
+
+        queryset = queryset.distinct()
+
         return queryset
 
 
