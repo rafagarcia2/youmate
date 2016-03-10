@@ -78,7 +78,7 @@ def send_mate_notification(sender, instance, **kwargs):
             'message': message,
             'image': photo_url,
             'type': 'invite_mate',
-            'mateId': str(instance.id),
+            'mateId': str(instance.from_user.id),
             'notId': str(notification_id),
         })
 
@@ -105,7 +105,7 @@ def accepted_mate_notification(sender, instance, **kwargs):
             'message': message,
             'image': photo_url,
             'type': 'accept_mate',
-            'mateId': str(instance.id),
+            'mateId': str(instance.to_user.id),
             'notId': str(notification_id),
         })
 
