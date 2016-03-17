@@ -3,6 +3,7 @@ import random
 
 from django.db import models
 from django.contrib import auth
+from django.contrib.auth.models import AbstractUser
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
@@ -10,7 +11,6 @@ from django.core.mail import send_mail
 from django.utils.translation import ugettext as _
 from django.db.models.signals import post_save
 from django.template.loader import render_to_string
-from django.core.exceptions import AppRegistryNotReady
 
 from twilio.rest import TwilioRestClient
 
@@ -32,6 +32,11 @@ def code_generate6():
 
 def code_generate32():
     return code_generate(32)
+
+
+class CoreUser(AbstractUser):
+    class Meta(AbstractUser.Meta):
+        swappable = 'AUTH_USER_MODEL'
 
 
 class Profile(models.Model):
@@ -146,7 +151,7 @@ class Profile(models.Model):
 
     @property
     def mates_users(self):
-        return User.objects.filter(
+        return CoreUser.objects.filter(
             models.Q(
                 profile__mates_to__from_user=self,
                 profile__mates_to__status=Mate.MATE
@@ -317,10 +322,4 @@ def create_user_profile(sender, instance, created, **kwargs):
         instance.profile.send_email_verification(reset_email=False)
 
 
-try:
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-except AppRegistryNotReady:
-    from django.contrib.auth.models import User
-
-post_save.connect(create_user_profile, sender=User)
+post_save.connect(create_user_profile, sender=CoreUser)

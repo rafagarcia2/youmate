@@ -17,6 +17,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=50, verbose_name='Title')),
                 ('description', models.TextField(max_length=400, null=True, verbose_name='Description', blank=True)),
+                ('image_class', models.CharField(max_length=50, null=True, verbose_name='Image')),
                 ('profiles', models.ManyToManyField(related_name='interests', to='core.Profile')),
             ],
             options={

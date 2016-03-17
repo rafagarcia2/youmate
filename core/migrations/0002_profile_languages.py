@@ -7,13 +7,14 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('reference', '0003_auto_20151112_2111'),
+        ('language', '0001_initial'),
+        ('core', '0001_initial'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='reference',
-            name='active',
-            field=models.BooleanField(default=False),
+            model_name='profile',
+            name='languages',
+            field=models.ManyToManyField(related_name='profiles', to='language.Language'),
         ),
     ]

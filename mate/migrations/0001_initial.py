@@ -8,7 +8,7 @@ import django_extensions.db.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0002_auto_20151102_1652'),
+        ('core', '0001_initial'),
     ]
 
     operations = [
@@ -17,6 +17,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('created_at', django_extensions.db.fields.CreationDateTimeField(auto_now_add=True)),
+                ('status', models.CharField(default=b'P', max_length=2, choices=[(b'P', b'Pending'), (b'M', b'Mate')])),
                 ('from_user', models.ForeignKey(related_name='mates_from', to='core.Profile')),
                 ('to_user', models.ForeignKey(related_name='mates_to', to='core.Profile')),
             ],
