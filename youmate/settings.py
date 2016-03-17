@@ -183,7 +183,7 @@ AUTHENTICATION_BACKENDS = global_settings.AUTHENTICATION_BACKENDS + (
     'rest_framework_social_oauth2.backends.DjangoOAuth2',
 )
 
-AUTH_USER_MODEL = 'core.CoreUser'
+SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL = 'core.CoreUser'
 
 # Social auth configuration
 SOCIAL_AUTH_FACEBOOK_KEY = '1685351455020151'
