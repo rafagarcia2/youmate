@@ -109,6 +109,26 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
                 profile__interests__id__in=interests_ids
             )
 
+        latitude = self.request.query_params.get(
+            'latitude') or None
+        longitude = self.request.query_params.get(
+            'longitude') or None
+        distance = 50
+
+        if latitude and longitude:
+            query = '''
+                6371 * acos(
+                    cos(radians(%s)) * cos(radians(latitude)) *
+                    cos(radians(longitude) - radians(%s)) +
+                    sin(radians(%s)) * sin(radians(latitude))
+                )
+            '''
+            queryset = queryset.extra(
+                select={'distance': query},
+                select_params=[latitude, longitude, latitude],
+                params=[latitude, longitude, latitude, distance],
+            )
+
         if self.request.user.is_authenticated():
             queryset = queryset.exclude(pk=self.request.user.pk)
 
