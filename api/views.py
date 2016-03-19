@@ -78,11 +78,13 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
     filter_backends = (filters.DjangoFilterBackend,)
     pagination_class = serializers.PaginatedUserSerializer
     filter_fields = {
+        # custom_filters: [
+        #     'latitude', 'longitude',
+        #     'full_search', 'profile__interests__id',
+        # ]
         'username': ['exact'],
         'first_name': ['icontains'],
         'last_name': ['icontains'],
-        'latitude': ['exact'],
-        'longitude': ['exact'],
         'profile__born_city': ['icontains'],
         'profile__living_city': ['icontains'],
         'profile__genre': ['icontains'],
@@ -91,7 +93,6 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = super(UserList, self).get_queryset()
-
         latitude = self.request.query_params.get(
             'latitude') or None
         longitude = self.request.query_params.get(
@@ -118,7 +119,7 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
             """ % {
                 'latitude': latitude,
                 'longitude': longitude,
-                'distance': 5
+                'distance': 500,
             }
 
             cursor = connection.cursor()
@@ -154,7 +155,6 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
         ).order_by('-rating')
 
         queryset = queryset.distinct()
-
         return queryset
 
 
