@@ -1,5 +1,6 @@
 from django.db.models import Q, Avg
 from django.db.models.functions import Coalesce
+from django.db import connection
 
 from rest_framework import generics, views, status
 from rest_framework.exceptions import NotAuthenticated
@@ -80,6 +81,8 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
         'username': ['exact'],
         'first_name': ['icontains'],
         'last_name': ['icontains'],
+        'latitude': ['exact'],
+        'longitude': ['exact'],
         'profile__born_city': ['icontains'],
         'profile__living_city': ['icontains'],
         'profile__genre': ['icontains'],
@@ -88,6 +91,40 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = super(UserList, self).get_queryset()
+
+        latitude = self.request.query_params.get(
+            'latitude') or None
+        longitude = self.request.query_params.get(
+            'longitude') or None
+
+        if latitude and longitude:
+            query = """
+                SELECT
+                  query.id
+                FROM (
+                    SELECT id, (6371 *
+                        acos(
+                            cos(radians(%(latitude)s)) *
+                            cos(radians(latitude)) *
+                            cos(radians(%(longitude)s) - radians(longitude)) +
+                            sin(radians(%(latitude)s)) *
+                            sin(radians(latitude))
+                        )
+                    ) distance
+                    FROM core_coreuser
+                    GROUP BY id
+                ) query
+                WHERE distance <= %(distance)s;
+            """ % {
+                'latitude': latitude,
+                'longitude': longitude,
+                'distance': 5
+            }
+
+            cursor = connection.cursor()
+            cursor.execute(query)
+            ids = [i[0] for i in cursor.fetchall()]
+            queryset = queryset.filter(id__in=ids)
 
         full_search = self.request.query_params.get('full_search', None)
         if full_search is not None:
@@ -107,26 +144,6 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
         if isinstance(interests_ids, list):
             queryset = queryset.filter(
                 profile__interests__id__in=interests_ids
-            )
-
-        latitude = self.request.query_params.get(
-            'latitude') or None
-        longitude = self.request.query_params.get(
-            'longitude') or None
-        distance = 50
-
-        if latitude and longitude:
-            query = '''
-                6371 * acos(
-                    cos(radians(%s)) * cos(radians(latitude)) *
-                    cos(radians(longitude) - radians(%s)) +
-                    sin(radians(%s)) * sin(radians(latitude))
-                )
-            '''
-            queryset = queryset.extra(
-                select={'distance': query},
-                select_params=[latitude, longitude, latitude],
-                params=[latitude, longitude, latitude, distance],
             )
 
         if self.request.user.is_authenticated():
