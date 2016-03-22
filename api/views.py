@@ -12,6 +12,7 @@ from allauth.socialaccount.providers.facebook.views import (
     FacebookOAuth2Adapter)
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from rest_auth.registration.views import SocialLoginView
+from geopy.geocoders import Nominatim
 
 from api import serializers
 from api import mixins
@@ -79,7 +80,7 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
     pagination_class = serializers.PaginatedUserSerializer
     filter_fields = {
         # custom_filters: [
-        #     'latitude', 'longitude',
+        #     'latitude', 'longitude', 'address',
         #     'full_search', 'profile__interests__id',
         # ]
         'username': ['exact'],
@@ -97,6 +98,13 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
             'latitude') or None
         longitude = self.request.query_params.get(
             'longitude') or None
+        address = self.request.query_params.get(
+            'address') or None
+
+        if address:
+            geolocator = Nominatim()
+            location = geolocator.geocode(address)
+            latitude, longitude = location.point[:-1]
 
         if latitude and longitude:
             query = """
