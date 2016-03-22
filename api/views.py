@@ -127,7 +127,7 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
             """ % {
                 'latitude': latitude,
                 'longitude': longitude,
-                'distance': 500,
+                'distance': 100,
             }
 
             cursor = connection.cursor()
