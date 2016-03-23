@@ -13,6 +13,7 @@ from django.db.models.signals import post_save
 from django.template.loader import render_to_string
 
 from twilio.rest import TwilioRestClient
+from push_notifications.models import APNSDevice, GCMDevice
 
 from core.templatetags.tags import get_profile_photo
 from reference.models import Reference
@@ -302,6 +303,32 @@ class Profile(models.Model):
             to=self.phone,
             from_="+NNNNNNNNNNNN",
         )
+
+    def get_device(self, device_id):
+        try:
+            device = GCMDevice.objects.get(
+                device_id=int(device_id),
+                user_id=self.user_id,
+            )
+        except:
+            try:
+                device = APNSDevice.objects.get(
+                    device_id=device_id,
+                    user_id=self.user_id,
+                )
+            except:
+                device = None
+
+        return device
+
+    def logout(self, device_id=None):
+        device = self.get_device(device_id)
+
+        if not device:
+            raise ValueError
+
+        device.active = False
+        device.save()
 
 
 class SearchQuery(models.Model):

@@ -66,21 +66,22 @@ def send_mate_notification(sender, instance, **kwargs):
     )
     message = '{} quer ser seu Mate.'.format(from_name)
     photo_url = instance.from_user.get_photo_url
-    devices = list(instance.to_user.user.gcmdevice_set.all())
-    devices.extend(instance.to_user.user.apnsdevice_set.all())
+    devices = list(instance.to_user.user.gcmdevice_set.filter(active=True))
+    devices.extend(instance.to_user.user.apnsdevice_set.filter(active=True))
     notification_id = int(
         (datetime.now() - datetime(1970, 1, 1)).total_seconds()
     )
 
+    data = {
+        'title': 'YouMate',
+        'message': message,
+        'image': photo_url,
+        'type': 'invite_mate',
+        'mateId': str(instance.from_user.id),
+        'notId': str(notification_id),
+    }
     for device in devices:
-        device.send_message(message, extra={
-            'title': 'YouMate',
-            'message': message,
-            'image': photo_url,
-            'type': 'invite_mate',
-            'mateId': str(instance.from_user.id),
-            'notId': str(notification_id),
-        })
+        device.send_message(message, extra=data)
 
 
 def accepted_mate_notification(sender, instance, **kwargs):
@@ -93,21 +94,23 @@ def accepted_mate_notification(sender, instance, **kwargs):
     )
     message = '{} aceitou ser seu Mate.'.format(to_name)
     photo_url = instance.to_user.get_photo_url
-    devices = list(instance.from_user.user.gcmdevice_set.all())
-    devices.extend(instance.from_user.user.apnsdevice_set.all())
+    devices = list(instance.from_user.user.gcmdevice_set.filter(active=True))
+    devices.extend(
+        instance.from_user.user.apnsdevice_set.filter(active=True))
     notification_id = int(
         (datetime.now() - datetime(1970, 1, 1)).total_seconds()
     )
 
+    data = {
+        'title': 'YouMate',
+        'message': message,
+        'image': photo_url,
+        'type': 'accept_mate',
+        'mateId': str(instance.to_user.id),
+        'notId': str(notification_id),
+    }
     for device in devices:
-        device.send_message(message, extra={
-            'title': 'YouMate',
-            'message': message,
-            'image': photo_url,
-            'type': 'accept_mate',
-            'mateId': str(instance.to_user.id),
-            'notId': str(notification_id),
-        })
+        device.send_message(message, extra=data)
 
 post_save.connect(send_mate_notification, sender=Mate)
 post_save.connect(accepted_mate_notification, sender=Mate)

@@ -30,6 +30,8 @@ class APIRoot(views.APIView):
                 'profile': {
                     'profiles': reverse('profile_list', request=request),
                     'mate': {
+                        'logout': reverse(
+                            'profile_logout', request=request),
                         'pending_mates': reverse(
                             'profile_pending_mates', request=request),
                         'mates': reverse(
@@ -366,6 +368,23 @@ class ProfileDeleteMateView(mixins.ProfileMixin, views.APIView):
         self.object = self.get_object()
         try:
             self.request.user.profile.delete_mate(self.object)
+            return Response({}, status=status.HTTP_201_CREATED)
+        except:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileLogoutView(mixins.ProfileMixin, views.APIView):
+    def get_object(self):
+        if self.request.user.is_authenticated():
+            return self.request.user.profile
+        raise NotAuthenticated()
+
+    def post(self, request, format=None, pk=None):
+        self.object = self.get_object()
+        device_id = self.request.query_params.get('device_id', None)
+
+        try:
+            self.object.logout(device_id)
             return Response({}, status=status.HTTP_201_CREATED)
         except:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
