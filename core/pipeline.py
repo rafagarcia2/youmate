@@ -3,6 +3,7 @@ from datetime import datetime, date
 from django.core.files.base import ContentFile
 
 from requests import request, HTTPError
+from geopy.geocoders import Nominatim
 
 
 def convert_birthday(birthday, date_format='%m/%d/%Y'):
@@ -47,6 +48,12 @@ def save_profile(backend, user, response, *args, **kwargs):
                 user.profile.age = convert_birthday(birthday, '%Y-%m-%d')
             except ValueError:
                 pass
+
+    if not (user.latitude and user.longitude) and user.profile.living_city:
+        geolocator = Nominatim()
+        location = geolocator.geocode(user.profile.living_city)
+        user.latitude, user.longitude = location.point[:-1]
+        user.save()
     user.profile.save()
 
 
