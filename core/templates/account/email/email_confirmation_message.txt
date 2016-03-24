@@ -1,8 +1,8 @@
 {% load account %}
 {% load i18n %}
 
-{% autoescape off %}{% blocktrans %}
-User "{{ user_display }}" at "{{ site_name }}" has given this as an email address.
+{% autoescape off %}
+O usuário "{{ user_display }}" no "{{ site_name }}" informou este email como o email dele.
 
-To confirm this is correct, go to "{{ activate_url }}"
-{% endblocktrans %}{% endautoescape %}
+Para confirmar que isto é válido, acesse: "{{ activate_url }}"
+{% endautoescape %}
