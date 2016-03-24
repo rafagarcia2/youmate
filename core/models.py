@@ -14,6 +14,7 @@ from django.template.loader import render_to_string
 
 from twilio.rest import TwilioRestClient
 from push_notifications.models import APNSDevice, GCMDevice
+from geopy.geocoders import Nominatim
 
 from core.templatetags.tags import get_profile_photo
 from reference.models import Reference
@@ -119,11 +120,22 @@ class Profile(models.Model):
         )
         return set(registration_ids)
 
+    def update_latlong(self):
+        if not self.living_city:
+            return
+
+        geolocator = Nominatim()
+        location = geolocator.geocode(self.living_city)
+        self.user.latitude, self.user.longitude = location.point[:-1]
+        self.user.save()
+
     def save(self, *args, **kwargs):
         if self.pk is not None:
             old_instance = Profile.objects.get(pk=self.pk)
             if old_instance.phone != self.phone:
                 self.send_phone_verification()
+            if old_instance.living_city != self.living_city:
+                self.update_latlong()
 
         return super(Profile, self).save(*args, **kwargs)
 
