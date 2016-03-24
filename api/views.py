@@ -381,7 +381,7 @@ class ProfileLogoutView(mixins.ProfileMixin, views.APIView):
 
     def post(self, request, format=None, pk=None):
         self.object = self.get_object()
-        device_id = self.request.query_params.get('device_id', None)
+        device_id = self.request.data.get('device_id', None)
 
         try:
             self.object.logout(device_id)
