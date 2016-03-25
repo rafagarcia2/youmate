@@ -223,6 +223,15 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ProfileFeedSerializer(ProfileSerializer):
+    interests = serializers.ListField(
+        source='get_interests_images',
+        read_only=True
+    )
+    referece = serializers.DictField(
+        source='get_pretty_referece',
+        read_only=True
+    )
+
     class Meta:
         model = Profile
         validators = [
@@ -230,7 +239,7 @@ class ProfileFeedSerializer(ProfileSerializer):
         ]
         fields = (
             'id', 'photo_url', 'age', 'living_city',
-            'interests', 'references',
+            'interests', 'referece',
         )
 
 

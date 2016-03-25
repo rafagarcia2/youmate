@@ -244,6 +244,17 @@ class Profile(models.Model):
             models.Avg('rating')
         )['rating__avg'] or 0)
 
+    @property
+    def get_pretty_referece(self):
+        return {
+            'total': Reference.objects.filter(to_user=self).count(),
+            'average_rate': self.get_average_rate()
+        }
+
+    @property
+    def get_interests_images(self):
+        return map(lambda x: x.get_image_url, self.interests.all())
+
     def add_mate(self, profile, status='P'):
         mate, created = Mate.objects.get_or_create(
             from_user=self,
