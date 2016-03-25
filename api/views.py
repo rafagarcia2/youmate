@@ -24,6 +24,7 @@ class APIRoot(views.APIView):
             'YouMate': {
                 'users': {
                     'users': reverse('user_list', request=request),
+                    'users_feed': reverse('user_feed_list', request=request),
                     'logged_user': reverse(
                         'logged_user_retrieve', request=request),
                 },
@@ -166,6 +167,10 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
 
         queryset = queryset.distinct()
         return queryset
+
+
+class UserFeedList(UserList, mixins.UserFeedMixin):
+    pass
 
 
 class UserRetrieve(mixins.UserMixin, generics.RetrieveUpdateAPIView):

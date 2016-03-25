@@ -55,6 +55,9 @@ urlpatterns = patterns(
         views.GoogleLogin.as_view(), name='rest_google_login'),
 
     # User
+    url(regex=r'^users/feed/$',
+        view=views.UserFeedList.as_view(),
+        name='user_feed_list'),
     url(regex=r'^users/$',
         view=views.UserList.as_view(),
         name='user_list'),

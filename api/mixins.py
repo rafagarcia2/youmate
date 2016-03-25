@@ -16,6 +16,10 @@ class UserMixin(object):
     serializer_class = serializers.UserSerializer
 
 
+class UserFeedMixin(UserMixin):
+    serializer_class = serializers.UserFeedSerializer
+
+
 class ProfileMixin(object):
     queryset = Profile.objects.all()
     serializer_class = serializers.ProfileSerializer

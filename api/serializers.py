@@ -222,6 +222,28 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
 
+class ProfileFeedSerializer(ProfileSerializer):
+    class Meta:
+        model = Profile
+        validators = [
+            ValidateInterestsCount()
+        ]
+        fields = (
+            'id', 'photo_url', 'age', 'living_city',
+            'interests', 'references',
+        )
+
+
+class UserFeedSerializer(UserSerializer):
+    profile = ProfileFeedSerializer()
+
+    class Meta:
+        model = auth.get_user_model()
+        fields = (
+            'id', 'full_name', 'profile'
+        )
+
+
 class PaginatedUserSerializer(pagination.PageNumberPagination):
     # page_size = 20
     page_size = 2
