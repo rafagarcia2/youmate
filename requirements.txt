@@ -1,4 +1,5 @@
 -e git+https://github.com/Tivix/django-common.git@bcf5a67192f967a71688f597dc79db8f9b620412#egg=django_common_helpers-master
+raven==5.12.0
 Babel==2.2.0
 Django==1.8.4
 Pillow==3.0.0
