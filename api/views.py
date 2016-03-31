@@ -528,10 +528,73 @@ class GCMDeviceRetrieve(mixins.GCMDeviceMixin, generics.RetrieveAPIView):
 
 
 class PollList(mixins.PollMixin, generics.ListCreateAPIView):
-    def get_logged_user(self):
-        if self.request.user.is_authenticated():
-            return self.request.user
-        raise NotAuthenticated()
+    filter_fields = {
+        # custom_filters: [
+        #     'latitude', 'longitude', 'address', 'interests__id',
+        # ]
+    }
+
+    def get_queryset(self):
+        queryset = super(PollList, self).get_queryset()
+        latitude = self.request.query_params.get(
+            'latitude') or None
+        longitude = self.request.query_params.get(
+            'longitude') or None
+        address = self.request.query_params.get(
+            'address') or None
+
+        if address:
+            geolocator = Nominatim()
+            location = geolocator.geocode(address)
+            latitude, longitude = location.point[:-1]
+
+        if latitude and longitude:
+            query = """
+                SELECT
+                  query.id
+                FROM (
+                    SELECT id, (6371 *
+                        acos(
+                            cos(radians(%(latitude)s)) *
+                            cos(radians(latitude)) *
+                            cos(radians(%(longitude)s) - radians(longitude)) +
+                            sin(radians(%(latitude)s)) *
+                            sin(radians(latitude))
+                        )
+                    ) distance
+                    FROM poll_poll
+                    GROUP BY id
+                ) query
+                WHERE distance <= %(distance)s;
+            """ % {
+                'latitude': latitude,
+                'longitude': longitude,
+                'distance': 100,
+            }
+
+            cursor = connection.cursor()
+            cursor.execute(query)
+            ids = [i[0] for i in cursor.fetchall()]
+            queryset = queryset.filter(id__in=ids)
+
+        interests_ids = self.request.query_params.get(
+            'interests__id') or None
+        try:
+            interests_ids = interests_ids.split(',')
+        except AttributeError:
+            pass
+
+        if isinstance(interests_ids, list):
+            queryset = queryset.filter(
+                interests__id__in=interests_ids
+            )
+
+        # queryset = queryset.annotate(
+        #     rating=Sum(Sum('likes'), Sum('deslikes'))
+        # ).order_by('-rating')
+
+        queryset = queryset.distinct()
+        return queryset
 
     def post(self, request, format=None, pk=None):
         self.user = self.get_logged_user()
