@@ -65,6 +65,7 @@ LOCAL_APPS = (
     'photo',
     'interest',
     'api',
+    'poll',
 )
 
 EXTERNAL_APPS = (

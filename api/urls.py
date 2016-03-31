@@ -108,6 +108,9 @@ urlpatterns = patterns(
     url(regex=r'^profiles/confirm_phone_code/$',
         view=views.ProfileConfirmPhoneCodeView.as_view(),
         name='profile_confirm_phone_code'),
+    url(regex=r'^profiles/polls/$',
+        view=views.ProfilePollsView.as_view(),
+        name='profile_polls'),
 
     # Interest
     url(regex=r'^interests/$',
@@ -145,4 +148,12 @@ urlpatterns = patterns(
     url(regex=r'^mates/(?P<pk>[0-9]+)/$',
         view=views.MateUpdateView.as_view(),
         name='mate_detail'),
+
+    # Poll
+    url(regex=r'^polls/$',
+        view=views.PollList.as_view(),
+        name='poll_list'),
+    url(regex=r'^polls/(?P<pk>[0-9]+)/$',
+        view=views.PollUpdateView.as_view(),
+        name='poll_detail'),
 )

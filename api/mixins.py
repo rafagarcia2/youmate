@@ -9,6 +9,7 @@ from language.models import Language
 from photo.models import Photo
 from core.models import Profile
 from mate.models import Mate
+from poll.models import Poll
 
 
 class UserMixin(object):
@@ -58,3 +59,8 @@ class APNSDeviceMixin(object):
 class GCMDeviceMixin(object):
     queryset = GCMDevice.objects.all()
     serializer_class = serializers.GCMDeviceSerializer
+
+
+class PollMixin(object):
+    queryset = Poll.objects.all()
+    serializer_class = serializers.PollSerializer

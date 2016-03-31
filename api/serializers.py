@@ -9,6 +9,7 @@ from reference.models import Reference
 from language.models import Language
 from photo.models import Photo
 from mate.models import Mate
+from poll.models import Poll
 
 
 class Base64ImageField(serializers.ImageField):
@@ -293,3 +294,32 @@ class APNSDeviceSerializer(serializers.ModelSerializer):
 class GCMDeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = GCMDevice
+
+
+class PollSerializer(serializers.ModelSerializer):
+    author = serializers.PrimaryKeyRelatedField(
+        read_only=True
+    )
+    interests = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=Interest.objects.all(),
+        validators=[ValidateInterestsCount()]
+    )
+
+    class Meta:
+        model = Poll
+        validators = [
+            ValidateInterestsCount()
+        ]
+
+
+class ProfilePollsSerializer(serializers.ModelSerializer):
+    polls = PollSerializer(
+        source='polls_users',
+        many=True,
+        read_only=True
+    )
+
+    class Meta:
+        model = Profile
+        fields = ('polls',)

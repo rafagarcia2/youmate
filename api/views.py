@@ -37,6 +37,8 @@ class APIRoot(views.APIView):
                             'profile_pending_mates', request=request),
                         'mates': reverse(
                             'profile_mates', request=request),
+                        'polls': reverse(
+                            'profile_polls', request=request),
                         'add_mate': '/profiles/:pk/add_mate/',
                         'cancel_mate': '/profiles/:pk/cancel_mate/',
                         'accept_mate': '/profiles/:pk/accept_mate/',
@@ -56,6 +58,7 @@ class APIRoot(views.APIView):
                 'photos': reverse('photo_list', request=request),
                 'mates': reverse('mate_list', request=request),
                 'references': reverse('reference_list', request=request),
+                'polls': reverse('poll_list', request=request),
             },
             'Oauth2': {
                 'oauth2_authorize': reverse(
@@ -437,6 +440,19 @@ class ProfileMatesView(mixins.ProfileMixin, generics.RetrieveAPIView):
         return Response(serializer.data)
 
 
+class ProfilePollsView(mixins.ProfileMixin, generics.RetrieveAPIView):
+    def get_object(self):
+        if self.request.user.is_authenticated():
+            return self.request.user.profile
+        raise NotAuthenticated()
+
+    def retrieve(self, request, pk=None):
+        serializer = serializers.ProfilePollsSerializer(
+            self.get_object()
+        )
+        return Response(serializer.data)
+
+
 class ProfileResetEmailCodeView(mixins.ProfileMixin, views.APIView):
     def get_object(self):
         if self.request.user.is_authenticated():
@@ -508,4 +524,25 @@ class GCMDeviceList(mixins.GCMDeviceMixin, generics.ListCreateAPIView):
 
 
 class GCMDeviceRetrieve(mixins.GCMDeviceMixin, generics.RetrieveAPIView):
+    pass
+
+
+class PollList(mixins.PollMixin, generics.ListCreateAPIView):
+    def get_logged_user(self):
+        if self.request.user.is_authenticated():
+            return self.request.user
+        raise NotAuthenticated()
+
+    def post(self, request, format=None, pk=None):
+        self.user = self.get_logged_user()
+
+        request.data.update(
+            author=str(self.user.profile.pk)
+        )
+
+        return super(PollList, self).post(
+            request=request, format=format, pk=pk)
+
+
+class PollUpdateView(mixins.PollMixin, generics.RetrieveUpdateAPIView):
     pass

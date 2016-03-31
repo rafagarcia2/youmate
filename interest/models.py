@@ -12,6 +12,8 @@ class Interest(models.Model):
 
     profiles = models.ManyToManyField(
         to='core.Profile', related_name='interests')
+    polls = models.ManyToManyField(
+        to='poll.Poll', related_name='interests')
 
     class Meta:
         verbose_name = "Interest"
