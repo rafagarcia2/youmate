@@ -145,11 +145,15 @@ class ValidateInterestsCount(object):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    languages = LanguageSerializer(many=True)
+    # languages = LanguageSerializer(many=True)
     interests = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=Interest.objects.all(),
         validators=[ValidateInterestsCount()]
+    )
+    languages = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=Language.objects.all(),
     )
     photo_url = serializers.CharField(
         source='get_photo_url',
