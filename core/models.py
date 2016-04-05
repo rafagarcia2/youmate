@@ -171,7 +171,7 @@ class Profile(models.Model):
 
         if self.get_photo_url:
             photos.append({
-                'id': 0,
+                'id': None,
                 'url': self.get_photo_url
             })
 
