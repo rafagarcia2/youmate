@@ -191,8 +191,8 @@ class UserRetrieve(mixins.UserMixin, generics.RetrieveUpdateAPIView):
         return response
 
     def patch(self, request, *args, **kwargs):
-        # if not self.request.user.is_authenticated():
-        #     raise NotAuthenticated()
+        if not self.request.user.is_authenticated():
+            raise NotAuthenticated()
 
         self.object = self.get_object()
 
