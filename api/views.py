@@ -190,6 +190,23 @@ class UserRetrieve(mixins.UserMixin, generics.RetrieveUpdateAPIView):
 
         return response
 
+    def patch(self, request, *args, **kwargs):
+        # if not self.request.user.is_authenticated():
+        #     raise NotAuthenticated()
+
+        self.object = self.get_object()
+
+        language_ids = self.request.data.get('profile__language_ids')
+        try:
+            language_ids = language_ids.split(',')
+        except AttributeError:
+            pass
+        else:
+            self.object.profile.update_languages(language_ids)
+
+        return super(UserRetrieve, self).patch(
+            request, *args, **kwargs)
+
 
 class LoggedUserRetrieve(mixins.UserMixin, generics.RetrieveUpdateAPIView):
     def get_object(self):

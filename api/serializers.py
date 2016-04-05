@@ -138,6 +138,9 @@ class ValidateInterestsCount(object):
         self.max = 4
 
     def __call__(self, data):
+        if 'interests' not in data:
+            return
+
         interests = data.get('interests', [])
         if not (self.min <= len(interests) <= self.max):
             message = ('You cannot have more than %s interests.' % self.max)
@@ -145,19 +148,13 @@ class ValidateInterestsCount(object):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    # languages = LanguageSerializer(many=True)
+    languages = LanguageSerializer(
+        many=True,
+    )
     interests = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=Interest.objects.all(),
         validators=[ValidateInterestsCount()]
-    )
-    languages = serializers.PrimaryKeyRelatedField(
-        many=True,
-        queryset=Language.objects.all(),
-    )
-    photo_url = serializers.CharField(
-        source='get_photo_url',
-        read_only=True
     )
     references = serializers.PrimaryKeyRelatedField(
         source='references_to',
@@ -168,6 +165,10 @@ class ProfileSerializer(serializers.ModelSerializer):
         source='get_average_rate',
         read_only=True
     )
+    # photo_url = serializers.CharField(
+    #     source='get_photo_url',
+    #     read_only=True
+    # )
     photos = serializers.ListField(
         source='get_photos',
         read_only=True

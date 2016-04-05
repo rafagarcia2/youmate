@@ -19,6 +19,7 @@ from geopy.geocoders import Nominatim
 from core.templatetags.tags import get_profile_photo
 from reference.models import Reference
 from mate.models import Mate
+from language.models import Language
 
 
 def code_generate(size=6):
@@ -139,6 +140,11 @@ class Profile(models.Model):
 
         return super(Profile, self).save(*args, **kwargs)
 
+    def update_languages(self, language_ids=[]):
+        languages = Language.objects.filter(pk__in=language_ids)
+        self.languages.clear()
+        self.languages.add(*languages)
+
     @property
     def reference(self):
         reference = Reference.objects.filter(
@@ -160,12 +166,21 @@ class Profile(models.Model):
     def get_photo_url(self):
         return get_profile_photo(self.user)
 
-    @property
     def get_photos(self):
-        return [
-            '{0}{1}'.format(settings.HOST_URL, photo.image.url)
-            for photo in self.photos.all()
-        ]
+        photos = []
+
+        if self.get_photo_url:
+            photos.append({
+                'id': 0,
+                'url': self.get_photo_url
+            })
+
+        for photo in self.photos.all():
+            photos.append({
+                'id': photo.id,
+                'url': '{0}{1}'.format(settings.HOST_URL, photo.image.url),
+            })
+        return photos
 
     @property
     def mates_users(self):
