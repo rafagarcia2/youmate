@@ -310,6 +310,12 @@ class PollSerializer(serializers.ModelSerializer):
         queryset=Interest.objects.all(),
         validators=[ValidateInterestsCount()]
     )
+    likes = serializers.CharField(
+        read_only=True
+    )
+    deslikes = serializers.CharField(
+        read_only=True
+    )
 
     class Meta:
         model = Poll

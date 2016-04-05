@@ -156,4 +156,10 @@ urlpatterns = patterns(
     url(regex=r'^polls/(?P<pk>[0-9]+)/$',
         view=views.PollUpdateView.as_view(),
         name='poll_detail'),
+    url(regex=r'^polls/(?P<pk>[0-9]+)/like/$',
+        view=views.PollLikeView.as_view(),
+        name='poll_like'),
+    url(regex=r'^polls/(?P<pk>[0-9]+)/deslike/$',
+        view=views.PollDeslikeView.as_view(),
+        name='poll_deslike'),
 )

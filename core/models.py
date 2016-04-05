@@ -20,6 +20,7 @@ from core.templatetags.tags import get_profile_photo
 from reference.models import Reference
 from mate.models import Mate
 from language.models import Language
+from poll.models import PollRate
 
 
 def code_generate(size=6):
@@ -367,6 +368,34 @@ class Profile(models.Model):
 
         device.active = False
         device.save()
+
+    def like_poll(self, poll):
+        already_desliked = self.polls_rates.filter(
+            poll=poll, rate=PollRate.DESLIKE
+        ).first()
+        if already_desliked:
+            already_desliked.rate = PollRate.LIKE
+            already_desliked.save()
+        else:
+            PollRate.objects.create(
+                created_by=self,
+                poll=poll,
+                rate=PollRate.LIKE
+            )
+
+    def deslike_poll(self, poll):
+        already_liked = self.polls_rates.filter(
+            poll=poll, rate=PollRate.LIKE
+        ).first()
+        if already_liked:
+            already_liked.rate = PollRate.DESLIKE
+            already_liked.save()
+        else:
+            PollRate.objects.create(
+                created_by=self,
+                poll=poll,
+                rate=PollRate.DESLIKE
+            )
 
 
 class SearchQuery(models.Model):

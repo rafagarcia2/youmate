@@ -17,3 +17,32 @@ class Poll(models.Model):
 
     def __unicode__(self):
         return self.text
+
+    @property
+    def likes(self):
+        return self.polls_rates.filter(rate=PollRate.LIKE).count()
+
+    @property
+    def deslikes(self):
+        return self.polls_rates.filter(rate=PollRate.DESLIKE).count()
+
+
+class PollRate(models.Model):
+    # Genre choices
+    LIKE = 'L'
+    DESLIKE = 'D'
+    RATE_CHOICES = (
+        (LIKE, _('Like')),
+        (DESLIKE, _('Deslike')),
+    )
+    rate = models.CharField(
+        _('Rate'), max_length=2, choices=RATE_CHOICES, default=LIKE)
+
+    created_by = models.ForeignKey(
+        to='core.Profile', related_name='polls_rates')
+    poll = models.ForeignKey(
+        to='poll.Poll', related_name='polls_rates')
+
+    class Meta:
+        verbose_name = _('Poll Rate')
+        verbose_name_plural = _('PollR ates')

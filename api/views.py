@@ -16,6 +16,7 @@ from geopy.geocoders import Nominatim
 
 from api import serializers
 from api import mixins
+from poll.models import PollRate
 
 
 class APIRoot(views.APIView):
@@ -58,7 +59,11 @@ class APIRoot(views.APIView):
                 'photos': reverse('photo_list', request=request),
                 'mates': reverse('mate_list', request=request),
                 'references': reverse('reference_list', request=request),
-                'polls': reverse('poll_list', request=request),
+                'polls': {
+                    'polls': reverse('poll_list', request=request),
+                    'polls_like': '/polls/:pk/like/',
+                    'polls_deslike': '/polls/:pk/deslike/',
+                },
             },
             'Oauth2': {
                 'oauth2_authorize': reverse(
@@ -606,8 +611,14 @@ class PollList(mixins.PollMixin, generics.ListCreateAPIView):
                 interests__id__in=interests_ids
             )
 
+        # from django.db.models import Sum, Case, When, IntegerField
         # queryset = queryset.annotate(
-        #     rating=Sum(Sum('likes'), Sum('deslikes'))
+        #     likes=Sum(Case(When(
+        #         polls_rates__rate=PollRate.LIKE, then=1
+        #     ), output_field=IntegerField())),
+        #     deslikes=Sum(Case(When(
+        #         polls_rates__rate=PollRate.DESLIKE, then=-1
+        #     ), output_field=IntegerField())),
         # ).order_by('-rating')
 
         queryset = queryset.distinct()
@@ -626,3 +637,57 @@ class PollList(mixins.PollMixin, generics.ListCreateAPIView):
 
 class PollUpdateView(mixins.PollMixin, generics.RetrieveUpdateAPIView):
     pass
+
+
+class PollLikeView(mixins.PollMixin, views.APIView):
+    def get_object(self):
+        return self.queryset.get(**self.kwargs)
+
+    def post(self, request, format=None, pk=None):
+        if not self.request.user.is_authenticated():
+            raise NotAuthenticated()
+
+        profile = self.request.user.profile
+        self.object = self.get_object()
+
+        already_liked = profile.polls_rates.filter(
+            poll=self.object, rate=PollRate.LIKE
+        ).exists()
+
+        if already_liked:
+            message = ('You can only like a poll once.')
+            return Response(
+                {'detail': message}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            profile.like_poll(self.object)
+            return Response({}, status=status.HTTP_201_CREATED)
+        except:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PollDeslikeView(mixins.PollMixin, views.APIView):
+    def get_object(self):
+        return self.queryset.get(**self.kwargs)
+
+    def post(self, request, format=None, pk=None):
+        if not self.request.user.is_authenticated():
+            raise NotAuthenticated()
+
+        profile = self.request.user.profile
+        self.object = self.get_object()
+
+        already_desliked = profile.polls_rates.filter(
+            poll=self.object, rate=PollRate.DESLIKE
+        ).exists()
+
+        if already_desliked:
+            message = ('You can only like a poll once.')
+            return Response(
+                {'detail': message}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            profile.deslike_poll(self.object)
+            return Response({}, status=status.HTTP_201_CREATED)
+        except:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
