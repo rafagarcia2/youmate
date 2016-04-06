@@ -150,6 +150,7 @@ class ValidateInterestsCount(object):
 class ProfileSerializer(serializers.ModelSerializer):
     languages = LanguageSerializer(
         many=True,
+        read_only=True,
     )
     interests = serializers.PrimaryKeyRelatedField(
         many=True,
