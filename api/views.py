@@ -16,7 +16,6 @@ from geopy.geocoders import Nominatim
 
 from api import serializers
 from api import mixins
-from poll.models import PollRate
 
 
 class APIRoot(views.APIView):
@@ -644,6 +643,8 @@ class PollLikeView(mixins.PollMixin, views.APIView):
         return self.queryset.get(**self.kwargs)
 
     def post(self, request, format=None, pk=None):
+        from poll.models import PollRate
+
         if not self.request.user.is_authenticated():
             raise NotAuthenticated()
 
