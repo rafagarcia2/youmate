@@ -322,6 +322,14 @@ class ProfileUpdateView(mixins.ProfileMixin, generics.RetrieveUpdateAPIView):
            self.request.user.profile != self.object:
             raise NotAuthenticated()
 
+        language_ids = self.request.data.get('language_ids')
+        try:
+            language_ids = language_ids.split(',')
+        except AttributeError:
+            pass
+        else:
+            self.object.update_languages(language_ids)
+
         return super(ProfileUpdateView, self).patch(
             request, *args, **kwargs)
 
