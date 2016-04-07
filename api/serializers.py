@@ -9,7 +9,7 @@ from reference.models import Reference
 from language.models import Language
 from photo.models import Photo
 from mate.models import Mate
-from poll.models import Poll
+from poll.models import Poll, Answer
 
 
 class Base64ImageField(serializers.ImageField):
@@ -238,6 +238,10 @@ class ProfileFeedSerializer(ProfileSerializer):
         source='get_pretty_referece',
         read_only=True
     )
+    photo_url = serializers.CharField(
+        source='get_photo_url',
+        read_only=True
+    )
 
     class Meta:
         model = Profile
@@ -302,6 +306,18 @@ class GCMDeviceSerializer(serializers.ModelSerializer):
         model = GCMDevice
 
 
+class AnswerSerializer(serializers.ModelSerializer):
+    likes = serializers.CharField(
+        read_only=True
+    )
+    deslikes = serializers.CharField(
+        read_only=True
+    )
+
+    class Meta:
+        model = Answer
+
+
 class PollSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(
         read_only=True
@@ -311,15 +327,14 @@ class PollSerializer(serializers.ModelSerializer):
         queryset=Interest.objects.all(),
         validators=[ValidateInterestsCount()]
     )
-    likes = serializers.CharField(
-        read_only=True
-    )
-    deslikes = serializers.CharField(
-        read_only=True
+    answers = AnswerSerializer(
+        many=True, read_only=True,
+        source='get_sorted_answers'
     )
 
     class Meta:
         model = Poll
+        fields = ('id', 'text', 'author', 'interests', 'answers')
         validators = [
             ValidateInterestsCount()
         ]
@@ -327,7 +342,7 @@ class PollSerializer(serializers.ModelSerializer):
 
 class ProfilePollsSerializer(serializers.ModelSerializer):
     polls = PollSerializer(
-        source='polls_users',
+        source='polls',
         many=True,
         read_only=True
     )

@@ -114,7 +114,16 @@ class UserList(mixins.UserMixin, generics.ListCreateAPIView):
         if address:
             geolocator = Nominatim()
             location = geolocator.geocode(address)
-            latitude, longitude = location.point[:-1]
+            try:
+                latitude, longitude = location.point[:-1]
+            except:
+                location = geolocator.geocode(address.split('-')[0])
+                try:
+                    latitude, longitude = location.point[:-1]
+                except:
+                    pass
+            else:
+                latitude, longitude = location.point[:-1]
 
         if latitude and longitude:
             query = """
@@ -621,10 +630,10 @@ class PollList(mixins.PollMixin, generics.ListCreateAPIView):
         # from django.db.models import Sum, Case, When, IntegerField
         # queryset = queryset.annotate(
         #     likes=Sum(Case(When(
-        #         polls_rates__rate=PollRate.LIKE, then=1
+        #         answer_rates__rate=AnswerRate.LIKE, then=1
         #     ), output_field=IntegerField())),
         #     deslikes=Sum(Case(When(
-        #         polls_rates__rate=PollRate.DESLIKE, then=-1
+        #         answer_rates__rate=AnswerRate.DESLIKE, then=-1
         #     ), output_field=IntegerField())),
         # ).order_by('-rating')
 
@@ -646,12 +655,22 @@ class PollUpdateView(mixins.PollMixin, generics.RetrieveUpdateAPIView):
     pass
 
 
-class PollLikeView(mixins.PollMixin, views.APIView):
+class AnswerList(mixins.AnswerMixin, generics.ListCreateAPIView):
+    def get_queryset(self):
+        return self.queryset.filter(**self.kwargs)
+
+
+class AnswerUpdateView(mixins.AnswerMixin, generics.RetrieveUpdateAPIView):
     def get_object(self):
         return self.queryset.get(**self.kwargs)
 
-    def post(self, request, format=None, pk=None):
-        from poll.models import PollRate
+
+class AnswerLikeView(mixins.AnswerMixin, views.APIView):
+    def get_object(self):
+        return self.queryset.get(**self.kwargs)
+
+    def post(self, request, *args, **kwargs):
+        from poll.models import AnswerRate
 
         if not self.request.user.is_authenticated():
             raise NotAuthenticated()
@@ -659,44 +678,46 @@ class PollLikeView(mixins.PollMixin, views.APIView):
         profile = self.request.user.profile
         self.object = self.get_object()
 
-        already_liked = profile.polls_rates.filter(
-            poll=self.object, rate=PollRate.LIKE
+        already_liked = profile.answer_rates.filter(
+            answer=self.object, rate=AnswerRate.LIKE
         ).exists()
 
         if already_liked:
-            message = ('You can only like a poll once.')
+            message = ('You can only like a answer once.')
             return Response(
                 {'detail': message}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            profile.like_poll(self.object)
+            profile.like_answer(self.object)
             return Response({}, status=status.HTTP_201_CREATED)
         except:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class PollDeslikeView(mixins.PollMixin, views.APIView):
+class AnswerDeslikeView(mixins.AnswerMixin, views.APIView):
     def get_object(self):
         return self.queryset.get(**self.kwargs)
 
-    def post(self, request, format=None, pk=None):
+    def post(self, request, *args, **kwargs):
+        from poll.models import AnswerRate
+
         if not self.request.user.is_authenticated():
             raise NotAuthenticated()
 
         profile = self.request.user.profile
         self.object = self.get_object()
 
-        already_desliked = profile.polls_rates.filter(
-            poll=self.object, rate=PollRate.DESLIKE
+        already_desliked = profile.answer_rates.filter(
+            answer=self.object, rate=AnswerRate.DESLIKE
         ).exists()
 
         if already_desliked:
-            message = ('You can only like a poll once.')
+            message = ('You can only like a answer once.')
             return Response(
                 {'detail': message}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            profile.deslike_poll(self.object)
+            profile.deslike_answer(self.object)
             return Response({}, status=status.HTTP_201_CREATED)
         except:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)

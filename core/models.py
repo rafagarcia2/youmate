@@ -20,7 +20,7 @@ from core.templatetags.tags import get_profile_photo
 from reference.models import Reference
 from mate.models import Mate
 from language.models import Language
-from poll.models import PollRate
+from poll.models import AnswerRate
 
 
 def code_generate(size=6):
@@ -128,7 +128,14 @@ class Profile(models.Model):
 
         geolocator = Nominatim()
         location = geolocator.geocode(self.living_city)
-        self.user.latitude, self.user.longitude = location.point[:-1]
+        try:
+            self.user.latitude, self.user.longitude = location.point[:-1]
+        except:
+            location = geolocator.geocode(self.living_city.split('-')[0])
+            try:
+                self.user.latitude, self.user.longitude = location.point[:-1]
+            except:
+                return
         self.user.save()
 
     def save(self, *args, **kwargs):
@@ -369,32 +376,36 @@ class Profile(models.Model):
         device.active = False
         device.save()
 
-    def like_poll(self, poll):
-        already_desliked = self.polls_rates.filter(
-            poll=poll, rate=PollRate.DESLIKE
-        ).first()
-        if already_desliked:
-            already_desliked.rate = PollRate.LIKE
-            already_desliked.save()
-        else:
-            PollRate.objects.create(
-                created_by=self,
-                poll=poll,
-                rate=PollRate.LIKE
-            )
+    def get_sorted_answers(self):
+        answers = self.answers
+        return answers
 
-    def deslike_poll(self, poll):
-        already_liked = self.polls_rates.filter(
-            poll=poll, rate=PollRate.LIKE
-        ).first()
+    def like_answer(self, answer):
+        already_liked = self.answer_rates.filter(
+            answer=answer, rate=AnswerRate.LIKE
+        ).exists()
         if already_liked:
-            already_liked.rate = PollRate.DESLIKE
+            already_liked.rate = AnswerRate.DESLIKE
             already_liked.save()
         else:
-            PollRate.objects.create(
+            AnswerRate.objects.create(
                 created_by=self,
-                poll=poll,
-                rate=PollRate.DESLIKE
+                answer=answer,
+                rate=AnswerRate.LIKE
+            )
+
+    def deslike_answer(self, answer):
+        already_desliked = self.answer_rates.filter(
+            answer=answer, rate=AnswerRate.DESLIKE
+        ).exists()
+        if already_desliked:
+            already_desliked.rate = AnswerRate.LIKE
+            already_desliked.save()
+        else:
+            AnswerRate.objects.create(
+                created_by=self,
+                answer=answer,
+                rate=AnswerRate.DESLIKE
             )
 
 

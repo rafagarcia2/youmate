@@ -46,7 +46,7 @@ EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
 
 # Application definition
 
-DJANGO_APPS = (
+DJANGO_APPS = [
     # The Django sites framework is required
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,9 +55,9 @@ DJANGO_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-)
+]
 
-LOCAL_APPS = (
+LOCAL_APPS = [
     'core',
     'mate',
     'reference',
@@ -66,9 +66,9 @@ LOCAL_APPS = (
     'interest',
     'api',
     'poll',
-)
+]
 
-EXTERNAL_APPS = (
+EXTERNAL_APPS = [
     'django_extensions',
     'widget_tweaks',
     'rest_framework',
@@ -89,7 +89,7 @@ EXTERNAL_APPS = (
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
-)
+]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + EXTERNAL_APPS
 
@@ -172,7 +172,7 @@ STATICFILES_DIRS = (
 
 # Django allauth
 
-AUTHENTICATION_BACKENDS = global_settings.AUTHENTICATION_BACKENDS + (
+AUTHENTICATION_BACKENDS = global_settings.AUTHENTICATION_BACKENDS + [
     # Django
     'django.contrib.auth.backends.ModelBackend',
 
@@ -183,7 +183,7 @@ AUTHENTICATION_BACKENDS = global_settings.AUTHENTICATION_BACKENDS + (
 
     # django-rest-framework-social-oauth2
     'rest_framework_social_oauth2.backends.DjangoOAuth2',
-)
+]
 
 SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL = 'core.CoreUser'
 
