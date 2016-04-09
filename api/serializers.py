@@ -250,7 +250,7 @@ class ProfileFeedSerializer(ProfileSerializer):
         ]
         fields = (
             'id', 'photo_url', 'age', 'living_city',
-            'interests', 'referece',
+            'interests', 'referece', 'status',
         )
 
 
@@ -260,7 +260,7 @@ class UserFeedSerializer(UserSerializer):
     class Meta:
         model = auth.get_user_model()
         fields = (
-            'id', 'full_name', 'profile'
+            'id', 'first_name', 'last_name', 'profile'
         )
 
 
