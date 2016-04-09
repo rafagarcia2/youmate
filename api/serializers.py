@@ -166,10 +166,10 @@ class ProfileSerializer(serializers.ModelSerializer):
         source='get_average_rate',
         read_only=True
     )
-    # photo_url = serializers.CharField(
-    #     source='get_photo_url',
-    #     read_only=True
-    # )
+    photo_url = serializers.CharField(
+        source='get_photo_url',
+        read_only=True
+    )
     photos = serializers.ListField(
         source='get_photos',
         read_only=True
