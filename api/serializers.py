@@ -307,13 +307,6 @@ class GCMDeviceSerializer(serializers.ModelSerializer):
 
 
 class AnswerSerializer(serializers.ModelSerializer):
-    likes = serializers.CharField(
-        read_only=True
-    )
-    deslikes = serializers.CharField(
-        read_only=True
-    )
-
     class Meta:
         model = Answer
 

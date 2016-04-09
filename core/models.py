@@ -381,32 +381,18 @@ class Profile(models.Model):
         return answers
 
     def like_answer(self, answer):
-        already_liked = self.answer_rates.filter(
-            answer=answer, rate=AnswerRate.LIKE
-        ).exists()
-        if already_liked:
-            already_liked.rate = AnswerRate.DESLIKE
-            already_liked.save()
-        else:
-            AnswerRate.objects.create(
-                created_by=self,
-                answer=answer,
-                rate=AnswerRate.LIKE
-            )
+        AnswerRate.objects.create(
+            created_by=self,
+            answer=answer,
+            rate=AnswerRate.LIKE
+        )
 
     def deslike_answer(self, answer):
-        already_desliked = self.answer_rates.filter(
-            answer=answer, rate=AnswerRate.DESLIKE
-        ).exists()
-        if already_desliked:
-            already_desliked.rate = AnswerRate.LIKE
-            already_desliked.save()
-        else:
-            AnswerRate.objects.create(
-                created_by=self,
-                answer=answer,
-                rate=AnswerRate.DESLIKE
-            )
+        AnswerRate.objects.create(
+            created_by=self,
+            answer=answer,
+            rate=AnswerRate.DESLIKE
+        )
 
 
 class SearchQuery(models.Model):

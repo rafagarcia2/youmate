@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext as _
+from django.db.models.signals import post_save
+from django.db.models import Sum, F
 
 from django_extensions.db.fields import CreationDateTimeField
 
@@ -21,34 +23,23 @@ class Poll(models.Model):
         return self.text
 
     def get_sorted_answers(self):
-        from django.db.models import *
         return self.answers.annotate(
-            likes=Case(
-                answer_rates__rate=AnswerRate.LIKE,
-                then=Value(1),
-                output_field=IntegerField()
-            )
-        ).order_by('-likes')
+            rate=Sum(F('likes') - F('deslikes'))
+        ).order_by('-rate', 'created_at')
 
 
 class Answer(models.Model):
     created_at = CreationDateTimeField()
     text = models.TextField(
         _('Text'), max_length=400, null=True, blank=True)
+    likes = models.IntegerField(_('Likes'), default=0)
+    deslikes = models.IntegerField(_('Deslikes'), default=0)
 
     author = models.ForeignKey(to='core.Profile', related_name='answers')
     poll = models.ForeignKey(to='poll.Poll', related_name='answers')
 
     def __unicode__(self):
         return self.text
-
-    @property
-    def likes(self):
-        return self.answer_rates.filter(rate=AnswerRate.LIKE).count()
-
-    @property
-    def deslikes(self):
-        return self.answer_rates.filter(rate=AnswerRate.DESLIKE).count()
 
 
 class AnswerRate(models.Model):
@@ -70,3 +61,15 @@ class AnswerRate(models.Model):
     class Meta:
         verbose_name = _('Answer Rate')
         verbose_name_plural = _('Answer Rates')
+
+
+def update_like_answer(sender, instance, created, **kwargs):
+    if created:
+        if instance.rate == AnswerRate.LIKE:
+            instance.answer.likes += 1
+        else:
+            instance.answer.deslikes += 1
+        instance.answer.save()
+
+
+post_save.connect(update_like_answer, sender=AnswerRate)
