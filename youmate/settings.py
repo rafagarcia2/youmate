@@ -32,7 +32,7 @@ DEBUG = True
 HOST_URL = 'http://youmate.herokuapp.com'
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_PROXY_SSL_HEADER = ['HTTP_X_FORWARDED_PROTO', 'https']
 
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
@@ -94,7 +94,7 @@ EXTERNAL_APPS = [
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + EXTERNAL_APPS
 
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -105,7 +105,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-)
+]
 
 
 ROOT_URLCONF = 'youmate.urls'
@@ -166,9 +166,9 @@ USE_TZ = True
 STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
+STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
-)
+]
 
 # Django allauth
 
@@ -220,7 +220,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ('79881842751-c9l225d7nojbqhsfeuak1h8mlmqmmlgi'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '26mT_rgQys1saUiCeqzgjjCB'
 
 
-SOCIAL_AUTH_PIPELINE = (
+SOCIAL_AUTH_PIPELINE = [
     'social.pipeline.social_auth.social_details',
     'social.pipeline.social_auth.social_uid',
     'social.pipeline.social_auth.auth_allowed',
@@ -232,7 +232,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.associate_user',
     'social.pipeline.social_auth.load_extra_data',
     'social.pipeline.user.user_details',
-)
+]
 
 PROTECTED_USER_FIELDS = [
     'first_name',
@@ -250,7 +250,7 @@ PROTECTED_USER_FIELDS = [
 #     # Facebook OAuth2
 #     'social.backends.facebook.FacebookAppOAuth2',
 #     'social.backends.facebook.FacebookOAuth2',
-# )
+# ]
 
 # MIDDLEWARE_CLASSES = global_settings.AUTHENTICATION_BACKENDS + (
 #     'django.middleware.common.CommonMiddleware',

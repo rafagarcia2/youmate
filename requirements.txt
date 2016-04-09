@@ -1,7 +1,7 @@
 -e git+https://github.com/Tivix/django-common.git@bcf5a67192f967a71688f597dc79db8f9b620412#egg=django_common_helpers-master
 raven==5.12.0
 Babel==2.2.0
-Django==1.8.4
+Django==1.9.5
 Pillow==3.0.0
 PyJWT==1.4.0
 Pygments==2.0.2
@@ -21,7 +21,7 @@ django-allauth==0.23.0
 django-braces==1.8.1
 django-common==0.1.51
 django-cors-headers==1.1.0
-django-extensions==1.5.7
+django-extensions==1.6.1
 django-filter==0.11.0
 django-oauth-toolkit==0.9.0
 django-oauth2-provider==0.2.6.1
