@@ -27,6 +27,10 @@ class Poll(models.Model):
             rate=Sum(F('likes') - F('deslikes'))
         ).order_by('-rate', 'created_at')
 
+    @property
+    def get_interests_images(self):
+        return map(lambda x: x.get_image_url, self.interests.all())
+
 
 class Answer(models.Model):
     created_at = CreationDateTimeField()

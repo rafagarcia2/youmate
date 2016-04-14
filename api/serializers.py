@@ -315,10 +315,9 @@ class PollSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(
         read_only=True
     )
-    interests = serializers.PrimaryKeyRelatedField(
-        many=True,
-        queryset=Interest.objects.all(),
-        validators=[ValidateInterestsCount()]
+    interests = serializers.ListField(
+        source='get_interests_images',
+        read_only=True
     )
     answers = AnswerSerializer(
         many=True, read_only=True,
