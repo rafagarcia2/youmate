@@ -65,6 +65,7 @@ class APIRoot(views.APIView):
                     'polls_update': '/polls/:pk/update/',
                     'answers': {
                         'answers': '/polls/:pk/answers/',
+                        'answers_create': '/polls/:pk/answers/create/',
                         'answers_like': 'polls/:pk/answers/:pk/like/',
                         'answers_deslike': 'polls/:pk/answers/:pk/deslike/',
                     },
@@ -693,9 +694,35 @@ class PollUpdateView(mixins.PollMixin, generics.UpdateAPIView):
     serializer_class = serializers.PollUpdateSerializer
 
 
-class AnswerList(mixins.AnswerMixin, generics.ListCreateAPIView):
+class AnswerList(mixins.AnswerMixin, generics.ListAPIView):
     def get_queryset(self):
         return self.queryset.filter(**self.kwargs)
+
+
+class AnswerCreateView(mixins.AnswerMixin, generics.CreateAPIView):
+    serializer_class = serializers.AnswerCreateSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(**self.kwargs)
+
+    def get_poll(self):
+        from poll.models import Poll
+        return Poll.objects.get(pk=self.kwargs.get('poll__pk'))
+
+    def post(self, request, format=None, pk=None, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            raise NotAuthenticated()
+        profile = self.get_logged_user().profile
+        # from core.models import Profile
+        # profile = Profile.objects.get(pk=4)
+
+        request.data.update(
+            poll=self.get_poll().id,
+            author=profile.pk
+        )
+
+        return super(AnswerCreateView, self).post(
+            request=request, format=format, pk=pk, *args, **kwargs)
 
 
 class AnswerUpdateView(mixins.AnswerMixin, generics.RetrieveUpdateAPIView):

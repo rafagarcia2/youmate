@@ -343,6 +343,12 @@ class AnswerSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'text', 'likes')
 
 
+class AnswerCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = ('id', 'author', 'text', 'poll')
+
+
 class PollSerializer(serializers.ModelSerializer):
     user = PollProfileSerializer(
         source='author'
