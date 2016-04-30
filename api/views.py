@@ -60,8 +60,14 @@ class APIRoot(views.APIView):
                 'references': reverse('reference_list', request=request),
                 'polls': {
                     'polls': reverse('poll_list', request=request),
-                    'polls_like': '/polls/:pk/like/',
-                    'polls_deslike': '/polls/:pk/deslike/',
+                    'polls_create': reverse('poll_create', request=request),
+                    'polls_detail': '/polls/:pk/',
+                    'polls_update': '/polls/:pk/update/',
+                    'answers': {
+                        'answers': '/polls/:pk/answers/',
+                        'answers_like': 'polls/:pk/answers/:pk/like/',
+                        'answers_deslike': 'polls/:pk/answers/:pk/deslike/',
+                    },
                 },
             },
             'Oauth2': {
