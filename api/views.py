@@ -581,6 +581,10 @@ class PollList(mixins.PollMixin, generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = super(PollList, self).get_queryset()
+        if not self.request.user.is_authenticated():
+            raise NotAuthenticated()
+        profile = self.get_logged_user().profile
+
         latitude = self.request.query_params.get(
             'latitude') or None
         longitude = self.request.query_params.get(
@@ -591,7 +595,15 @@ class PollList(mixins.PollMixin, generics.ListCreateAPIView):
         if address:
             geolocator = Nominatim()
             location = geolocator.geocode(address)
-            latitude, longitude = location.point[:-1]
+            try:
+                latitude, longitude = location.point[:-1]
+            except:
+                location = geolocator.geocode(
+                    profile.living_city.split('-')[0])
+                try:
+                    latitude, longitude = location.point[:-1]
+                except:
+                    pass
 
         if latitude and longitude:
             query = """
