@@ -362,9 +362,14 @@ class PollSerializer(serializers.ModelSerializer):
 
 
 class PollCreateSerializer(serializers.ModelSerializer):
+    address = serializers.CharField(required=False)
+
     class Meta:
         model = Poll
-        fields = ('id', 'text', 'author', 'interests')
+        fields = (
+            'id', 'text', 'author', 'interests',
+            'latitude', 'longitude', 'address'
+        )
         validators = [
             ValidateInterestsCount()
         ]

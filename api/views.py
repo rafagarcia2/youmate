@@ -651,12 +651,31 @@ class PollCreateView(mixins.PollMixin, generics.CreateAPIView):
     serializer_class = serializers.PollCreateSerializer
 
     def post(self, request, format=None, pk=None):
-        # if not self.request.user.is_authenticated():
-        #     raise NotAuthenticated()
-        # profile = self.get_logged_user().profile
+        if not self.request.user.is_authenticated():
+            raise NotAuthenticated()
+        profile = self.get_logged_user().profile
 
-        from core.models import Profile
-        profile = Profile.objects.get(pk=4)
+        latitude = longitude = None
+        address = self.request.data.pop('address', None)
+
+        if address:
+            geolocator = Nominatim()
+            location = geolocator.geocode(address)
+            try:
+                latitude, longitude = location.point[:-1]
+            except:
+                location = geolocator.geocode(
+                    profile.living_city.split('-')[0])
+                try:
+                    latitude, longitude = location.point[:-1]
+                except:
+                    pass
+
+        if latitude is not None and longitude is not None:
+            request.data.update(
+                latitude='{0:.6f}'.format(latitude),
+                longitude='{0:.6f}'.format(longitude),
+            )
 
         request.data.update(
             author=profile.pk
