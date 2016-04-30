@@ -340,7 +340,7 @@ class AnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Answer
-        fields = ('user', 'text', 'likes')
+        fields = ('id', 'user', 'text', 'likes')
 
 
 class PollSerializer(serializers.ModelSerializer):
