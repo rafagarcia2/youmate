@@ -640,19 +640,32 @@ class PollList(mixins.PollMixin, generics.ListCreateAPIView):
         queryset = queryset.distinct()
         return queryset
 
+
+class PollCreateView(mixins.PollMixin, generics.CreateAPIView):
+    serializer_class = serializers.PollCreateSerializer
+
     def post(self, request, format=None, pk=None):
-        self.user = self.get_logged_user()
+        # if not self.request.user.is_authenticated():
+        #     raise NotAuthenticated()
+        # profile = self.get_logged_user().profile
+
+        from core.models import Profile
+        profile = Profile.objects.get(pk=4)
 
         request.data.update(
-            author=str(self.user.profile.pk)
+            author=profile.pk
         )
 
-        return super(PollList, self).post(
+        return super(PollCreateView, self).post(
             request=request, format=format, pk=pk)
 
 
-class PollUpdateView(mixins.PollMixin, generics.RetrieveUpdateAPIView):
+class PollDetailView(mixins.PollMixin, generics.RetrieveAPIView):
     pass
+
+
+class PollUpdateView(mixins.PollMixin, generics.UpdateAPIView):
+    serializer_class = serializers.PollUpdateSerializer
 
 
 class AnswerList(mixins.AnswerMixin, generics.ListCreateAPIView):

@@ -306,19 +306,48 @@ class GCMDeviceSerializer(serializers.ModelSerializer):
         model = GCMDevice
 
 
+class PollProfileSerializer(ProfileFeedSerializer):
+    picture = serializers.CharField(
+        source='get_photo_url',
+        read_only=True
+    )
+    full_name = serializers.CharField(
+        source='user.get_full_name', read_only=True)
+
+    class Meta:
+        model = Profile
+        validators = [
+            ValidateInterestsCount()
+        ]
+        fields = (
+            'id', 'picture', 'living_city', 'full_name',
+        )
+
+
+class PollInterestSerializer(InterestSerializer):
+    picture = serializers.CharField(source='get_image_url', read_only=True)
+    name = serializers.CharField(source='title', read_only=True)
+
+    class Meta:
+        model = Interest
+        fields = ('id', 'picture', 'name')
+
+
 class AnswerSerializer(serializers.ModelSerializer):
+    user = PollProfileSerializer(
+        source='author', read_only=True
+    )
+
     class Meta:
         model = Answer
+        fields = ('user', 'text', 'likes')
 
 
 class PollSerializer(serializers.ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(
-        read_only=True
+    user = PollProfileSerializer(
+        source='author'
     )
-    interests = serializers.ListField(
-        source='get_interests_images',
-        read_only=True
-    )
+    interests = PollInterestSerializer(many=True, read_only=True)
     answers = AnswerSerializer(
         many=True, read_only=True,
         source='get_sorted_answers'
@@ -326,7 +355,25 @@ class PollSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Poll
-        fields = ('id', 'text', 'author', 'interests', 'answers')
+        fields = ('id', 'text', 'user', 'interests', 'answers')
+        validators = [
+            ValidateInterestsCount()
+        ]
+
+
+class PollCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Poll
+        fields = ('id', 'text', 'author', 'interests')
+        validators = [
+            ValidateInterestsCount()
+        ]
+
+
+class PollUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Poll
+        fields = ('id', 'text', 'interests')
         validators = [
             ValidateInterestsCount()
         ]
