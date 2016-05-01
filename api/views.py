@@ -583,7 +583,7 @@ class PollList(mixins.PollMixin, generics.ListCreateAPIView):
         queryset = super(PollList, self).get_queryset()
         if not self.request.user.is_authenticated():
             raise NotAuthenticated()
-        profile = self.get_logged_user().profile
+        profile = self.request.user.profile
 
         latitude = self.request.query_params.get(
             'latitude') or None
@@ -666,7 +666,7 @@ class PollCreateView(mixins.PollMixin, generics.CreateAPIView):
     def post(self, request, format=None, pk=None):
         if not self.request.user.is_authenticated():
             raise NotAuthenticated()
-        profile = self.get_logged_user().profile
+        profile = self.request.user.profile
 
         latitude = longitude = None
         address = self.request.data.pop('address', None)
@@ -724,7 +724,7 @@ class AnswerCreateView(mixins.AnswerMixin, generics.CreateAPIView):
     def post(self, request, format=None, pk=None, *args, **kwargs):
         if not self.request.user.is_authenticated():
             raise NotAuthenticated()
-        profile = self.get_logged_user().profile
+        profile = self.request.user.profile
         # from core.models import Profile
         # profile = Profile.objects.get(pk=4)
 
