@@ -1,26 +1,618 @@
 [
 {
-    "fields": {
-        "name": "Portugu\u00eas",
-        "locale": "pt_BR"
-    },
     "model": "language.language",
-    "pk": 1
+    "pk": 1,
+    "fields": {
+        "name": "Portugu\u00eas do Brasil",
+        "locale": "pt_BR"
+    }
 },
 {
+    "model": "language.language",
+    "pk": 2,
     "fields": {
         "name": "Ingl\u00eas",
         "locale": "en"
-    },
-    "model": "language.language",
-    "pk": 2
+    }
 },
 {
+    "model": "language.language",
+    "pk": 3,
     "fields": {
         "name": "Espanhol",
         "locale": "es"
-    },
+    }
+},
+{
     "model": "language.language",
-    "pk": 3
+    "pk": 4,
+    "fields": {
+        "name": "Afrikaans",
+        "locale": "af"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 5,
+    "fields": {
+        "name": "\u00c1rabe",
+        "locale": "ar"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 6,
+    "fields": {
+        "name": "Asturiano",
+        "locale": "ast"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 7,
+    "fields": {
+        "name": "Azerbaijano",
+        "locale": "az"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 8,
+    "fields": {
+        "name": "B\u00falgaro",
+        "locale": "bg"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 9,
+    "fields": {
+        "name": "Bielorrusso",
+        "locale": "be"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 10,
+    "fields": {
+        "name": "Bengali",
+        "locale": "bn"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 11,
+    "fields": {
+        "name": "Breton",
+        "locale": "br"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 12,
+    "fields": {
+        "name": "B\u00f3snio",
+        "locale": "bs"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 13,
+    "fields": {
+        "name": "Catal\u00e3o",
+        "locale": "ca"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 14,
+    "fields": {
+        "name": "Tcheco",
+        "locale": "cs"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 15,
+    "fields": {
+        "name": "Gal\u00eas",
+        "locale": "cy"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 16,
+    "fields": {
+        "name": "Dinamarqu\u00eas",
+        "locale": "da"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 17,
+    "fields": {
+        "name": "Alem\u00e3o",
+        "locale": "de"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 18,
+    "fields": {
+        "name": "Grego",
+        "locale": "el"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 20,
+    "fields": {
+        "name": "Esperanto",
+        "locale": "eo"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 22,
+    "fields": {
+        "name": "Estoniano",
+        "locale": "et"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 23,
+    "fields": {
+        "name": "Basco",
+        "locale": "eu"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 24,
+    "fields": {
+        "name": "Persa",
+        "locale": "fa"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 25,
+    "fields": {
+        "name": "Finland\u00eas",
+        "locale": "fi"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 26,
+    "fields": {
+        "name": "Franc\u00eas",
+        "locale": "fr"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 27,
+    "fields": {
+        "name": "Fr\u00edsio",
+        "locale": "fy"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 28,
+    "fields": {
+        "name": "Irland\u00eas",
+        "locale": "ga"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 29,
+    "fields": {
+        "name": "Ga\u00e9lico Escoc\u00eas",
+        "locale": "gd"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 30,
+    "fields": {
+        "name": "Galego",
+        "locale": "gl"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 31,
+    "fields": {
+        "name": "Hebraico",
+        "locale": "he"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 32,
+    "fields": {
+        "name": "Hindi",
+        "locale": "hi"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 33,
+    "fields": {
+        "name": "Croata",
+        "locale": "hr"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 34,
+    "fields": {
+        "name": "H\u00fangaro",
+        "locale": "hu"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 35,
+    "fields": {
+        "name": "Interl\u00edngua",
+        "locale": "ia"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 36,
+    "fields": {
+        "name": "Indon\u00e9sio",
+        "locale": "id"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 37,
+    "fields": {
+        "name": "Eu Fa\u00e7o",
+        "locale": "io"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 38,
+    "fields": {
+        "name": "Island\u00eas",
+        "locale": "is"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 39,
+    "fields": {
+        "name": "Italiano",
+        "locale": "it"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 40,
+    "fields": {
+        "name": "Japon\u00eas",
+        "locale": "ja"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 41,
+    "fields": {
+        "name": "Georgiano",
+        "locale": "ka"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 42,
+    "fields": {
+        "name": "Kazakh",
+        "locale": "kk"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 43,
+    "fields": {
+        "name": "Khmer",
+        "locale": "km"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 44,
+    "fields": {
+        "name": "Kannada",
+        "locale": "kn"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 45,
+    "fields": {
+        "name": "Coreano",
+        "locale": "ko"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 46,
+    "fields": {
+        "name": "Luxemburgu\u00eas",
+        "locale": "lb"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 47,
+    "fields": {
+        "name": "Lituano",
+        "locale": "lt"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 48,
+    "fields": {
+        "name": "Let\u00e3o",
+        "locale": "lv"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 49,
+    "fields": {
+        "name": "Maced\u00f4nio",
+        "locale": "mk"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 50,
+    "fields": {
+        "name": "Malayalam",
+        "locale": "ml"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 51,
+    "fields": {
+        "name": "Mongol",
+        "locale": "mn"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 52,
+    "fields": {
+        "name": "Marata",
+        "locale": "mr"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 53,
+    "fields": {
+        "name": "Birman\u00eas",
+        "locale": "my"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 54,
+    "fields": {
+        "name": "Noruegu\u00eas",
+        "locale": "nb"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 55,
+    "fields": {
+        "name": "Nepali",
+        "locale": "ne"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 56,
+    "fields": {
+        "name": "Holand\u00eas",
+        "locale": "nl"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 57,
+    "fields": {
+        "name": "Novo Noruegu\u00eas",
+        "locale": "nn"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 58,
+    "fields": {
+        "name": "Ossetic",
+        "locale": "os"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 59,
+    "fields": {
+        "name": "Punjabi",
+        "locale": "pa"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 60,
+    "fields": {
+        "name": "Polon\u00eas",
+        "locale": "pl"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 61,
+    "fields": {
+        "name": "Portugu\u00eas",
+        "locale": "pt"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 63,
+    "fields": {
+        "name": "Romeno",
+        "locale": "ro"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 64,
+    "fields": {
+        "name": "Russo",
+        "locale": "ru"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 65,
+    "fields": {
+        "name": "Eslovaco",
+        "locale": "sk"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 66,
+    "fields": {
+        "name": "Esloveno",
+        "locale": "sl"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 67,
+    "fields": {
+        "name": "Alban\u00eas",
+        "locale": "sq"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 68,
+    "fields": {
+        "name": "S\u00e9rvio",
+        "locale": "sr"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 69,
+    "fields": {
+        "name": "Sueco",
+        "locale": "sv"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 70,
+    "fields": {
+        "name": "Swahili",
+        "locale": "sw"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 71,
+    "fields": {
+        "name": "T\u00e2mil",
+        "locale": "ta"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 72,
+    "fields": {
+        "name": "Telugu",
+        "locale": "te"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 73,
+    "fields": {
+        "name": "Tailand\u00eas",
+        "locale": "th"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 74,
+    "fields": {
+        "name": "Turco",
+        "locale": "tr"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 75,
+    "fields": {
+        "name": "Tatar",
+        "locale": "tt"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 76,
+    "fields": {
+        "name": "Udmurt",
+        "locale": "udm"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 77,
+    "fields": {
+        "name": "Ucraniano",
+        "locale": "uk"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 78,
+    "fields": {
+        "name": "Urdu",
+        "locale": "ur"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 79,
+    "fields": {
+        "name": "Vietnamita",
+        "locale": "vi"
+    }
+},
+{
+    "model": "language.language",
+    "pk": 80,
+    "fields": {
+        "name": "Chin\u00eas",
+        "locale": "zh-hant"
+    }
 }
 ]
