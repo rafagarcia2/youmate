@@ -61,6 +61,15 @@ class InterestSerializer(serializers.ModelSerializer):
         exclude = ('image_class',)
 
 
+class FeedInterestSerializer(InterestSerializer):
+    picture = serializers.CharField(source='get_image_url', read_only=True)
+    name = serializers.CharField(source='title', read_only=True)
+
+    class Meta:
+        model = Interest
+        fields = ('id', 'picture', 'name')
+
+
 class ReferenceSerializer(serializers.ModelSerializer):
     from_user__photo_url = serializers.CharField(
         source='from_user.get_photo_url', read_only=True)
@@ -230,10 +239,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ProfileFeedSerializer(ProfileSerializer):
-    interests = serializers.ListField(
-        source='get_interests_images',
-        read_only=True
-    )
+    interests = FeedInterestSerializer(many=True, read_only=True)
     referece = serializers.DictField(
         source='get_pretty_referece',
         read_only=True
@@ -296,16 +302,6 @@ class ProfileMatesSerializer(serializers.ModelSerializer):
         fields = ('mates',)
 
 
-class APNSDeviceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = APNSDevice
-
-
-class GCMDeviceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = GCMDevice
-
-
 class PollProfileSerializer(ProfileFeedSerializer):
     picture = serializers.CharField(
         source='get_photo_url',
@@ -324,13 +320,14 @@ class PollProfileSerializer(ProfileFeedSerializer):
         )
 
 
-class PollInterestSerializer(InterestSerializer):
-    picture = serializers.CharField(source='get_image_url', read_only=True)
-    name = serializers.CharField(source='title', read_only=True)
-
+class APNSDeviceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Interest
-        fields = ('id', 'picture', 'name')
+        model = APNSDevice
+
+
+class GCMDeviceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GCMDevice
 
 
 class AnswerSerializer(serializers.ModelSerializer):
@@ -353,7 +350,7 @@ class PollSerializer(serializers.ModelSerializer):
     user = PollProfileSerializer(
         source='author'
     )
-    interests = PollInterestSerializer(many=True, read_only=True)
+    interests = FeedInterestSerializer(many=True, read_only=True)
     answers = AnswerSerializer(
         many=True, read_only=True,
         source='get_sorted_answers'
