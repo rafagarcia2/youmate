@@ -1,6 +1,7 @@
 from django.contrib import auth
 
 from rest_framework import serializers, pagination
+from rest_framework.exceptions import NotAuthenticated
 from push_notifications.models import APNSDevice, GCMDevice
 
 from core.models import Profile
@@ -334,10 +335,18 @@ class AnswerSerializer(serializers.ModelSerializer):
     user = PollProfileSerializer(
         source='author', read_only=True
     )
+    liked = serializers.SerializerMethodField()
 
     class Meta:
         model = Answer
-        fields = ('id', 'user', 'text', 'likes')
+        fields = ('id', 'user', 'text', 'likes', 'liked')
+
+    def get_liked(self, instance):
+        if not self.context['request'].user.is_authenticated():
+            raise NotAuthenticated()
+
+        profile = self.context['request'].user.profile
+        return instance.has_being_liked_by(profile=profile)
 
 
 class AnswerCreateSerializer(serializers.ModelSerializer):

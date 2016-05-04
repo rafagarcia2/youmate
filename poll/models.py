@@ -45,6 +45,13 @@ class Answer(models.Model):
     def __unicode__(self):
         return self.text
 
+    def has_being_liked_by(self, profile):
+        return AnswerRate.objects.filter(
+            answer=self,
+            created_by=profile,
+            rate=AnswerRate.LIKE
+        ).exists()
+
 
 class AnswerRate(models.Model):
     # Genre choices
