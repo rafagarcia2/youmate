@@ -343,7 +343,7 @@ class AnswerSerializer(serializers.ModelSerializer):
 
     def get_liked(self, instance):
         if not self.context['request'].user.is_authenticated():
-            raise NotAuthenticated()
+            return None
 
         profile = self.context['request'].user.profile
         return instance.has_being_liked_by(profile=profile)
