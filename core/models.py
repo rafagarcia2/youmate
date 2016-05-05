@@ -388,11 +388,12 @@ class Profile(models.Model):
         )
 
     def deslike_answer(self, answer):
-        AnswerRate.objects.create(
+        like = AnswerRate.objects.get(
             created_by=self,
             answer=answer,
-            rate=AnswerRate.DESLIKE
+            rate=AnswerRate.LIKE
         )
+        like.delete()
 
 
 class SearchQuery(models.Model):

@@ -785,12 +785,12 @@ class AnswerDeslikeView(mixins.AnswerMixin, views.APIView):
         profile = self.request.user.profile
         self.object = self.get_object()
 
-        already_desliked = profile.answer_rates.filter(
-            answer=self.object, rate=AnswerRate.DESLIKE
+        already_liked = profile.answer_rates.filter(
+            answer=self.object, rate=AnswerRate.LIKE
         ).exists()
 
-        if already_desliked:
-            message = ('You can only like a answer once.')
+        if not already_liked:
+            message = ('You cant deslike a answer that you never liked.')
             return Response(
                 {'detail': message}, status=status.HTTP_400_BAD_REQUEST)
 

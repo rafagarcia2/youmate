@@ -56,10 +56,8 @@ class Answer(models.Model):
 class AnswerRate(models.Model):
     # Genre choices
     LIKE = 'L'
-    DESLIKE = 'D'
     RATE_CHOICES = (
         (LIKE, _('Like')),
-        (DESLIKE, _('Deslike')),
     )
     rate = models.CharField(
         _('Rate'), max_length=2, choices=RATE_CHOICES, default=LIKE)
