@@ -574,8 +574,9 @@ class GCMDeviceRetrieve(mixins.GCMDeviceMixin, generics.RetrieveAPIView):
 
 class PollList(mixins.PollMixin, generics.ListCreateAPIView):
     filter_fields = {
-        # custom_filters: [
-        #     'latitude', 'longitude', 'address', 'interests__id',
+        'text': ['icontains'],
+        # 'custom_filters': [
+        #     'latitude', 'longitude', 'address', 'interests__id', 'text'
         # ]
     }
 
