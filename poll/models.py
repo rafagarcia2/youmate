@@ -7,6 +7,7 @@ from django_extensions.db.fields import CreationDateTimeField
 
 
 class Poll(models.Model):
+    created_at = CreationDateTimeField()
     text = models.CharField(_('Text'), max_length=200)
     latitude = models.DecimalField(
         max_digits=9, decimal_places=6, null=True, blank=True)
@@ -16,6 +17,7 @@ class Poll(models.Model):
     author = models.ForeignKey(to='core.Profile', related_name='polls')
 
     class Meta:
+        ordering = ['created_at']
         verbose_name = _('Poll')
         verbose_name_plural = _('Polls')
 

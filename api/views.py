@@ -726,8 +726,6 @@ class AnswerCreateView(mixins.AnswerMixin, generics.CreateAPIView):
         if not self.request.user.is_authenticated():
             raise NotAuthenticated()
         profile = self.request.user.profile
-        # from core.models import Profile
-        # profile = Profile.objects.get(pk=4)
 
         request.data.update(
             poll=self.get_poll().id,
