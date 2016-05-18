@@ -4,10 +4,10 @@ from reference import views
 
 urlpatterns = patterns(
     '',
-    url(regex=r'^references/add/$',
-        view=views.ReferenceCreateView.as_view(),
-        name='add_reference'),
-    url(regex=r'^references/(?P<id>\d+)/active/$',
-        view=views.ReferenceActiveView.as_view(),
-        name='active_reference'),
+    url(regex=r'^$',
+        view=views.ReferenceList.as_view(),
+        name='reference_list'),
+    url(regex=r'^(?P<pk>[0-9]+)/$',
+        view=views.ReferenceUpdateView.as_view(),
+        name='reference_detail'),
 )

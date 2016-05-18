@@ -1,3 +1,13 @@
-from django.shortcuts import render
+from rest_framework import generics
 
-# Create your views here.
+from language.models import Language
+from language import serializers
+
+
+class LanguageMixin(object):
+    queryset = Language.objects.all()
+    serializer_class = serializers.LanguageSerializer
+
+
+class LanguageList(LanguageMixin, generics.ListCreateAPIView):
+    pass

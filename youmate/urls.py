@@ -27,13 +27,10 @@ urlpatterns = patterns(
     url(r'^social/',
         include('social.apps.django_app.urls', namespace='social')),
 
-    url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('core.urls')),
-    url(r'^', include('mate.urls')),
-    url(r'^', include('reference.urls')),
-    url(r'^', include('interest.urls')),
-    url(r'^api/', include('api.urls')),
+    url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('allauth.urls')),
+    url(r'^api/', include('api.urls')),
 ) + static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()

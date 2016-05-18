@@ -8,6 +8,7 @@ class Language(models.Model):
         _('Locale'), max_length=10, null=True, blank=True)
 
     class Meta:
+        ordering = ('name',)
         verbose_name = _('Language')
         verbose_name_plural = _('Languages')
 

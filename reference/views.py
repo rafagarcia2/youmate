@@ -1,52 +1,31 @@
-from django.views.generic import View
-from django.shortcuts import redirect, get_object_or_404
-from django.core.urlresolvers import reverse
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
+from rest_framework.exceptions import NotAuthenticated
+from rest_framework import generics, filters
 
-from vanilla import CreateView
-
-from core.models import Profile
-from reference.forms import ReferenceForm
+from reference import serializers
 from reference.models import Reference
 
 
-class ReferenceCreateView(CreateView):
-    model = Reference
-    template_name = 'account/profile.html'
+class ReferenceMixin(object):
+    queryset = Reference.objects.all()
+    serializer_class = serializers.ReferenceSerializer
 
-    def get_form(self, data=None, files=None, **kwargs):
-        initial = dict(
-            from_user=self.request.user.profile.id,
-            to_user=data and data.get('to_user'),
-            text=data and data.get('text'),
-            rating=data and data.get('rating', 1),
+
+class ReferenceList(ReferenceMixin, generics.ListCreateAPIView):
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('id', 'from_user', 'to_user')
+
+    def post(self, request, format=None, pk=None):
+        if not self.request.user.is_authenticated():
+            raise NotAuthenticated()
+
+        request.data.update(
+            from_user=str(self.request.user.profile.pk)
         )
-        return ReferenceForm(initial, files, **kwargs)
 
-    def form_invalid(self, form):
-        profile_id = self.request.POST.get('to_user')
-        profile = get_object_or_404(Profile, id=profile_id)
-        return redirect('profile', username=profile.user.username)
-
-    def get_success_url(self):
-        username = self.object.to_user.user.username
-        return reverse('profile', kwargs={'username': username})
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(ReferenceCreateView, self).dispatch(*args, **kwargs)
+        return super(ReferenceList, self).post(
+            request=request, format=format, pk=pk)
 
 
-class ReferenceActiveView(View):
-    def get(self, request, id=None):
-        self.object = get_object_or_404(Reference, id=id)
-        profile = self.object.to_user
-
-        if profile != request.user.profile:
-            return redirect('profile')
-
-        profile.references_to.update(active=False)
-        self.object.active = True
-        self.object.save()
-        return redirect('profile')
+class ReferenceUpdateView(ReferenceMixin,
+                          generics.RetrieveUpdateAPIView):
+    pass
