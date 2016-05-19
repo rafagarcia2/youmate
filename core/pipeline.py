@@ -37,10 +37,12 @@ def save_profile(backend, user, response, *args, **kwargs):
 
     if backend.name == 'google-oauth2':
         places_lived = response.get('placesLived')
-        try:
-            user.profile.living_city = places_lived[-1].get('value')
-        except IndexError:
-            pass
+
+        if places_lived is not None:
+            try:
+                user.profile.living_city = places_lived[-1].get('value')
+            except IndexError:
+                pass
 
         if birthday and not birthday.startswith('0000-'):
             try:
