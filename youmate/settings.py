@@ -187,23 +187,18 @@ SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL = 'core.CoreUser'
 # Social auth configuration
 SOCIAL_AUTH_FACEBOOK_KEY = '1685351455020151'
 SOCIAL_AUTH_FACEBOOK_SECRET = '5dc0a60e3812301c576211452ac6cce8'
-# SOCIAL_AUTH_FACEBOOK_SCOPE = [
-#     'email',
-#     'public_profile',
-#     'user_about_me',
-#     'user_birthday',
-#     'user_location',
-#     'user_location',
-# ]
-SOCIAL_AUTH_FACEBOOK_IGNORE_DEFAULT_SCOPE = True
 SOCIAL_AUTH_FACEBOOK_SCOPE = [
     'email',
     'public_profile',
-    # 'user_location'
+    'user_about_me',
+    'user_birthday',
+    'user_location',
+    'user_location',
 ]
+SOCIAL_AUTH_FACEBOOK_IGNORE_DEFAULT_SCOPE = True
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-  # 'locale': 'pt_BR',
-  'fields': 'id, name, email, birthday, gender, location'
+    'locale': 'pt_BR',
+    'fields': 'id, name, email, birthday, gender, location'
 }
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_IGNORE_DEFAULT_SCOPE = True
@@ -215,7 +210,6 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ('79881842751-c9l225d7nojbqhsfeuak1h8mlmqmmlgi'
                                  '.apps.googleusercontent.com')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '26mT_rgQys1saUiCeqzgjjCB'
-
 
 SOCIAL_AUTH_PIPELINE = [
     'social.pipeline.social_auth.social_details',
@@ -235,26 +229,6 @@ PROTECTED_USER_FIELDS = [
     'first_name',
     'last_name',
 ]
-
-# AUTHENTICATION_BACKENDS = global_settings.AUTHENTICATION_BACKENDS + (
-#     'oauth2_provider.backends.OAuth2Backend',
-#     # `allauth` specific authentication methods, such as login by e-mail
-#     'allauth.account.auth_backends.AuthenticationBackend',
-
-#     'rest_framework_social_oauth2.backends.DjangoOAuth2',
-#     'django.contrib.auth.backends.ModelBackend',
-
-#     # Facebook OAuth2
-#     'social.backends.facebook.FacebookAppOAuth2',
-#     'social.backends.facebook.FacebookOAuth2',
-# ]
-
-# MIDDLEWARE_CLASSES = global_settings.AUTHENTICATION_BACKENDS + (
-#     'django.middleware.common.CommonMiddleware',
-#     'django.contrib.sessions.middleware.SessionMiddleware',
-#     'django.contrib.auth.middleware.AuthenticationMiddleware',
-#     'django.contrib.messages.middleware.MessageMiddleware'
-# )
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
