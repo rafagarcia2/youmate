@@ -416,7 +416,7 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
-        instance.profile.send_email_verification(reset_email=False)
+        # instance.profile.send_email_verification(reset_email=False)
 
 
 post_save.connect(create_user_profile, sender=CoreUser)

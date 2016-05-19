@@ -41,9 +41,6 @@ MEDIA_ROOT = 'media'
 
 MEDIA_URL = '/media/'
 
-MANDRILL_API_KEY = "YW3aJkoPhCmodizEU7ZGvQ"
-EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
-
 # Application definition
 
 DJANGO_APPS = [
