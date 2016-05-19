@@ -22,12 +22,12 @@ def save_profile(backend, user, response, *args, **kwargs):
     birthday = response.get('birthday')
     gender = response.get('gender')
 
-    if gender == 'male':
-        user.profile.gender = 'M'
-    elif gender == 'female':
-        user.profile.gender = 'W'
-
     if backend.name == 'facebook':
+        if gender == 'masculino':
+            user.profile.gender = 'M'
+        elif gender == 'feminono':
+            user.profile.gender = 'W'
+
         location = response.get('location', {}).get('name')
         if location:
             user.profile.living_city = location
