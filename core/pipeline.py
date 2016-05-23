@@ -23,9 +23,11 @@ def save_profile(backend, user, response, *args, **kwargs):
     gender = response.get('gender')
 
     if backend.name == 'facebook':
+        user.email = response.get('email')
+
         if gender == 'masculino':
             user.profile.gender = 'M'
-        elif gender == 'feminono':
+        elif gender == 'feminino':
             user.profile.gender = 'W'
 
         location = response.get('location', {}).get('name')
@@ -36,6 +38,17 @@ def save_profile(backend, user, response, *args, **kwargs):
             user.profile.age = convert_birthday(birthday)
 
     if backend.name == 'google-oauth2':
+        if gender == 'male':
+            user.profile.gender = 'M'
+        elif gender == 'female':
+            user.profile.gender = 'W'
+
+        try:
+            user.email = response.get('emails')[0].get('value')
+            user.save()
+        except IndexError:
+            pass
+
         places_lived = response.get('placesLived')
 
         if places_lived is not None:
