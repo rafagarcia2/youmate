@@ -448,7 +448,8 @@ class ProfilePollsView(ProfileMixin, generics.RetrieveAPIView):
         raise NotAuthenticated()
 
     def retrieve(self, request, pk=None):
-        serializer = serializers.ProfilePollsSerializer(
+        from poll.serializers import ProfilePollsSerializer
+        serializer = ProfilePollsSerializer(
             self.get_object()
         )
         return Response(serializer.data)
