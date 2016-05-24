@@ -81,7 +81,10 @@ def send_mate_notification(sender, instance, **kwargs):
         'notId': str(notification_id),
     }
     for device in devices:
-        device.send_message(message, extra=data)
+        try:
+            device.send_message(message, extra=data)
+        except:
+            pass
 
 
 def accepted_mate_notification(sender, instance, **kwargs):
