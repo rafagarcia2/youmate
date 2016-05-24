@@ -7,7 +7,7 @@ from django_extensions.db.fields import CreationDateTimeField
 
 class Poll(models.Model):
     created_at = CreationDateTimeField()
-    text = models.CharField(_('Text'), max_length=200)
+    text = models.CharField(_('Text'), max_length=400)
     latitude = models.DecimalField(
         max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(
