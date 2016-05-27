@@ -43,11 +43,12 @@ def save_profile(backend, user, response, *args, **kwargs):
         elif gender == 'female':
             user.profile.gender = 'W'
 
-        try:
-            user.email = response.get('emails')[0].get('value')
-            user.save()
-        except IndexError:
-            pass
+        if not user.email:
+            try:
+                user.email = response.get('emails')[0].get('value')
+                user.save()
+            except:
+                pass
 
         places_lived = response.get('placesLived')
 
