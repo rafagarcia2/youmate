@@ -56,6 +56,7 @@ DJANGO_APPS = [
 
 LOCAL_APPS = [
     'core',
+    'chat',
     'mate',
     'reference',
     'language',

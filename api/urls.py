@@ -48,4 +48,5 @@ urlpatterns = patterns(
     url(r'^mates/', include('mate.urls')),
     url(r'^languages/', include('language.urls')),
     url(r'^references/', include('reference.urls')),
+    url(r'^chat/', include('chat.urls')),
 )
