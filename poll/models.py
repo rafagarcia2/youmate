@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from django.utils.translation import ugettext as _
 from django.db.models.signals import post_save, pre_delete
@@ -82,5 +84,67 @@ def deslike_answer(sender, instance, **kwargs):
     instance.answer.save()
 
 
+def send_answer_notification(sender, instance, created, **kwargs):
+    if not created:
+        return
+
+    from_name = (
+        instance.author.user.first_name or
+        instance.author.user.username
+    )
+    message = '{} respondeu sua pergunta.'.format(from_name)
+    photo_url = instance.author.get_photo_url
+    devices = list(instance.poll.author.user.gcmdevice_set.filter(active=True))
+    devices.extend(
+        instance.poll.author.user.apnsdevice_set.filter(active=True))
+    notification_id = int(
+        (datetime.now() - datetime(1970, 1, 1)).total_seconds()
+    )
+
+    data = {
+        'title': 'YouMate',
+        'message': message,
+        'image': photo_url,
+        'type': 'answer_poll',
+        'profileId': str(instance.author.id),
+        'notId': str(notification_id),
+    }
+    for device in devices:
+        device.send_message(message, extra=data)
+
+
+def send_like_answer_notification(sender, instance, created, **kwargs):
+    if not created and not instance.rate == AnswerRate.LIKE:
+        return
+
+    from_name = (
+        instance.created_by.user.first_name or
+        instance.created_by.user.username
+    )
+    message = '{} curtiu sua resposta.'.format(from_name)
+    photo_url = instance.created_by.get_photo_url
+    devices = list(
+        instance.answer.poll.author.user.gcmdevice_set.filter(active=True)
+    )
+    devices.extend(
+        instance.answer.poll.author.user.apnsdevice_set.filter(active=True))
+    notification_id = int(
+        (datetime.now() - datetime(1970, 1, 1)).total_seconds()
+    )
+
+    data = {
+        'title': 'YouMate',
+        'message': message,
+        'image': photo_url,
+        'type': 'answer_poll',
+        'profileId': str(instance.created_by.id),
+        'notId': str(notification_id),
+    }
+    for device in devices:
+        device.send_message(message, extra=data)
+
+
+post_save.connect(send_answer_notification, sender=Answer)
+post_save.connect(send_like_answer_notification, sender=AnswerRate)
 post_save.connect(update_like_answer, sender=AnswerRate)
 pre_delete.connect(deslike_answer, sender=AnswerRate)

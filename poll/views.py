@@ -188,8 +188,8 @@ class AnswerLikeView(AnswerMixin, views.APIView):
 
         if not self.request.user.is_authenticated():
             raise NotAuthenticated()
-
         profile = self.request.user.profile
+
         self.object = self.get_object()
 
         already_liked = profile.answer_rates.filter(
@@ -217,8 +217,8 @@ class AnswerDeslikeView(AnswerMixin, views.APIView):
 
         if not self.request.user.is_authenticated():
             raise NotAuthenticated()
-
         profile = self.request.user.profile
+
         self.object = self.get_object()
 
         already_liked = profile.answer_rates.filter(
