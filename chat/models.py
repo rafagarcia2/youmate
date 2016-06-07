@@ -12,3 +12,11 @@ class Chat(models.Model):
     class Meta:
         verbose_name = "Chat"
         verbose_name_plural = "Chats"
+
+    # def get_chat(self): # Peguar minha conversas
+    #     return self.chat.filter(
+    #         to_user__from_user=self)
+
+    # def get_chat_with_me(self): 
+    #     return self.chat_with_me.filter(
+    #         from_user__to_user=self)

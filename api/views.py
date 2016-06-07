@@ -50,6 +50,7 @@ class APIRoot(views.APIView):
                 'photos': reverse('photo_list', request=request),
                 'mates': reverse('mate_list', request=request),
                 'references': reverse('reference_list', request=request),
+                'chat': reverse('chat_list', request=request),
                 'polls': {
                     'polls': reverse('poll_list', request=request),
                     'polls_create': reverse('poll_create', request=request),
