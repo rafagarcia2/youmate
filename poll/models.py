@@ -125,10 +125,10 @@ def send_like_answer_notification(sender, instance, created, **kwargs):
     message = '{} curtiu sua resposta.'.format(from_name)
     photo_url = instance.created_by.get_photo_url
     devices = list(
-        instance.answer.poll.author.user.gcmdevice_set.filter(active=True)
+        instance.answer.author.user.gcmdevice_set.filter(active=True)
     )
     devices.extend(
-        instance.answer.poll.author.user.apnsdevice_set.filter(active=True))
+        instance.answer.author.user.apnsdevice_set.filter(active=True))
     notification_id = int(
         (datetime.now() - datetime(1970, 1, 1)).total_seconds()
     )
@@ -138,7 +138,7 @@ def send_like_answer_notification(sender, instance, created, **kwargs):
         'message': message,
         'image': photo_url,
         'type': 'answer_poll',
-        'pollId': str(instance.id),
+        'pollId': str(instance.poll.id),
         'profileId': str(instance.created_by.id),
         'notId': str(notification_id),
     }
