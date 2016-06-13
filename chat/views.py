@@ -1,11 +1,11 @@
 from rest_framework import generics
-
+from django.db.models import Q
 from chat.models import Chat, Message
 from chat import serializers
+from django.shortcuts import get_object_or_404
 
 from rest_framework.response import Response
 from rest_framework.exceptions import NotAuthenticated
-from django.core.exceptions import ObjectDoesNotExist
 
 class ChatMixin(object):
     queryset = Chat.objects.all()
@@ -34,14 +34,13 @@ class MessageView(MessageMixin, generics.ListCreateAPIView):
         from_user = self.request.user.profile
 
         queryset = super(MessageView, self).get_queryset()
-        try:
-            to_chat = Chat.objects.get(pk=self.kwargs.get('to_chat'))
-        except ObjectDoesNotExist:
-            return None
+        to_chat = get_object_or_404(Chat, pk=self.kwargs.get('to_chat'))
 
-        # Testing user in chat
+        if (not to_chat):
+            return to_chat # Object Not found
+
         if (to_chat.from_user != from_user and to_chat.to_user != from_user):
-            return None
+                return to_chat # Not found for the user
 
         queryset = self.queryset.filter(to_chat=to_chat)
         return queryset
