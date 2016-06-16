@@ -1,9 +1,8 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from core import views
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(regex=r'^$',
         view=views.IndexView.as_view(),
         name='index'),
@@ -71,4 +70,4 @@ urlpatterns = patterns(
     url(regex=r'^api/profiles/polls/$',
         view=views.ProfilePollsView.as_view(),
         name='profile_polls'),
-)
+]

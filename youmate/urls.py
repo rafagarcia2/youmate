@@ -15,15 +15,14 @@ Including another URLconf
 """
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.conf.urls import patterns, include, url, static
+from django.conf.urls import include, url, static
 from django.contrib import admin
 
 from youmate import settings
 
 admin.autodiscover()
 
-urlpatterns = patterns(
-
+urlpatterns = [
     url(r'^social/',
         include('social.apps.django_app.urls', namespace='social')),
 
@@ -31,6 +30,6 @@ urlpatterns = patterns(
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^api/', include('api.urls')),
-) + static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()

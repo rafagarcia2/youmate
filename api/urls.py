@@ -1,12 +1,11 @@
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 
 from rest_framework.authtoken.views import obtain_auth_token
 
 # Class based API views
 from api import views
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     # Root
     url(regex=r'^$',
         view=views.APIRoot.as_view(),
@@ -48,4 +47,4 @@ urlpatterns = patterns(
     url(r'^mates/', include('mate.urls')),
     url(r'^languages/', include('language.urls')),
     url(r'^references/', include('reference.urls')),
-)
+]

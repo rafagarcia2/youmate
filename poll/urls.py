@@ -1,9 +1,8 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from poll import views
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(regex=r'^$',
         view=views.PollList.as_view(),
         name='poll_list'),
@@ -31,4 +30,4 @@ urlpatterns = patterns(
     url(regex=r'^(?P<poll__pk>[0-9]+)/answers/(?P<pk>[0-9]+)/deslike/$',
         view=views.AnswerDeslikeView.as_view(),
         name='poll_answer_deslike'),
-)
+]
