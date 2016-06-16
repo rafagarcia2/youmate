@@ -1,10 +1,6 @@
-# Pré-requisitos para o sistema rodar
-# Os arquivos comentados são desnecessários para Windows (descomentar se estiver usando outro SO)
-
 -e git+https://github.com/Tivix/django-common.git@bcf5a67192f967a71688f597dc79db8f9b620412#egg=django_common_helpers-master
-raven==5.12.0
 Babel==2.2.0
-Django==1.9.5
+Django==1.9.7
 Pillow==3.0.0
 PyJWT==1.4.0
 Pygments==2.0.2
@@ -16,12 +12,13 @@ beautifulsoup4==4.4.1
 blessings==1.6
 bpython==0.14.2
 click==6.2
+contextlib2==0.5.3
 curtsies==0.1.19
 decorator==4.0.4
 dj-database-url==0.3.0
 dj-static==0.0.6
 django-allauth==0.23.0
-django-braces==1.8.1
+django-braces==1.9.0
 django-common==0.1.51
 django-cors-headers==1.1.0
 django-extensions==1.6.1
@@ -39,7 +36,7 @@ django-vanilla-views==1.0.4
 django-webtest==1.7.8
 django-widget-tweaks==1.4.1
 djangorestframework-filters==0.6.0
-djangorestframework==3.3.1
+djangorestframework==3.3.3
 first==2.0.1
 geopy==1.11.0
 #gnureadline==6.3.3
@@ -54,24 +51,25 @@ model-mommy==1.2.5
 oauth2-provider==0.0
 oauthlib==1.1.2
 path.py==8.1.1
-#pexpect==3.3
+#pexpect==4.1.0
 phonenumbers==7.2.3
 pickleshare==0.5
 pip-tools==1.4.2
 psycopg2==2.6.1
 pydot==1.0.2
-#pygraphviz==1.3.1
+pygraphviz==1.3.1
 pyparsing==1.5.7
 python-openid==2.2.5
 python-social-auth==0.2.19
 pytz==2015.7
-requests-oauthlib==0.5.0
-requests==2.7.0
-shortuuid==0.4.2
+raven==5.12.0
+requests-oauthlib==0.6.1
+requests==2.10.0
+shortuuid==0.4.3
 simplegeneric==0.8.1
-six==1.9.0
+six==1.10.0
 static3==0.6.1
+tinycss==0.3
 traitlets==4.0.0
 twilio==4.9.2
 waitress==0.8.10
-wsgiref==0.1.2
