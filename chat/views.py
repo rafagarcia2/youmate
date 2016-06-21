@@ -18,40 +18,20 @@ class MessageMixin(object):
 class ChatList(ChatMixin, generics.ListCreateAPIView):
     '''View para visualizar todas as conversas do user.'''
     def get_queryset(self):
-        # if not self.request.user.is_authenticated():
-        #     raise NotAuthenticated()
-        # from_user = self.request.user.profile
-        from core.models import Profile
-        from_user = Profile.objects.get(pk=4)
+        if not self.request.user.is_authenticated():
+            raise NotAuthenticated()
+        from_user = self.request.user.profile
 
         queryset = super(ChatList, self).get_queryset()
-        #queryset = self.queryset.filter(Q(from_user=from_user) | Q(to_user=from_user))
+        queryset = queryset.filter(Q(from_user=from_user) | Q(to_user=from_user))
 
         return queryset
 
-    def post(self, request, *args, **kwargs):
-        # if not self.request.user.is_authenticated():
-        #     raise NotAuthenticated()
-        # from_user = self.request.user.profile
-
-        # from core.models import Profile
-        # from_user = Profile.objects.get(pk=3)
-
-        from_user = self.request.query_params.get('from_user')
-        to_user = self.request.query_params.get('to_user')
-        queryset = Chat.objects.filter(Q(from_user=from_user, to_user=to_user) | Q(from_user=from_user, to_user=to_user))
-        if queryset is not None: # if the chat already exist
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
-
-        return super(ChatList, self).post(request=request, *args, **kwargs)
-
 class MessageView(MessageMixin, generics.ListCreateAPIView):
     def get_queryset(self):
-        # if not self.request.user.is_authenticated():
-        #     raise NotAuthenticated()
-        # from_user = self.request.user.profile
-        from core.models import Profile
-        from_user = Profile.objects.get(pk=4)
+        if not self.request.user.is_authenticated():
+            raise NotAuthenticated()
+        from_user = self.request.user.profile
 
         queryset = super(MessageView, self).get_queryset()
         to_chat = get_object_or_404(Chat, pk=self.kwargs.get('to_chat'))
@@ -64,18 +44,17 @@ class MessageView(MessageMixin, generics.ListCreateAPIView):
 
         queryset = self.queryset.filter(to_chat=to_chat)
 
-        max_messages = self.request.query_params.get('max_messages', None)
-        if max_messages is not None:
-            queryset = self.queryset[:max_messages]
+        top_messages = self.request.query_params.get('top_messages', None)
+        bottom_messages = self.request.query_params.get('bottom_messages', None)
+        if top_messages != None and bottom_messages != None:
+            queryset = queryset[top_messages:bottom_messages]
 
         return queryset
 
     def post(self, request, *args, **kwargs):
-        # if not self.request.user.is_authenticated():
-        #     raise NotAuthenticated()
-        # from_user = self.request.user.profile
-        from core.models import Profile
-        from_user = Profile.objects.get(pk=4)
+        if not self.request.user.is_authenticated():
+            raise NotAuthenticated()
+        from_user = self.request.user.profile
         to_chat = get_object_or_404(Chat, pk=self.kwargs.get('to_chat'))
 
         if  from_user not in [to_chat.from_user, to_chat.to_user]: # If the user is in chat
