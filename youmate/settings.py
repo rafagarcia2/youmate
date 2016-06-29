@@ -80,7 +80,6 @@ EXTERNAL_APPS = [
     'rest_framework_social_oauth2',
     'push_notifications',
     'django_twilio',
-    'raven.contrib.django.raven_compat',
 
     'allauth',
     'allauth.account',
@@ -289,46 +288,47 @@ TWILIO_DEFAULT_CALLERID = 'NNNNNNNNNN'
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
-    'root': {
-        'level': 'DEBUG',
-        'handlers': ['sentry'],
-    },
-    'formatters': {
-        'verbose': {
-            'format': ('%(levelname)s %(asctime)s %(module)s '
-                       '%(process)d %(thread)d %(message)s')
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
         },
     },
     'handlers': {
-        'sentry': {
-            'level': 'DEBUG',
-            'class': ('raven.contrib.django.'
-                      'raven_compat.handlers.SentryHandler'),
-        },
         'console': {
-            'level': 'DEBUG',
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
+        },
+        'null': {
+            'class': 'logging.NullHandler',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
         }
     },
     'loggers': {
-        'django.db.backends': {
+        'django': {
+            'handlers': ['console'],
+        },
+        'django.request': {
+            'handlers': ['mail_admins'],
             'level': 'ERROR',
-            'handlers': ['console'],
             'propagate': False,
         },
-        'raven': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
+        'django.security': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
             'propagate': False,
         },
-        'sentry.errors': {
-            'level': 'DEBUG',
+        'py.warnings': {
             'handlers': ['console'],
-            'propagate': False,
         },
-    },
+    }
 }
 
 
