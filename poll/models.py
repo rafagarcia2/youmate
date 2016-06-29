@@ -138,7 +138,7 @@ def send_like_answer_notification(sender, instance, created, **kwargs):
         'message': message,
         'image': photo_url,
         'type': 'answer_poll',
-        'pollId': str(instance.poll.id),
+        'pollId': str(instance.answer.poll.id),
         'profileId': str(instance.created_by.id),
         'notId': str(notification_id),
     }
