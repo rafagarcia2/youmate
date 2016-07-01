@@ -185,9 +185,21 @@ class AnswerCreateView(AnswerMixin, generics.CreateAPIView):
             request=request, format=format, pk=pk, *args, **kwargs)
 
 
-class AnswerUpdateView(AnswerMixin, generics.RetrieveUpdateAPIView):
+class AnswerUpdateView(AnswerMixin, generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         return self.queryset.get(**self.kwargs)
+
+    def delete(self, request, format=None, pk=None):
+        if not self.request.user.is_authenticated():
+            raise NotAuthenticated()
+        profile = self.request.user.profile
+
+        self.object = self.get_object()
+        if profile == self.object.author:
+            raise ValidationError('You can only delete your own answers.')
+
+        return super(PollDetailView, self).delete(
+            request, format=format, pk=pk)
 
 
 class AnswerLikeView(AnswerMixin, views.APIView):
