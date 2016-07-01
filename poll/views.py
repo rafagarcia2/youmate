@@ -195,7 +195,7 @@ class AnswerUpdateView(AnswerMixin, generics.RetrieveUpdateDestroyAPIView):
         profile = self.request.user.profile
 
         self.object = self.get_object()
-        if profile == self.object.author:
+        if profile not in [self.object.author, self.object.poll.author]:
             raise ValidationError('You can only delete your own answers.')
 
         return super(PollDetailView, self).delete(
