@@ -3,6 +3,7 @@ from django.db import connection
 from rest_framework import generics, views, status
 from rest_framework.exceptions import NotAuthenticated
 from rest_framework.response import Response
+from rest_framework.serializers import ValidationError
 
 from geopy.geocoders import Nominatim
 
@@ -137,8 +138,18 @@ class PollCreateView(PollMixin, generics.CreateAPIView):
             request=request, format=format, pk=pk)
 
 
-class PollDetailView(PollMixin, generics.RetrieveAPIView):
-    pass
+class PollDetailView(PollMixin, generics.RetrieveDestroyAPIView):
+    def delete(self, request, format=None, pk=None):
+        if not self.request.user.is_authenticated():
+            raise NotAuthenticated()
+        profile = self.request.user.profile
+
+        self.object = self.get_object()
+        if profile == self.object.author:
+            raise ValidationError('You can only delete your own polls.')
+
+        return super(PollDetailView, self).delete(
+            request, format=format, pk=pk)
 
 
 class PollUpdateView(PollMixin, generics.UpdateAPIView):
