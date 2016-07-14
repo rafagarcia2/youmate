@@ -263,6 +263,11 @@ PUSH_NOTIFICATIONS_SETTINGS = {
     # 'APNS_CERTIFICATE': '/path/to/your/certificate.pem',
 }
 
+TORNADOAPP_SERVER = os.environ.get('TORNADOAPP_SERVER', 'localhost:8080')
+TORNADOAPP_SECURE = bool(os.environ.get('TORNADOAPP_SECURE', ''))
+TORNADOAPP_SECRET = os.environ.get('TORNADOAPP_SECRET',
+    'TAfs7y8ajbahvct5r56465avhdsadsg')
+
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_ON_GET = True
