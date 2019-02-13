@@ -1,6 +1,6 @@
 -e git+https://github.com/Tivix/django-common.git@bcf5a67192f967a71688f597dc79db8f9b620412#egg=django_common_helpers-master
 Babel==2.2.0
-Django==1.9.7
+django>=1.11.19
 Pillow==3.0.0
 PyJWT==1.4.0
 Pygments==2.0.2
